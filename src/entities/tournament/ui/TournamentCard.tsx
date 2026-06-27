@@ -5,10 +5,17 @@ import styles from "./TournamentCard.module.scss";
 
 type TournamentCardProps = {
   tournament: Tournament;
+  clubName?: string;
+  gameTitle?: string;
 };
 
-export const TournamentCard = ({ tournament }: TournamentCardProps) => {
+export const TournamentCard = ({
+  tournament,
+  clubName,
+  gameTitle,
+}: TournamentCardProps) => {
   const { t, i18n } = useTranslation();
+  const isFull = tournament.registeredPlayers >= tournament.maxPlayers;
   const date = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
     day: "numeric",
     month: "short",
@@ -18,12 +25,19 @@ export const TournamentCard = ({ tournament }: TournamentCardProps) => {
   return (
     <article className={styles.card}>
       <div className={styles.topLine}>
-        <span className={styles.status}>{t("cards.registrationOpen")}</span>
+        <span className={styles.status}>
+          {isFull ? t("cards.waitlistOpen") : t("cards.registrationOpen")}
+        </span>
         <span className={styles.type}>{tournament.type}</span>
       </div>
       <h3 className={styles.title}>
         <Link to={`/tournaments/${tournament.id}`}>{tournament.name}</Link>
       </h3>
+      {(gameTitle || clubName) && (
+        <p className={styles.host}>
+          {gameTitle} {gameTitle && clubName ? "·" : ""} {clubName}
+        </p>
+      )}
       <p className={styles.description}>{tournament.description}</p>
       <dl className={styles.details}>
         <div>
@@ -36,11 +50,14 @@ export const TournamentCard = ({ tournament }: TournamentCardProps) => {
         </div>
         <div>
           <dt>{t("cards.players")}</dt>
-          <dd>{tournament.registeredPlayers}/{tournament.maxPlayers}</dd>
+          <dd>
+            {tournament.registeredPlayers}/{tournament.maxPlayers}
+          </dd>
         </div>
       </dl>
       <Link className={styles.cardLink} to={`/tournaments/${tournament.id}`}>
-        {t("cards.viewEvent")} <span aria-hidden="true">→</span>
+        {isFull ? t("cards.joinWaitlist") : t("cards.register")}{" "}
+        <span aria-hidden="true">→</span>
       </Link>
     </article>
   );

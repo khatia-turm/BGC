@@ -385,7 +385,7 @@
       "startsAt": "2026-07-25T12:00:00Z",
       "endsAt": "2026-07-25T19:00:00Z",
       "maxPlayers": 24,
-      "registeredPlayers": 17,
+      "registeredPlayers": 24,
       "scoringPolicy": "LinearPlacementPoints",
       "tieBreakRules": ["MostWins", "HighestRawScore"],
       "createdAt": "2026-06-18T09:00:00Z",

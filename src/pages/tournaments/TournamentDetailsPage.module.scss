@@ -1,0 +1,191 @@
+@use "@shared/styles/colors" as colors;
+
+.page,
+.state {
+  min-height: calc(100dvh - 4.5rem);
+  color: colors.$neutral-100;
+  background:
+    radial-gradient(
+      circle at 80% 5%,
+      rgba(colors.$primary-700, 0.18),
+      transparent 28rem
+    ),
+    colors.$neutral-950;
+}
+
+.page {
+  padding: 2.5rem max(1rem, calc((100% - 1200px) / 2)) 6rem;
+}
+.state {
+  display: grid;
+  place-items: center;
+  color: colors.$neutral-300;
+}
+.back {
+  color: colors.$primary-400;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  align-items: start;
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-top: 3rem;
+}
+.mainContent h1 {
+  max-width: 15ch;
+  margin: 1rem 0 0;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+.lead {
+  max-width: 45rem;
+  margin: 1.25rem 0 0;
+  color: colors.$neutral-300;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.badges {
+  display: flex;
+  gap: 0.6rem;
+}
+.badges span {
+  padding: 0.4rem 0.65rem;
+  color: colors.$primary-400;
+  border: 1px solid rgba(colors.$primary-400, 0.25);
+  background: rgba(colors.$primary-500, 0.08);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 3rem;
+  overflow: hidden;
+  background: rgba(colors.$primary-400, 0.13);
+  border: 1px solid rgba(colors.$primary-400, 0.13);
+  border-radius: 1rem;
+}
+.infoGrid div {
+  padding: 1.1rem;
+  background: rgba(colors.$neutral-950, 0.92);
+}
+.infoGrid span {
+  display: block;
+  color: colors.$neutral-300;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.infoGrid strong {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.about {
+  margin-top: 3rem;
+}
+.about h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+.about p {
+  max-width: 45rem;
+  color: colors.$neutral-300;
+  line-height: 1.7;
+}
+
+.registrationCard {
+  position: sticky;
+  top: 6.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(colors.$primary-400, 0.24);
+  background: linear-gradient(
+    145deg,
+    rgba(colors.$primary-900, 0.65),
+    rgba(colors.$neutral-950, 0.95)
+  );
+  border-radius: 1rem;
+  box-shadow:
+    0 24px 60px rgba(#000, 0.28),
+    0 0 30px rgba(colors.$primary-400, 0.08);
+}
+.registrationCard > p {
+  margin: 0;
+  color: colors.$primary-400;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.registrationCard > strong {
+  display: block;
+  margin-top: 0.65rem;
+  font-size: 1.25rem;
+}
+.capacityText {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  color: colors.$neutral-300;
+  font-size: 0.78rem;
+}
+.progress {
+  height: 0.4rem;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  background: colors.$primary-900;
+  border-radius: 999px;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  background: colors.$primary-400;
+  box-shadow: 0 0 12px rgba(colors.$primary-400, 0.55);
+  border-radius: inherit;
+}
+.registrationCard button {
+  width: 100%;
+  min-height: 3rem;
+  margin-top: 1.5rem;
+  color: colors.$neutral-950;
+  background: colors.$primary-400;
+  border: 0;
+  border-radius: 0.6rem;
+  box-shadow: 0 0 20px rgba(colors.$primary-400, 0.2);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.registrationCard small {
+  display: block;
+  margin-top: 0.8rem;
+  color: colors.$neutral-300;
+  line-height: 1.4;
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .registrationCard {
+    position: static;
+  }
+}
+
+@media (max-width: 520px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+}
