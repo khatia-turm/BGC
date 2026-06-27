@@ -41,3 +41,11 @@ export function useClub(id: number) {
     enabled: Number.isFinite(id),
   });
 }
+
+export function useClubGames(id: number) {
+  return useQuery({
+    queryKey: clubKeys.games(id),
+    queryFn: () => getClubGames(id),
+    enabled: Number.isFinite(id),
+  });
+}

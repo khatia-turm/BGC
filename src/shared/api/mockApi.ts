@@ -103,6 +103,16 @@ function resolveGet(
         .map((item) => item.gameId);
       return mockData.games.filter((game) => gameIds.includes(game.id));
     }
+    if (segments[3] === "leaderboards") {
+      const gameId = toNumber(searchParams.get("gameId"));
+      const season = searchParams.get("season");
+      return mockData.clubLeaderboards.filter(
+        (entry) =>
+          entry.clubId === clubId &&
+          (!gameId || entry.gameId === gameId) &&
+          (!season || entry.season === season),
+      );
+    }
     return mockData.clubs.find((club) => club.id === clubId);
   }
 
