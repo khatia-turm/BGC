@@ -518,6 +518,60 @@
       ]
     }
   ],
+  "clubLeaderboards": [
+    {
+      "id": 1,
+      "clubId": 456,
+      "gameId": 13,
+      "season": "2026",
+      "userId": 234,
+      "nickname": "TabletopKing",
+      "avatarUrl": "https://i.pravatar.cc/300?img=12",
+      "rank": 1,
+      "ratingPoints": 128.4,
+      "gamesPlayed": 18,
+      "wins": 11
+    },
+    {
+      "id": 2,
+      "clubId": 456,
+      "gameId": 13,
+      "season": "2026",
+      "userId": 235,
+      "nickname": "MeepleQueen",
+      "avatarUrl": "https://i.pravatar.cc/300?img=47",
+      "rank": 2,
+      "ratingPoints": 104.2,
+      "gamesPlayed": 16,
+      "wins": 8
+    },
+    {
+      "id": 3,
+      "clubId": 456,
+      "gameId": 15,
+      "season": "2026",
+      "userId": 235,
+      "nickname": "MeepleQueen",
+      "avatarUrl": "https://i.pravatar.cc/300?img=47",
+      "rank": 1,
+      "ratingPoints": 91.6,
+      "gamesPlayed": 12,
+      "wins": 7
+    },
+    {
+      "id": 4,
+      "clubId": 456,
+      "gameId": 13,
+      "season": "2025",
+      "userId": 235,
+      "nickname": "MeepleQueen",
+      "avatarUrl": "https://i.pravatar.cc/300?img=47",
+      "rank": 1,
+      "ratingPoints": 119.8,
+      "gamesPlayed": 20,
+      "wins": 12
+    }
+  ],
   "pagination": {
     "page": 1,
     "pageSize": 10,

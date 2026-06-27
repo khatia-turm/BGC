@@ -1,0 +1,17 @@
+@use "@shared/styles/colors" as colors;
+
+.card {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(colors.$primary-400, 0.15);
+  background: rgba(colors.$primary-900, 0.2);
+  border-radius: 0.85rem;
+
+  img { width: 5rem; height: 5rem; object-fit: cover; border-radius: 0.6rem; }
+  h3 { margin: 0; font-size: 1rem; }
+  h3 a { color: colors.$neutral-100; text-decoration: none; }
+  p { margin: 0.5rem 0; color: colors.$neutral-300; font-size: 0.76rem; }
+  span { color: colors.$primary-400; font-size: 0.72rem; }
+}
