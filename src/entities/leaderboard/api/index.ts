@@ -31,7 +31,7 @@ export const useClubLeaderboard = (
   useQuery({
     queryKey: ["clubs", clubId, "leaderboards", filters],
     queryFn: () => getClubLeaderboard(clubId, filters),
-    enabled: Number.isFinite(clubId),
+    enabled: Number.isFinite(clubId) && Number.isFinite(filters.gameId),
   });
 
 export type PlatformLeaderboardFilters = {
@@ -56,4 +56,5 @@ export const usePlatformLeaderboard = (
   useQuery({
     queryKey: ["leaderboards", "platform", filters],
     queryFn: () => getPlatformLeaderboard(filters),
+    enabled: Number.isFinite(filters.gameId),
   });

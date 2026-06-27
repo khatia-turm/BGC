@@ -112,8 +112,8 @@
     "address": "Address",
     "hours": "Opening hours",
     "email": "Email",
-    "phone": "Phone"
-    ,"clubGames": "Club game library",
+    "phone": "Phone",
+    "clubGames": "Club game library",
     "clubGamesDescription": "Games physically available at this club for events, tournaments, and regular play.",
     "searchGames": "Search games",
     "searchGamesPlaceholder": "Search the club library…",
@@ -121,7 +121,7 @@
     "clubTournamentsDescription": "Upcoming and published tournaments organized by this club.",
     "rankingsLabel": "Club competition",
     "clubLeaderboards": "Club leaderboards",
-    "clubLeaderboardsDescription": "Compare player results by board game and season within this club.",
+    "clubLeaderboardsDescription": "Ranks players from {{club}}'s hosted tournament results. Choose a game and season to compare performance.",
     "leaderboardFilters": "Leaderboard filters",
     "season": "Season",
     "rank": "Rank",
@@ -138,7 +138,7 @@
   "leaderboard": {
     "eyebrow": "The best around the table",
     "title": "Leaderboards",
-    "description": "Compare tournament results across MeepleHub, explore rankings by game, and see who is leading this season.",
+    "description": "Ranks players from tournament results hosted by every club on MeepleHub. Choose a board game and season to find the strongest players across the platform.",
     "filtersLabel": "Leaderboard filters",
     "game": "Game",
     "season": "Season",

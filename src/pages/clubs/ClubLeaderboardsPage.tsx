@@ -21,7 +21,7 @@ export const ClubLeaderboardsPage = () => {
   return (
     <main className={styles.page}>
       <Link className={styles.back} to={`/clubs/${id}`}>← {clubQuery.data.name}</Link>
-      <header className={styles.header}><p>{t("clubs.rankingsLabel")}</p><h1>{t("clubs.clubLeaderboards")}</h1><span>{t("clubs.clubLeaderboardsDescription")}</span></header>
+      <header className={styles.header}><p>{t("clubs.rankingsLabel")}</p><h1>{t("clubs.clubLeaderboards")}</h1><span>{t("clubs.clubLeaderboardsDescription", { club: clubQuery.data.name })}</span></header>
 
       <section className={styles.toolbar} aria-label={t("clubs.leaderboardFilters")}>
         <label><span>{t("tournaments.gameLabel")}</span><select value={gameId ?? ""} onChange={(event) => setSelectedGameId(Number(event.target.value))}>{(gamesQuery.data ?? []).map((game) => <option key={game.id} value={game.id}>{game.title}</option>)}</select></label>
