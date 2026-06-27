@@ -1,0 +1,176 @@
+@use "@shared/styles/colors" as colors;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  background:
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(colors.$primary-700, 0.14),
+      transparent 28rem
+    ),
+    colors.$neutral-950;
+  border-bottom: 1px solid rgba(colors.$primary-500, 0.16);
+  box-shadow: 0 8px 32px rgba(#000, 0.22);
+}
+
+.navigation {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  width: min(100% - 2rem, 1200px);
+  min-height: 4.5rem;
+  margin-inline: auto;
+}
+
+.logo {
+  text-decoration: none;
+}
+
+.brand {
+  color: colors.$primary-400;
+  text-shadow:
+    0 0 8px rgba(colors.$primary-400, 0.45),
+    0 0 24px rgba(colors.$primary-500, 0.2);
+  transition:
+    filter 180ms ease,
+    text-shadow 180ms ease;
+
+  &:hover,
+  &:focus-visible {
+    filter: brightness(1.14);
+    text-shadow:
+      0 0 10px rgba(colors.$primary-400, 0.7),
+      0 0 28px rgba(colors.$primary-500, 0.35);
+  }
+}
+
+.primaryLinks,
+.authLinks {
+  display: flex;
+  align-items: center;
+}
+
+.primaryLinks {
+  align-self: stretch;
+  justify-content: center;
+  gap: clamp(0.6rem, 2vw, 1rem);
+}
+
+.authLinks {
+  justify-content: flex-end;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.link,
+.loginLink,
+.registerLink {
+  color: colors.$neutral-100;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 160ms ease;
+
+  &:hover,
+  &:focus-visible {
+    color: colors.$primary-400;
+    text-shadow: 0 0 12px rgba(colors.$primary-400, 0.55);
+  }
+}
+
+.link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+
+  &::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: colors.$primary-400;
+    box-shadow:
+      0 0 8px rgba(colors.$primary-400, 0.65),
+      0 0 18px rgba(colors.$primary-400, 0.25);
+    border-radius: 999px 999px 0 0;
+    content: "";
+    opacity: 0;
+    transform: scaleX(0.5);
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease;
+  }
+}
+
+.active {
+  color: colors.$primary-400;
+  text-shadow: 0 0 12px rgba(colors.$primary-400, 0.5);
+
+  &::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.registerLink {
+  padding: 0.65rem 0.9rem;
+  color: colors.$neutral-950;
+  background: colors.$primary-400;
+  border-radius: 0.55rem;
+  box-shadow:
+    0 0 10px rgba(colors.$primary-400, 0.25),
+    inset 0 0 0 1px rgba(colors.$neutral-100, 0.18);
+  text-shadow: none;
+  transition:
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+
+  &:hover,
+  &:focus-visible {
+    color: colors.$neutral-950;
+    background: colors.$neutral-100;
+    box-shadow:
+      0 0 12px rgba(colors.$primary-400, 0.58),
+      0 0 28px rgba(colors.$primary-400, 0.22);
+    text-shadow: none;
+    transform: translateY(-1px);
+  }
+}
+
+.separator {
+  color: colors.$neutral-300;
+}
+
+@media (max-width: 760px) {
+  .navigation {
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem 1rem;
+    padding-top: 0.75rem;
+  }
+
+  .authLinks {
+    justify-self: end;
+  }
+
+  .primaryLinks {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    overflow-x: auto;
+  }
+
+  .link {
+    min-height: 3.25rem;
+
+    &::after {
+      bottom: -1px;
+    }
+  }
+}
