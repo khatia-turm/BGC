@@ -156,6 +156,40 @@
     "bestFinish": "Best finish",
     "noResults": "No ranking results for this game and season."
   },
+  "players": {
+    "eyebrow": "Meet the community",
+    "title": "Players",
+    "description": "Find board game players across MeepleHub and explore their public tournament profiles.",
+    "searchLabel": "Search players",
+    "searchPlaceholder": "Search by nickname or name…",
+    "results": "{{count}} players found",
+    "resultsLabel": "Player search results",
+    "searching": "Searching…",
+    "noResults": "No players match that search.",
+    "joined": "Joined {{date}}",
+    "viewProfile": "View profile"
+  },
+  "playerProfile": {
+    "notFound": "Player not found.",
+    "backToPlayers": "Back to players",
+    "publicProfile": "Public player profile",
+    "memberSince": "MeepleHub member since {{date}}",
+    "statsLabel": "Player statistics",
+    "ratingPoints": "Rating points",
+    "tournaments": "Tournaments",
+    "wins": "Wins",
+    "bestFinish": "Best finish",
+    "competition": "Competitive record",
+    "gameRankings": "Game rankings",
+    "game": "Game",
+    "season": "Season",
+    "rank": "Rank",
+    "points": "Points",
+    "noRankings": "This player has no ranking results yet.",
+    "activity": "Recent activity",
+    "recentTournaments": "Tournaments",
+    "noTournaments": "No public tournament activity yet."
+  },
   "common": {
     "loading": "Loading…",
     "loadError": "We couldn't load this right now."

@@ -37,6 +37,26 @@ function resolveGet(
   if (matches(segments, ["api", "games", "categories"]))
     return mockData.categories;
 
+  if (matches(segments, ["api", "players"])) {
+    const search = searchParams.get("search")?.trim().toLowerCase();
+    return mockData.users
+      .filter((user) => user.status === "Active")
+      .filter(
+        (user) =>
+          !search ||
+          [user.nickname, user.firstName, user.lastName]
+            .some((value) => value.toLowerCase().includes(search)),
+      )
+      .map(toPublicPlayer);
+  }
+
+  if (segments[0] === "api" && segments[1] === "players" && segments[2]) {
+    const user = mockData.users.find(
+      (item) => item.id === Number(segments[2]) && item.status === "Active",
+    );
+    return user ? toPublicPlayerProfile(user) : undefined;
+  }
+
   if (matches(segments, ["api", "games"])) {
     const search = searchParams.get("search")?.toLowerCase();
     const categoryId = toNumber(searchParams.get("categoryId"));
@@ -149,4 +169,69 @@ function toNumber(value: string | null) {
 
 function delay(milliseconds: number) {
   return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
+function toPublicPlayer(user: (typeof mockData.users)[number]) {
+  return {
+    id: user.id,
+    nickname: user.nickname,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    avatarUrl: user.avatarUrl,
+    joinedAt: user.createdAt,
+  };
+}
+
+function toPublicPlayerProfile(user: (typeof mockData.users)[number]) {
+  const rankings = mockData.platformLeaderboards
+    .filter((entry) => entry.userId === user.id)
+    .map((entry) => ({
+      gameId: entry.gameId,
+      season: entry.season,
+      rank: entry.rank,
+      ratingPoints: entry.ratingPoints,
+    }));
+  const currentSeason = rankings
+    .map((entry) => entry.season)
+    .sort((first, second) => second.localeCompare(first))[0];
+  const currentEntries = mockData.platformLeaderboards.filter(
+    (entry) => entry.userId === user.id && entry.season === currentSeason,
+  );
+  const tournaments = mockData.tournamentRegistrations
+    .filter((registration) => registration.userId === user.id)
+    .map((registration) => {
+      const tournament = mockData.tournaments.find(
+        (item) => item.id === registration.tournamentId,
+      );
+      return tournament
+        ? {
+            tournamentId: tournament.id,
+            name: tournament.name,
+            startsAt: tournament.startsAt,
+            city: tournament.city,
+            status: registration.status,
+          }
+        : undefined;
+    })
+    .filter((tournament) => tournament !== undefined);
+
+  return {
+    ...toPublicPlayer(user),
+    stats: {
+      ratingPoints: currentEntries.reduce(
+        (total, entry) => total + entry.ratingPoints,
+        0,
+      ),
+      tournamentsPlayed: currentEntries.reduce(
+        (total, entry) => total + entry.tournamentsPlayed,
+        0,
+      ),
+      wins: currentEntries.reduce((total, entry) => total + entry.wins, 0),
+      bestFinish: currentEntries.length
+        ? Math.min(...currentEntries.map((entry) => entry.bestFinish))
+        : null,
+    },
+    rankings,
+    tournaments,
+  };
 }
