@@ -1,0 +1,21 @@
+export type Tournament = {
+  id: number;
+  clubId: number;
+  gameId: number;
+  name: string;
+  description: string;
+  type: "League" | "Knockout" | "Multi-stage";
+  status: string;
+  city: string;
+  venue: string;
+  registrationOpensAt: string;
+  registrationClosesAt: string;
+  startsAt: string;
+  endsAt: string;
+  maxPlayers: number;
+  registeredPlayers: number;
+  scoringPolicy: string;
+  tieBreakRules: string[];
+  createdAt: string;
+  updatedAt: string;
+};
