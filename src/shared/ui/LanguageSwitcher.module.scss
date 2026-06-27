@@ -1,0 +1,65 @@
+@use "@shared/styles/colors" as colors;
+
+.switcher {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 50;
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.25rem;
+  background: rgba(colors.$neutral-950, 0.9);
+  border: 1px solid rgba(colors.$primary-400, 0.28);
+  border-radius: 999px;
+  box-shadow:
+    0 8px 28px rgba(#000, 0.35),
+    0 0 18px rgba(colors.$primary-400, 0.1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.option {
+  min-width: 2.35rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.55rem;
+  color: colors.$neutral-300;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+
+  &:hover,
+  &:focus-visible {
+    color: colors.$neutral-100;
+  }
+
+  &:focus-visible {
+    outline: 2px solid colors.$primary-400;
+    outline-offset: 2px;
+  }
+}
+
+.active {
+  color: colors.$neutral-950;
+  background: colors.$primary-400;
+  box-shadow: 0 0 12px rgba(colors.$primary-400, 0.38);
+
+  &:hover,
+  &:focus-visible {
+    color: colors.$neutral-950;
+  }
+}
+
+@media (max-width: 520px) {
+  .switcher {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+}
