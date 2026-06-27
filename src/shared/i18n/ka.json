@@ -1,0 +1,12 @@
+{
+  "navigation": {
+    "mainLabel": "მთავარი ნავიგაცია",
+    "homeLabel": "BGC-ის მთავარი გვერდი",
+    "events": "ღონისძიებები",
+    "clubs": "კლუბები",
+    "leaderboards": "ლიდერბორდი",
+    "players": "მოთამაშეები",
+    "login": "შესვლა",
+    "register": "რეგისტრაცია"
+  }
+}

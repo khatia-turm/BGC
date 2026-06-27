@@ -1,0 +1,12 @@
+{
+  "navigation": {
+    "mainLabel": "Main navigation",
+    "homeLabel": "BGC home",
+    "events": "Events",
+    "clubs": "Clubs",
+    "leaderboards": "Leaderboards",
+    "players": "Players",
+    "login": "Login",
+    "register": "Register"
+  }
+}

@@ -1,1 +1,11 @@
-/* Styles entrypoint. */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Inter, "Noto Sans Georgian", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}
