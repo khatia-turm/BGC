@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@shared/api/client";
-import type { ClubLeaderboardEntry } from "../model/types";
+import type {
+  ClubLeaderboardEntry,
+  PlatformLeaderboardEntry,
+} from "../model/types";
 
 export type ClubLeaderboardFilters = {
   gameId?: number;
@@ -29,4 +32,28 @@ export const useClubLeaderboard = (
     queryKey: ["clubs", clubId, "leaderboards", filters],
     queryFn: () => getClubLeaderboard(clubId, filters),
     enabled: Number.isFinite(clubId),
+  });
+
+export type PlatformLeaderboardFilters = {
+  gameId?: number;
+  season?: string;
+};
+
+export const getPlatformLeaderboard = (
+  filters: PlatformLeaderboardFilters = {},
+) => {
+  const params = new URLSearchParams();
+  if (filters.gameId) params.set("gameId", String(filters.gameId));
+  if (filters.season) params.set("season", filters.season);
+  const query = params.size ? `?${params}` : "";
+
+  return apiClient<PlatformLeaderboardEntry[]>(`/api/leaderboards${query}`);
+};
+
+export const usePlatformLeaderboard = (
+  filters: PlatformLeaderboardFilters = {},
+) =>
+  useQuery({
+    queryKey: ["leaderboards", "platform", filters],
+    queryFn: () => getPlatformLeaderboard(filters),
   });

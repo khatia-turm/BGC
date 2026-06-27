@@ -11,3 +11,17 @@ export type ClubLeaderboardEntry = {
   gamesPlayed: number;
   wins: number;
 };
+
+export type PlatformLeaderboardEntry = {
+  id: number;
+  gameId: number;
+  season: string;
+  userId: number;
+  nickname: string;
+  avatarUrl: string | null;
+  rank: number;
+  ratingPoints: number;
+  tournamentsPlayed: number;
+  wins: number;
+  bestFinish: number;
+};

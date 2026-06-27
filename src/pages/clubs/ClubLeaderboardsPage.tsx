@@ -10,8 +10,9 @@ export const ClubLeaderboardsPage = () => {
   const { t } = useTranslation();
   const clubQuery = useClub(id);
   const gamesQuery = useClubGames(id);
-  const [gameId, setGameId] = useState<number | undefined>();
-  const [season, setSeason] = useState("2026");
+  const [selectedGameId, setSelectedGameId] = useState<number | undefined>();
+  const [season, setSeason] = useState(String(new Date().getFullYear()));
+  const gameId = selectedGameId ?? gamesQuery.data?.[0]?.id;
   const leaderboardQuery = useClubLeaderboard(id, { gameId, season });
 
   if (clubQuery.isPending) return <main className={styles.state}>{t("common.loading")}</main>;
@@ -23,7 +24,7 @@ export const ClubLeaderboardsPage = () => {
       <header className={styles.header}><p>{t("clubs.rankingsLabel")}</p><h1>{t("clubs.clubLeaderboards")}</h1><span>{t("clubs.clubLeaderboardsDescription")}</span></header>
 
       <section className={styles.toolbar} aria-label={t("clubs.leaderboardFilters")}>
-        <label><span>{t("tournaments.gameLabel")}</span><select value={gameId ?? "all"} onChange={(event) => setGameId(event.target.value === "all" ? undefined : Number(event.target.value))}><option value="all">{t("tournaments.allGames")}</option>{(gamesQuery.data ?? []).map((game) => <option key={game.id} value={game.id}>{game.title}</option>)}</select></label>
+        <label><span>{t("tournaments.gameLabel")}</span><select value={gameId ?? ""} onChange={(event) => setSelectedGameId(Number(event.target.value))}>{(gamesQuery.data ?? []).map((game) => <option key={game.id} value={game.id}>{game.title}</option>)}</select></label>
         <label><span>{t("clubs.season")}</span><select value={season} onChange={(event) => setSeason(event.target.value)}><option value="2026">2026</option><option value="2025">2025</option></select></label>
       </section>
 

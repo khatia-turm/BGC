@@ -65,6 +65,16 @@ function resolveGet(
     return mockData.users.filter((user) => !status || user.status === status);
   }
 
+  if (matches(segments, ["api", "leaderboards"])) {
+    const gameId = toNumber(searchParams.get("gameId"));
+    const season = searchParams.get("season");
+    return mockData.platformLeaderboards.filter(
+      (entry) =>
+        (!gameId || entry.gameId === gameId) &&
+        (!season || entry.season === season),
+    );
+  }
+
   if (segments[0] === "api" && segments[1] === "users" && segments[2]) {
     const userId = Number(segments[2]);
     if (segments[3] === "clubs") {
