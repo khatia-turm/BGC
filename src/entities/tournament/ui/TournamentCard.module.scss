@@ -1,0 +1,78 @@
+@use "@shared/styles/colors" as colors;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.4rem;
+  border: 1px solid rgba(colors.$primary-400, 0.16);
+  background: linear-gradient(145deg, rgba(colors.$primary-900, 0.5), rgba(colors.$neutral-950, 0.86));
+  border-radius: 1rem;
+  box-shadow: 0 18px 40px rgba(#000, 0.18);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+
+  &:hover {
+    border-color: rgba(colors.$primary-400, 0.42);
+    box-shadow: 0 20px 46px rgba(#000, 0.28), 0 0 25px rgba(colors.$primary-400, 0.08);
+    transform: translateY(-3px);
+  }
+}
+
+.topLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.status {
+  padding: 0.35rem 0.55rem;
+  color: colors.$primary-400;
+  background: rgba(colors.$primary-500, 0.1);
+  border-radius: 999px;
+}
+
+.type { color: colors.$neutral-300; }
+
+.title {
+  margin: 1rem 0 0;
+  font-size: 1.2rem;
+  line-height: 1.3;
+
+  a { color: colors.$neutral-100; text-decoration: none; }
+}
+
+.description {
+  display: -webkit-box;
+  margin: 0.7rem 0 0;
+  overflow: hidden;
+  color: colors.$neutral-300;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  margin: 1.25rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(colors.$neutral-300, 0.12);
+
+  div { min-width: 0; }
+  dt { color: colors.$neutral-300; font-size: 0.66rem; text-transform: uppercase; }
+  dd { margin: 0.3rem 0 0; overflow: hidden; color: colors.$neutral-100; font-size: 0.82rem; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+.cardLink {
+  align-self: flex-start;
+  margin-top: 1.25rem;
+  color: colors.$primary-400;
+  font-size: 0.84rem;
+  font-weight: 750;
+  text-decoration: none;
+}

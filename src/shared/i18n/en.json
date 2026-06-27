@@ -8,5 +8,40 @@
     "players": "Players",
     "login": "Login",
     "register": "Register"
+  },
+  "home": {
+    "eyebrow": "Georgia's board game community",
+    "title": "Find your table. Make your move.",
+    "description": "MeepleHub brings board game players and clubs together to discover events, join tournaments, track results, and keep every game night within reach.",
+    "registerCta": "Join MeepleHub",
+    "eventsCta": "Explore events",
+    "highlightsLabel": "What you can do on MeepleHub",
+    "highlightClubs": "Discover local clubs",
+    "highlightEvents": "Join tournaments",
+    "highlightPlayers": "Meet players",
+    "cardLabel": "Upcoming event",
+    "cardTitle": "Tbilisi Game Night",
+    "cardPlace": "Meeple Corner",
+    "cardPlayers": "12 players",
+    "eventsEyebrow": "Play something memorable",
+    "upcomingEvents": "Upcoming tournaments",
+    "viewAllEvents": "View all events",
+    "clubsEyebrow": "Find your people",
+    "featuredClubs": "Featured clubs",
+    "viewAllClubs": "View all clubs",
+    "noEvents": "No upcoming tournaments yet.",
+    "noClubs": "No clubs to show yet."
+  },
+  "cards": {
+    "registrationOpen": "Registration open",
+    "date": "Date",
+    "location": "Location",
+    "players": "Players",
+    "viewEvent": "View event",
+    "viewClub": "View club"
+  },
+  "common": {
+    "loading": "Loading…",
+    "loadError": "We couldn't load this right now."
   }
 }

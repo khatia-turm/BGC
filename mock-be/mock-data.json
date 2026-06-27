@@ -80,6 +80,54 @@
       "createdAt": "2026-01-15T08:00:00Z",
       "updatedAt": "2026-06-22T11:20:00Z",
       "deletedAt": null
+    },
+    {
+      "id": 457,
+      "name": "Batumi Boardwalk Games",
+      "logoUrl": "https://placehold.co/400x400/037971/C2FCF7?text=BBG",
+      "description": "Seaside board gaming with social deduction nights, family tables, and weekend tournaments.",
+      "address": "24 Rustaveli Street",
+      "city": "Batumi",
+      "email": "hello@boardwalk.ge",
+      "phone": "+995555220457",
+      "workingHours": "Tue-Sun 12:00-23:00",
+      "status": "Active",
+      "adminNote": null,
+      "createdAt": "2026-02-08T09:00:00Z",
+      "updatedAt": "2026-06-24T14:10:00Z",
+      "deletedAt": null
+    },
+    {
+      "id": 458,
+      "name": "Kutaisi Critical Roll",
+      "logoUrl": "https://placehold.co/400x400/049A8F/040F0F?text=KCR",
+      "description": "A welcoming community space for modern board games, RPG campaigns, and beginner-friendly events.",
+      "address": "8 Tsereteli Street",
+      "city": "Kutaisi",
+      "email": "play@criticalroll.ge",
+      "phone": "+995555330458",
+      "workingHours": "Mon-Sat 15:00-22:00",
+      "status": "Active",
+      "adminNote": null,
+      "createdAt": "2026-03-12T11:30:00Z",
+      "updatedAt": "2026-06-23T08:45:00Z",
+      "deletedAt": null
+    },
+    {
+      "id": 459,
+      "name": "Rustavi Dice District",
+      "logoUrl": "https://placehold.co/400x400/00BFB4/040F0F?text=DDD",
+      "description": "Fast games, deep strategy, and a lively local league just outside Tbilisi.",
+      "address": "16 Megobroba Avenue",
+      "city": "Rustavi",
+      "email": "team@dicedistrict.ge",
+      "phone": "+995555440459",
+      "workingHours": "Wed-Sun 14:00-22:30",
+      "status": "Active",
+      "adminNote": null,
+      "createdAt": "2026-04-04T10:15:00Z",
+      "updatedAt": "2026-06-21T17:30:00Z",
+      "deletedAt": null
     }
   ],
   "clubDashboard": {
@@ -104,6 +152,18 @@
     {
       "id": 10,
       "name": "Strategy"
+    },
+    {
+      "id": 11,
+      "name": "Card Game"
+    },
+    {
+      "id": 12,
+      "name": "Territory Building"
+    },
+    {
+      "id": 13,
+      "name": "Science Fiction"
     }
   ],
   "games": [
@@ -133,6 +193,87 @@
       "categoryIds": [9, 10],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
+    },
+    {
+      "id": 14,
+      "bggId": 266192,
+      "title": "Wingspan",
+      "subtitle": "Build a thriving wildlife preserve",
+      "description": "Attract beautiful birds to a network of habitats and create powerful combinations.",
+      "year": 2019,
+      "minPlayers": 1,
+      "maxPlayers": 5,
+      "minPlayingTime": 40,
+      "maxPlayingTime": 70,
+      "complexity": 2.47,
+      "type": "Strategy Game",
+      "bggOverallRank": 34,
+      "bggGeekRating": 7.9,
+      "bggAvgRating": 8.1,
+      "bggVoters": 92000,
+      "bggCommunityPlayerCounts": {
+        "best": [3],
+        "recommended": [1, 2, 3, 4],
+        "notRecommended": [5]
+      },
+      "imageUrl": "https://placehold.co/600x600/85BDBF/040F0F?text=Wingspan",
+      "categoryIds": [10, 11],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-25T03:00:00Z"
+    },
+    {
+      "id": 15,
+      "bggId": 224517,
+      "title": "Brass: Birmingham",
+      "subtitle": "Forge an industrial empire",
+      "description": "Compete as entrepreneurs during the Industrial Revolution across canals, rails, and markets.",
+      "year": 2018,
+      "minPlayers": 2,
+      "maxPlayers": 4,
+      "minPlayingTime": 60,
+      "maxPlayingTime": 120,
+      "complexity": 3.88,
+      "type": "Economic Strategy",
+      "bggOverallRank": 1,
+      "bggGeekRating": 8.4,
+      "bggAvgRating": 8.6,
+      "bggVoters": 65000,
+      "bggCommunityPlayerCounts": {
+        "best": [3, 4],
+        "recommended": [2, 3, 4],
+        "notRecommended": []
+      },
+      "imageUrl": "https://placehold.co/600x600/023436/C2FCF7?text=Brass+Birmingham",
+      "categoryIds": [9, 10],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-25T03:00:00Z"
+    },
+    {
+      "id": 16,
+      "bggId": 28143,
+      "title": "Race for the Galaxy",
+      "subtitle": "Build a galactic civilization",
+      "description": "Use cards to settle worlds, develop technologies, and create the strongest space empire.",
+      "year": 2007,
+      "minPlayers": 2,
+      "maxPlayers": 4,
+      "minPlayingTime": 30,
+      "maxPlayingTime": 60,
+      "complexity": 2.99,
+      "type": "Card Game",
+      "bggOverallRank": 78,
+      "bggGeekRating": 7.6,
+      "bggAvgRating": 7.8,
+      "bggVoters": 56000,
+      "bggCommunityPlayerCounts": {
+        "best": [2],
+        "recommended": [2, 3, 4],
+        "notRecommended": []
+      },
+      "imageUrl": "https://placehold.co/600x600/03B5AA/040F0F?text=Race+for+the+Galaxy",
+      "categoryIds": [11, 13],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-25T03:00:00Z"
     }
   ],
   "boardGameCategories": [
@@ -143,6 +284,30 @@
     {
       "boardGameId": 13,
       "categoryId": 10
+    },
+    {
+      "boardGameId": 14,
+      "categoryId": 10
+    },
+    {
+      "boardGameId": 14,
+      "categoryId": 11
+    },
+    {
+      "boardGameId": 15,
+      "categoryId": 9
+    },
+    {
+      "boardGameId": 15,
+      "categoryId": 10
+    },
+    {
+      "boardGameId": 16,
+      "categoryId": 11
+    },
+    {
+      "boardGameId": 16,
+      "categoryId": 13
     }
   ],
   "clubGames": [
@@ -150,6 +315,36 @@
       "id": 1,
       "clubId": 456,
       "gameId": 13,
+      "deletedAt": null
+    },
+    {
+      "id": 2,
+      "clubId": 456,
+      "gameId": 15,
+      "deletedAt": null
+    },
+    {
+      "id": 3,
+      "clubId": 457,
+      "gameId": 14,
+      "deletedAt": null
+    },
+    {
+      "id": 4,
+      "clubId": 457,
+      "gameId": 16,
+      "deletedAt": null
+    },
+    {
+      "id": 5,
+      "clubId": 458,
+      "gameId": 13,
+      "deletedAt": null
+    },
+    {
+      "id": 6,
+      "clubId": 459,
+      "gameId": 15,
       "deletedAt": null
     }
   ],
@@ -174,6 +369,90 @@
       "tieBreakRules": ["HeadToHead", "MostWins", "Manual"],
       "createdAt": "2026-06-10T09:00:00Z",
       "updatedAt": "2026-06-25T16:00:00Z"
+    },
+    {
+      "id": 701,
+      "clubId": 457,
+      "gameId": 14,
+      "name": "Black Sea Wingspan Cup",
+      "description": "A relaxed but competitive afternoon of birds, engines, and seaside board gaming.",
+      "type": "League",
+      "status": "RegistrationOpen",
+      "city": "Batumi",
+      "venue": "Batumi Boardwalk Games",
+      "registrationOpensAt": "2026-06-20T08:00:00Z",
+      "registrationClosesAt": "2026-07-22T18:00:00Z",
+      "startsAt": "2026-07-25T12:00:00Z",
+      "endsAt": "2026-07-25T19:00:00Z",
+      "maxPlayers": 24,
+      "registeredPlayers": 17,
+      "scoringPolicy": "LinearPlacementPoints",
+      "tieBreakRules": ["MostWins", "HighestRawScore"],
+      "createdAt": "2026-06-18T09:00:00Z",
+      "updatedAt": "2026-06-26T13:30:00Z"
+    },
+    {
+      "id": 702,
+      "clubId": 458,
+      "gameId": 13,
+      "name": "Imereti Strategy Masters",
+      "description": "Three rounds of Terraforming Mars followed by a four-player championship table.",
+      "type": "Multi-stage",
+      "status": "RegistrationOpen",
+      "city": "Kutaisi",
+      "venue": "Kutaisi Critical Roll",
+      "registrationOpensAt": "2026-06-24T08:00:00Z",
+      "registrationClosesAt": "2026-08-01T18:00:00Z",
+      "startsAt": "2026-08-08T10:00:00Z",
+      "endsAt": "2026-08-09T18:00:00Z",
+      "maxPlayers": 20,
+      "registeredPlayers": 11,
+      "scoringPolicy": "WinnerHeavyPlacementPoints",
+      "tieBreakRules": ["HeadToHead", "HighestRawScore", "Manual"],
+      "createdAt": "2026-06-22T10:00:00Z",
+      "updatedAt": "2026-06-27T08:15:00Z"
+    },
+    {
+      "id": 703,
+      "clubId": 456,
+      "gameId": 15,
+      "name": "Brass After Dark",
+      "description": "An evening knockout for experienced industrialists with two qualifying tables.",
+      "type": "Knockout",
+      "status": "RegistrationOpen",
+      "city": "Tbilisi",
+      "venue": "Tbilisi Meeple Corner",
+      "registrationOpensAt": "2026-06-27T08:00:00Z",
+      "registrationClosesAt": "2026-08-12T18:00:00Z",
+      "startsAt": "2026-08-15T17:00:00Z",
+      "endsAt": "2026-08-15T23:00:00Z",
+      "maxPlayers": 16,
+      "registeredPlayers": 6,
+      "scoringPolicy": "WinLossOnly",
+      "tieBreakRules": ["HeadToHead", "Manual"],
+      "createdAt": "2026-06-26T15:00:00Z",
+      "updatedAt": "2026-06-27T09:00:00Z"
+    },
+    {
+      "id": 704,
+      "clubId": 459,
+      "gameId": 16,
+      "name": "Galaxy Sprint Rustavi",
+      "description": "Quick Race for the Galaxy matches in a Swiss-style league for new and veteran players.",
+      "type": "League",
+      "status": "RegistrationOpen",
+      "city": "Rustavi",
+      "venue": "Rustavi Dice District",
+      "registrationOpensAt": "2026-07-01T08:00:00Z",
+      "registrationClosesAt": "2026-08-20T18:00:00Z",
+      "startsAt": "2026-08-23T13:00:00Z",
+      "endsAt": "2026-08-23T20:00:00Z",
+      "maxPlayers": 28,
+      "registeredPlayers": 9,
+      "scoringPolicy": "LinearPlacementPoints",
+      "tieBreakRules": ["MostWins", "HeadToHead"],
+      "createdAt": "2026-06-27T10:00:00Z",
+      "updatedAt": "2026-06-27T10:00:00Z"
     }
   ],
   "tournamentRegistrations": [
@@ -242,7 +521,7 @@
   "pagination": {
     "page": 1,
     "pageSize": 10,
-    "totalItems": 1,
+    "totalItems": 5,
     "totalPages": 1
   }
 }

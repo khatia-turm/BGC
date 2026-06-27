@@ -8,5 +8,40 @@
     "players": "მოთამაშეები",
     "login": "შესვლა",
     "register": "რეგისტრაცია"
+  },
+  "home": {
+    "eyebrow": "საქართველოს სამაგიდო თამაშების საზოგადოება",
+    "title": "იპოვე შენი მაგიდა. გააკეთე სვლა.",
+    "description": "MeepleHub აერთიანებს სამაგიდო თამაშების მოყვარულებსა და კლუბებს — აღმოაჩინე ღონისძიებები, შეუერთდი ტურნირებს და თვალყური ადევნე შედეგებს.",
+    "registerCta": "შემოუერთდი MeepleHub-ს",
+    "eventsCta": "ღონისძიებების ნახვა",
+    "highlightsLabel": "რას შეძლებ MeepleHub-ზე",
+    "highlightClubs": "აღმოაჩინე კლუბები",
+    "highlightEvents": "შეუერთდი ტურნირებს",
+    "highlightPlayers": "გაიცანი მოთამაშეები",
+    "cardLabel": "მომავალი ღონისძიება",
+    "cardTitle": "თბილისის თამაშების საღამო",
+    "cardPlace": "Meeple Corner",
+    "cardPlayers": "12 მოთამაშე",
+    "eventsEyebrow": "ითამაშე დაუვიწყარი თამაში",
+    "upcomingEvents": "მომავალი ტურნირები",
+    "viewAllEvents": "ყველა ღონისძიება",
+    "clubsEyebrow": "იპოვე შენი თანამოაზრეები",
+    "featuredClubs": "რჩეული კლუბები",
+    "viewAllClubs": "ყველა კლუბი",
+    "noEvents": "მომავალი ტურნირები ჯერ არ არის.",
+    "noClubs": "კლუბები ჯერ არ არის."
+  },
+  "cards": {
+    "registrationOpen": "რეგისტრაცია ღიაა",
+    "date": "თარიღი",
+    "location": "ადგილი",
+    "players": "მოთამაშეები",
+    "viewEvent": "ღონისძიების ნახვა",
+    "viewClub": "კლუბის ნახვა"
+  },
+  "common": {
+    "loading": "იტვირთება…",
+    "loadError": "მონაცემების ჩატვირთვა ვერ მოხერხდა."
   }
 }
