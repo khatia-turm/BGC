@@ -135,6 +135,27 @@
     "players": "players",
     "minutes": "min"
   },
+  "leaderboard": {
+    "eyebrow": "The best around the table",
+    "title": "Leaderboards",
+    "description": "Compare tournament results across MeepleHub, explore rankings by game, and see who is leading this season.",
+    "filtersLabel": "Leaderboard filters",
+    "game": "Game",
+    "season": "Season",
+    "topPlayers": "Top three players",
+    "pointsShort": "pts",
+    "completeStandings": "Complete standings",
+    "fullRanking": "Full ranking",
+    "playersRanked": "{{count}} players ranked",
+    "rank": "Rank",
+    "player": "Player",
+    "club": "Club",
+    "points": "Rating points",
+    "played": "Played",
+    "wins": "Wins",
+    "bestFinish": "Best finish",
+    "noResults": "No ranking results for this game and season."
+  },
   "common": {
     "loading": "Loading…",
     "loadError": "We couldn't load this right now."
