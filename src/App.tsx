@@ -1,1 +1,1 @@
-export const App = () => null;
+export { App } from "./app/index";

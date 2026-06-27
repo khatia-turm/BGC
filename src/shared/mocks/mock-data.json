@@ -1,0 +1,248 @@
+{
+  "auth": {
+    "token": "mock-jwt-token-for-local-development",
+    "expiresAt": "2026-12-31T23:59:59Z",
+    "user": {
+      "id": 234,
+      "nickname": "TabletopKing"
+    }
+  },
+  "currentUser": {
+    "id": 234,
+    "nickname": "TabletopKing",
+    "firstName": "Nika",
+    "lastName": "Beridze",
+    "birthday": "2005-04-21",
+    "gender": "Male",
+    "email": "nika@example.com",
+    "phone": "+995555123456",
+    "avatarUrl": "https://i.pravatar.cc/300?img=12",
+    "status": "Active",
+    "roles": ["Player", "ClubAdmin"],
+    "clubs": [
+      {
+        "id": 456,
+        "name": "Tbilisi Meeple Corner",
+        "role": "Admin"
+      }
+    ],
+    "createdAt": "2026-01-10T10:00:00Z",
+    "updatedAt": "2026-06-17T15:42:10Z",
+    "deletedAt": null
+  },
+  "users": [
+    {
+      "id": 234,
+      "nickname": "TabletopKing",
+      "firstName": "Nika",
+      "lastName": "Beridze",
+      "birthday": "2005-04-21",
+      "gender": "Male",
+      "email": "nika@example.com",
+      "phone": "+995555123456",
+      "avatarUrl": "https://i.pravatar.cc/300?img=12",
+      "status": "Active",
+      "adminNote": null,
+      "createdAt": "2026-01-10T10:00:00Z",
+      "updatedAt": "2026-06-17T15:42:10Z",
+      "deletedAt": null
+    },
+    {
+      "id": 235,
+      "nickname": "MeepleQueen",
+      "firstName": "Ana",
+      "lastName": "Gelashvili",
+      "birthday": "1998-09-12",
+      "gender": "Female",
+      "email": "ana@example.com",
+      "phone": "+995555654321",
+      "avatarUrl": "https://i.pravatar.cc/300?img=47",
+      "status": "Active",
+      "adminNote": null,
+      "createdAt": "2026-02-05T12:30:00Z",
+      "updatedAt": "2026-06-20T09:15:00Z",
+      "deletedAt": null
+    }
+  ],
+  "clubs": [
+    {
+      "id": 456,
+      "name": "Tbilisi Meeple Corner",
+      "logoUrl": "https://placehold.co/400x400/023436/C2FCF7?text=TMC",
+      "description": "A cozy Tbilisi venue for strategy games, weekly meetups, and competitive tournaments.",
+      "address": "12 Chavchavadze Avenue",
+      "city": "Tbilisi",
+      "email": "contact@tbilisimeeple.ge",
+      "phone": "+995555987654",
+      "workingHours": "Mon-Sun 14:00-22:00",
+      "status": "Active",
+      "adminNote": null,
+      "createdAt": "2026-01-15T08:00:00Z",
+      "updatedAt": "2026-06-22T11:20:00Z",
+      "deletedAt": null
+    }
+  ],
+  "clubDashboard": {
+    "clubId": 456,
+    "pendingMembers": 4,
+    "upcomingTournaments": 1,
+    "totalPlayers": 120
+  },
+  "userClubs": [
+    {
+      "id": 1,
+      "userId": 234,
+      "clubId": 456,
+      "role": "Admin"
+    }
+  ],
+  "categories": [
+    {
+      "id": 9,
+      "name": "Economic"
+    },
+    {
+      "id": 10,
+      "name": "Strategy"
+    }
+  ],
+  "games": [
+    {
+      "id": 13,
+      "bggId": 167791,
+      "title": "Terraforming Mars",
+      "subtitle": "Build a new world for humanity",
+      "description": "Corporations compete to transform Mars by raising temperature, creating oceans, and building infrastructure.",
+      "year": 2016,
+      "minPlayers": 1,
+      "maxPlayers": 5,
+      "minPlayingTime": 120,
+      "maxPlayingTime": 180,
+      "complexity": 3.26,
+      "type": "Strategy Game",
+      "bggOverallRank": 7,
+      "bggGeekRating": 8.2,
+      "bggAvgRating": 8.35,
+      "bggVoters": 106000,
+      "bggCommunityPlayerCounts": {
+        "best": [3],
+        "recommended": [2, 3, 4],
+        "notRecommended": [1, 5]
+      },
+      "imageUrl": "https://placehold.co/600x600/037971/FFFFFF?text=Terraforming+Mars",
+      "categoryIds": [9, 10],
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-06-25T03:00:00Z"
+    }
+  ],
+  "boardGameCategories": [
+    {
+      "boardGameId": 13,
+      "categoryId": 9
+    },
+    {
+      "boardGameId": 13,
+      "categoryId": 10
+    }
+  ],
+  "clubGames": [
+    {
+      "id": 1,
+      "clubId": 456,
+      "gameId": 13,
+      "deletedAt": null
+    }
+  ],
+  "tournaments": [
+    {
+      "id": 700,
+      "clubId": 456,
+      "gameId": 13,
+      "name": "Tbilisi Terraforming Mars Open",
+      "description": "A friendly two-stage Terraforming Mars tournament for players of all experience levels.",
+      "type": "Multi-stage",
+      "status": "RegistrationOpen",
+      "city": "Tbilisi",
+      "venue": "12 Chavchavadze Avenue",
+      "registrationOpensAt": "2026-06-15T08:00:00Z",
+      "registrationClosesAt": "2026-07-10T18:00:00Z",
+      "startsAt": "2026-07-18T10:00:00Z",
+      "endsAt": "2026-07-19T18:00:00Z",
+      "maxPlayers": 32,
+      "registeredPlayers": 2,
+      "scoringPolicy": "WinnerHeavyPlacementPoints",
+      "tieBreakRules": ["HeadToHead", "MostWins", "Manual"],
+      "createdAt": "2026-06-10T09:00:00Z",
+      "updatedAt": "2026-06-25T16:00:00Z"
+    }
+  ],
+  "tournamentRegistrations": [
+    {
+      "id": 900,
+      "tournamentId": 700,
+      "userId": 234,
+      "status": "CheckedIn",
+      "registeredAt": "2026-06-16T10:30:00Z"
+    },
+    {
+      "id": 901,
+      "tournamentId": 700,
+      "userId": 235,
+      "status": "Accepted",
+      "registeredAt": "2026-06-17T12:00:00Z"
+    }
+  ],
+  "tournamentStages": [
+    {
+      "id": 1000,
+      "tournamentId": 700,
+      "name": "League Stage",
+      "type": "League",
+      "order": 1,
+      "roundCount": 1,
+      "status": "Scheduled",
+      "playerIds": [234, 235]
+    }
+  ],
+  "tournamentRounds": [
+    {
+      "id": 1100,
+      "stageId": 1000,
+      "name": "Round 1",
+      "number": 1,
+      "status": "Scheduled",
+      "startsAt": "2026-07-18T10:30:00Z"
+    }
+  ],
+  "matches": [
+    {
+      "id": 1200,
+      "roundId": 1100,
+      "tableNumber": 1,
+      "groupIndex": 1,
+      "status": "Scheduled",
+      "players": [
+        {
+          "userId": 234,
+          "rawScore": null,
+          "placement": null,
+          "matchPoints": null,
+          "status": "Active"
+        },
+        {
+          "userId": 235,
+          "rawScore": null,
+          "placement": null,
+          "matchPoints": null,
+          "status": "Active"
+        }
+      ]
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "pageSize": 10,
+    "totalItems": 1,
+    "totalPages": 1
+  }
+}
