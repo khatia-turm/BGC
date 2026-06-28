@@ -13,6 +13,36 @@ export async function mockRequest<T>(
   const url = new URL(path, "http://mock-api.local");
   const segments = url.pathname.split("/").filter(Boolean);
 
+  if (method === "POST" && matches(segments, ["api", "auth", "login"])) {
+    const body = JSON.parse(String(options.body ?? "{}")) as {
+      email?: string;
+      password?: string;
+    };
+    if (!body.email || !body.password) {
+      throw new ApiError(400, "Email and password are required");
+    }
+    return structuredClone(mockData.auth) as T;
+  }
+
+  if (method === "POST" && matches(segments, ["api", "users"])) {
+    const body = JSON.parse(String(options.body ?? "{}")) as {
+      nickname?: string;
+    };
+    if (!body.nickname) throw new ApiError(400, "Nickname is required");
+    return {
+      userId: 999,
+      token: mockData.auth.token,
+      message: "User account created successfully.",
+    } as T;
+  }
+
+  if (
+    method === "POST" &&
+    matches(segments, ["api", "auth", "forgot-password"])
+  ) {
+    return { message: "Password recovery email sent." } as T;
+  }
+
   if (method !== "GET") {
     throw new ApiError(
       501,

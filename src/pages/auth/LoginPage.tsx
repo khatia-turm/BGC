@@ -1,3 +1,3 @@
-import { PagePlaceholder } from "@pages/_components/PagePlaceholder";
+import { LoginForm } from "@features/auth/login";
 
-export const LoginPage = () => <PagePlaceholder title="Login" />;
+export const LoginPage = () => <LoginForm />;
