@@ -1,0 +1,451 @@
+@use "@shared/styles/colors" as colors;
+
+.page {
+  min-height: calc(100dvh - 4.5rem);
+  color: colors.$neutral-100;
+  background:
+    radial-gradient(
+      circle at 78% 38%,
+      rgba(colors.$primary-700, 0.18),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at 15% 100%,
+      rgba(colors.$primary-900, 0.65),
+      transparent 32rem
+    ),
+    colors.$neutral-950;
+  overflow-x: hidden;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
+  align-items: center;
+  gap: clamp(3rem, 8vw, 8rem);
+  width: min(100% - 2rem, 1200px);
+  height: calc(100dvh - 4.5rem);
+  min-height: 34rem;
+  margin-inline: auto;
+  padding-block: clamp(2rem, 5vh, 4rem);
+}
+
+.previews {
+  width: min(100% - 2rem, 1200px);
+  margin-inline: auto;
+  padding: 2rem 0 6rem;
+}
+
+.previewSection {
+  padding-block: 3rem;
+  border-top: 1px solid rgba(colors.$primary-400, 0.14);
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  p {
+    margin: 0 0 0.45rem;
+    color: colors.$primary-400;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    letter-spacing: -0.035em;
+  }
+
+  > a {
+    flex: 0 0 auto;
+    padding-bottom: 0.25rem;
+    color: colors.$primary-400;
+    font-size: 0.88rem;
+    font-weight: 750;
+    text-decoration: none;
+  }
+}
+
+.cardRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.loadingCard,
+.message {
+  display: grid;
+  min-height: 12rem;
+  margin: 0;
+  place-items: center;
+  color: colors.$neutral-300;
+  border: 1px solid rgba(colors.$primary-400, 0.12);
+  background: rgba(colors.$primary-900, 0.18);
+  border-radius: 1rem;
+}
+
+.loadingCard {
+  animation: pulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  to {
+    border-color: rgba(colors.$primary-400, 0.32);
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 43rem;
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  color: colors.$primary-400;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 4.4rem);
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.description {
+  max-width: 38rem;
+  margin: 1.2rem 0 0;
+  color: colors.$neutral-300;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.7;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.6rem;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.15rem;
+  padding-inline: 1.35rem;
+  border-radius: 0.65rem;
+  font-weight: 750;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+  }
+}
+
+.primaryAction {
+  color: colors.$neutral-950;
+  background: colors.$primary-400;
+  box-shadow: 0 0 24px rgba(colors.$primary-400, 0.22);
+
+  &:hover,
+  &:focus-visible {
+    background: colors.$neutral-100;
+    box-shadow: 0 0 30px rgba(colors.$primary-400, 0.42);
+  }
+}
+
+.secondaryAction {
+  gap: 0.6rem;
+  color: colors.$neutral-100;
+  border: 1px solid rgba(colors.$neutral-300, 0.24);
+  background: rgba(colors.$primary-900, 0.18);
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(colors.$primary-400, 0.55);
+    background: rgba(colors.$primary-700, 0.16);
+  }
+}
+
+.highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  color: colors.$neutral-300;
+  font-size: 0.9rem;
+  list-style: none;
+
+  li::before {
+    margin-right: 0.5rem;
+    color: colors.$primary-400;
+    content: "◆";
+    text-shadow: 0 0 8px rgba(colors.$primary-400, 0.6);
+  }
+}
+
+.visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 22rem;
+}
+
+.glow {
+  position: absolute;
+  width: 22rem;
+  height: 22rem;
+  background: colors.$primary-500;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.18;
+}
+
+.cardBack {
+  position: absolute;
+  width: min(82%, 21rem);
+  height: 25rem;
+  overflow: hidden;
+  border: 1px solid rgba(colors.$primary-400, 0.2);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(colors.$primary-400, 0.035) 0 1px,
+      transparent 1px 12px
+    ),
+    linear-gradient(155deg, colors.$primary-900, colors.$neutral-950 70%);
+  border-radius: 1.25rem;
+  box-shadow: 0 28px 55px rgba(#000, 0.3);
+  transform-origin: 50% 90%;
+
+  &::after {
+    position: absolute;
+    inset: 0.8rem;
+    border: 1px solid rgba(colors.$primary-400, 0.13);
+    border-radius: 0.8rem;
+    content: "";
+  }
+
+  span {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.6rem;
+    color: rgba(colors.$primary-400, 0.44);
+    font-size: 1.5rem;
+    text-shadow: 0 0 14px rgba(colors.$primary-400, 0.28);
+  }
+}
+
+.cardBackLeft {
+  transform: translate(-2.3rem, 0.65rem) rotate(-10deg);
+}
+
+.cardBackRight {
+  transform: translate(2.7rem, 0.4rem) rotate(11deg);
+
+  span {
+    right: 1.6rem;
+    left: auto;
+  }
+}
+
+.gameCard {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 24rem);
+  padding: 2rem;
+  border: 1px solid rgba(colors.$primary-400, 0.28);
+  background: linear-gradient(
+    145deg,
+    rgba(colors.$primary-900, 0.8),
+    rgba(colors.$neutral-950, 0.94)
+  );
+  border-radius: 1.25rem;
+  box-shadow:
+    0 32px 70px rgba(#000, 0.35),
+    0 0 45px rgba(colors.$primary-500, 0.1),
+    inset 0 1px rgba(colors.$neutral-100, 0.06);
+  transform: rotate(2deg);
+
+  &::before {
+    position: absolute;
+    top: -2.25rem;
+    right: 2rem;
+    width: 4.25rem;
+    height: 4.25rem;
+    background:
+      radial-gradient(
+        circle at 33% 33%,
+        colors.$neutral-100 0 5%,
+        transparent 6%
+      ),
+      radial-gradient(
+        circle at 67% 67%,
+        colors.$neutral-100 0 5%,
+        transparent 6%
+      ),
+      colors.$primary-600;
+    border: 1px solid colors.$primary-400;
+    border-radius: 1rem;
+    box-shadow: 0 0 28px rgba(colors.$primary-400, 0.42);
+    content: "";
+    transform: rotate(12deg);
+  }
+
+  strong {
+    display: block;
+    max-width: 12ch;
+    margin-top: 0.8rem;
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+}
+
+.cardLabel {
+  color: colors.$primary-400;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cardMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  color: colors.$neutral-300;
+  border-top: 1px solid rgba(colors.$neutral-300, 0.16);
+  font-size: 0.85rem;
+}
+
+.playerDots {
+  display: flex;
+  margin-top: 1.25rem;
+
+  span {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-right: -0.45rem;
+    background: colors.$primary-700;
+    border: 2px solid colors.$neutral-950;
+    border-radius: 50%;
+  }
+
+  span:nth-child(2) {
+    background: colors.$primary-600;
+  }
+  span:nth-child(3) {
+    background: colors.$neutral-300;
+  }
+
+  .morePlayers {
+    color: colors.$neutral-100;
+    background: colors.$primary-900;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 850px) {
+  .page {
+    min-height: calc(100dvh - 7.75rem);
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: inherit;
+  }
+
+  .visual {
+    min-height: 22rem;
+  }
+
+  .cardRow {
+    display: flex;
+    margin-right: -1rem;
+    padding-right: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+
+    > * {
+      flex: 0 0 min(85vw, 23rem);
+      scroll-snap-align: start;
+    }
+  }
+}
+
+@media (max-height: 700px) and (min-width: 851px) {
+  .title {
+    font-size: clamp(2.35rem, 4.5vw, 3.6rem);
+  }
+
+  .description {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .highlights {
+    margin-top: 1.25rem;
+  }
+
+  .visual {
+    min-height: 18rem;
+    transform: scale(0.9);
+  }
+}
+
+@media (max-width: 520px) {
+  .actions,
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+  }
+
+  .visual {
+    min-height: 19rem;
+  }
+
+  .cardBack {
+    height: 20rem;
+  }
+
+  .cardBackLeft {
+    transform: translate(-1.25rem, 0.5rem) rotate(-7deg);
+  }
+
+  .cardBackRight {
+    transform: translate(1.5rem, 0.4rem) rotate(7deg);
+  }
+
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}

@@ -1,0 +1,37 @@
+@use "@shared/styles/colors" as colors;
+
+.page, .state { min-height: calc(100dvh - 4.5rem); color: colors.$neutral-100; background: radial-gradient(circle at 80% 0, rgba(colors.$primary-700, 0.17), transparent 30rem), colors.$neutral-950; }
+.page { padding: 2.5rem max(1rem, calc((100% - 1200px) / 2)) 6rem; }
+.state { display: grid; place-items: center; color: colors.$neutral-300; }
+.back { color: colors.$primary-400; font-size: 0.85rem; font-weight: 700; text-decoration: none; }
+
+.clubHeader { display: flex; align-items: center; gap: 1.5rem; margin-top: 2.5rem; }
+.clubHeader img { width: 7rem; height: 7rem; object-fit: cover; border: 1px solid rgba(colors.$primary-400, 0.3); border-radius: 1.2rem; box-shadow: 0 0 30px rgba(colors.$primary-400, 0.1); }
+.clubHeader span { color: colors.$primary-400; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.clubHeader h1 { margin: 0.4rem 0 0; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -0.045em; }
+.clubHeader p { margin: 0.5rem 0 0; color: colors.$neutral-300; }
+
+.tabs { display: flex; gap: 1.5rem; margin-top: 2.5rem; overflow-x: auto; border-bottom: 1px solid rgba(colors.$primary-400, 0.15); }
+.tabs a { flex: 0 0 auto; padding: 0.9rem 0; color: colors.$neutral-300; font-size: 0.86rem; font-weight: 700; text-decoration: none; }
+.tabs a[aria-current="page"] { color: colors.$primary-400; border-bottom: 2px solid colors.$primary-400; text-shadow: 0 0 8px rgba(colors.$primary-400, 0.25); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; align-items: start; gap: 3rem; margin-top: 2.5rem; }
+.mainContent { min-width: 0; }
+.about h2, .contentSection h2 { margin: 0; font-size: 1.7rem; letter-spacing: -0.03em; }
+.about > p:last-child { max-width: 45rem; color: colors.$neutral-300; line-height: 1.75; }
+.sectionLabel, .sectionHeading p { margin: 0 0 0.45rem; color: colors.$primary-400; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.contentSection { margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid rgba(colors.$primary-400, 0.12); }
+.sectionHeading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+.sectionHeading a { flex: 0 0 auto; color: colors.$primary-400; font-size: 0.8rem; font-weight: 700; text-decoration: none; }
+.gameGrid, .tournamentGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.empty { color: colors.$neutral-300; }
+
+.contactCard { position: sticky; top: 6.5rem; padding: 1.4rem; border: 1px solid rgba(colors.$primary-400, 0.2); background: rgba(colors.$primary-900, 0.25); border-radius: 1rem; }
+.contactCard > p { margin: 0; color: colors.$primary-400; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.contactCard dl { margin: 1.25rem 0 0; }
+.contactCard div + div { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid rgba(colors.$neutral-300, 0.1); }
+.contactCard dt { color: colors.$neutral-300; font-size: 0.68rem; text-transform: uppercase; }
+.contactCard dd { margin: 0.35rem 0 0; overflow-wrap: anywhere; font-size: 0.86rem; line-height: 1.5; }
+
+@media (max-width: 850px) { .layout { grid-template-columns: 1fr; } .contactCard { position: static; } }
+@media (max-width: 620px) { .clubHeader { align-items: flex-start; flex-direction: column; } .gameGrid, .tournamentGrid { grid-template-columns: 1fr; } }

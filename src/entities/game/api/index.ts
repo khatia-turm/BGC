@@ -38,3 +38,7 @@ export function useGame(id: number) {
     enabled: Number.isFinite(id),
   });
 }
+
+export function useGameCategories() {
+  return useQuery({ queryKey: gameKeys.categories, queryFn: getGameCategories });
+}

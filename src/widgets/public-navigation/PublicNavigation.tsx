@@ -28,6 +28,9 @@ export const PublicNavigation = () => {
           <NavLink className={getLinkClassName} to={routes.clubs}>
             {t("navigation.clubs")}
           </NavLink>
+          <NavLink className={getLinkClassName} to={routes.games}>
+            {t("navigation.games")}
+          </NavLink>
           <NavLink className={getLinkClassName} to={routes.leaderboards}>
             {t("navigation.leaderboards")}
           </NavLink>
