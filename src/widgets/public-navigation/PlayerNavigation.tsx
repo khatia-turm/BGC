@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@entities/user/api";
+import { useMyClubRequest } from "@entities/club/api";
 import { clearAuthSession } from "@shared/auth/session";
 import { routes } from "@shared/config/routes";
 import styles from "./PlayerNavigation.module.scss";
@@ -12,6 +13,7 @@ export const PlayerNavigation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const userQuery = useCurrentUser();
+  const clubRequest = useMyClubRequest();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -64,6 +66,16 @@ export const PlayerNavigation = () => {
           {firstClub && (
             <NavLink className={styles.clubLink} to={`/club-admin/${firstClub.id}`} role="menuitem" onClick={() => setOpen(false)}>
               {t("navigation.clubDashboard")}<small>{firstClub.name}</small>
+            </NavLink>
+          )}
+          {!firstClub && clubRequest.data?.status === "Pending" && (
+            <NavLink className={styles.clubLink} to={routes.clubRegister} role="menuitem" onClick={() => setOpen(false)}>
+              {t("navigation.clubApprovalPending")}<small>{clubRequest.data.clubName}</small>
+            </NavLink>
+          )}
+          {!firstClub && clubRequest.data?.status !== "Pending" && (
+            <NavLink className={styles.clubLink} to={routes.clubRegister} role="menuitem" onClick={() => setOpen(false)}>
+              {t("navigation.registerClub")}<small>{t("navigation.registerClubHint")}</small>
             </NavLink>
           )}
           <button className={styles.logout} type="button" role="menuitem" onClick={logout}>{t("navigation.logout")}</button>

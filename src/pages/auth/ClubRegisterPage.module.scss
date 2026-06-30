@@ -1,0 +1,16 @@
+@use "@shared/styles/colors" as colors;
+.page { min-height: calc(100dvh - 4.5rem); padding: clamp(2rem,5vw,4.5rem) max(1rem,calc((100% - 900px)/2)) 6rem; color: colors.$neutral-100; background: radial-gradient(circle at 80% 0,rgba(colors.$primary-700,.2),transparent 30rem),colors.$neutral-950; }
+.header { max-width: 42rem; }
+.header h1,.success h1 { margin:.2rem 0 .75rem; font-size:clamp(2.3rem,6vw,4.25rem); line-height:1; letter-spacing:-.055em; }
+.header>p:last-child,.success>p,.note { color:colors.$neutral-300; line-height:1.65; }
+.eyebrow { margin:0 0 .6rem; color:colors.$primary-400!important; font-size:.7rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+.flow { display:flex; align-items:center; gap:.7rem; margin:2.2rem 0 1rem; color:colors.$neutral-300; font-size:.75rem; }
+.flow span { display:flex; align-items:center; gap:.45rem; }
+.flow span::first-letter { font-weight:900; }.flow i { flex:1; height:1px; background:rgba(colors.$neutral-300,.22); }.flow .done,.flow .current { color:colors.$primary-400; }
+.form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; padding:clamp(1rem,3vw,2rem); border:1px solid rgba(colors.$primary-400,.18); border-radius:1rem; background:rgba(colors.$primary-900,.18); }
+.form label { display:grid; gap:.45rem; color:colors.$neutral-300; font-size:.75rem; font-weight:800; }.form small { font-weight:400; }
+.form input,.form textarea { width:100%; box-sizing:border-box; padding:.8rem; color:colors.$neutral-100; border:1px solid rgba(colors.$neutral-300,.25); border-radius:.6rem; outline:none; background:#071717; font:inherit; }.form input { min-height:3rem; }.form textarea { resize:vertical; }.form input:focus,.form textarea:focus { border-color:colors.$primary-400; box-shadow:0 0 0 3px rgba(colors.$primary-400,.1); }
+.wide,.notice,.error,.submit { grid-column:1/-1; }.notice { padding:1rem; border-left:3px solid colors.$primary-400; background:rgba(colors.$primary-700,.12); }.notice p { margin:.35rem 0 0; color:colors.$neutral-300; line-height:1.5; }.error { margin:0; color:#ff9d9d; }
+.submit,.primaryAction { min-height:3.2rem; padding:0 1.2rem; border:0; border-radius:.65rem; color:colors.$neutral-950; background:colors.$primary-400; font:inherit; font-weight:900; cursor:pointer; text-decoration:none; }.submit:disabled { opacity:.55; }
+.success { max-width:680px; margin:4rem auto; padding:clamp(1.5rem,5vw,3.5rem); border:1px solid rgba(colors.$primary-400,.25); border-radius:1rem; background:rgba(colors.$primary-900,.2); text-align:center; }.successIcon { display:grid; place-items:center; width:4rem; height:4rem; margin:0 auto 1.2rem; border-radius:50%; color:colors.$neutral-950; background:colors.$primary-400; font-size:2rem; font-weight:900; }.status { display:grid; grid-template-columns:1fr auto; gap:.7rem 1rem; margin:1.5rem 0; padding:1rem; border:1px solid rgba(colors.$neutral-300,.16); border-radius:.7rem; text-align:left; }.status strong { color:colors.$primary-400; }.primaryAction { display:inline-flex; align-items:center; margin-top:1rem; }
+@media(max-width:650px){.form{grid-template-columns:1fr}.wide,.notice,.error,.submit{grid-column:auto}.flow b{display:none}}

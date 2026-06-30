@@ -14,6 +14,7 @@ const mockRegistrations: MockRegistration[] = structuredClone(
 );
 let currentMockUser = structuredClone(mockData.currentUser);
 const mockNotifications: Array<{id:string;userId:number;type:"Registration"|"Waitlist"|"Promotion"|"Reminder"|"Cancellation";title:string;message:string;createdAt:string;tournamentId?:number}> = [];
+let mockClubRequest: { clubId:number;clubName:string;status:"Pending"|"Rejected";submittedAt:string;adminNote:null|string } | null = null;
 
 export async function mockRequest<T>(
   path: string,
@@ -68,6 +69,16 @@ export async function mockRequest<T>(
     Object.assign(user, body, { updatedAt: new Date().toISOString() });
     if (user.id === currentMockUser.id) currentMockUser = { ...currentMockUser, ...body, updatedAt:user.updatedAt };
     return structuredClone(user) as T;
+  }
+
+  if (method === "POST" && matches(segments, ["api", "clubs"])) {
+    const body = JSON.parse(String(options.body ?? "{}")) as Record<string, string>;
+    if (!body.name || !body.address || !body.city || !body.email || !body.phone) throw new ApiError(400, "Required club details are missing");
+    if (mockData.clubs.some((club) => club.name.toLowerCase() === body.name.toLowerCase())) throw new ApiError(409, "A club with this name already exists");
+    if (mockClubRequest?.status === "Pending") throw new ApiError(409, "You already have a club application waiting for approval");
+    const clubId = Math.max(...mockData.clubs.map((club) => club.id)) + 1;
+    mockClubRequest = { clubId, clubName:body.name, status:"Pending", submittedAt:new Date().toISOString(), adminNote:null };
+    return { clubId, status: "Pending", message: "Club application submitted successfully and is awaiting admin approval." } as T;
   }
 
   if (
@@ -139,6 +150,7 @@ function resolveGet(
   segments: string[],
   searchParams: URLSearchParams,
 ): unknown {
+  if (matches(segments,["api","clubs","my-request"])) return mockClubRequest;
   if (matches(segments,["api","notifications"])) {
     const reminders = mockRegistrations.filter((item)=>item.userId===currentMockUser.id).flatMap((registration)=>{const tournament=mockData.tournaments.find((item)=>item.id===registration.tournamentId);if(!tournament)return [];const remaining=new Date(tournament.startsAt).getTime()-Date.now();return remaining>0&&remaining<=86400000?[{id:`reminder-${tournament.id}`,userId:currentMockUser.id,type:"Reminder" as const,title:"Tournament reminder",message:`${tournament.name} starts within one day.`,createdAt:new Date().toISOString(),tournamentId:tournament.id}]:[];});
     return [...reminders,...mockNotifications.filter((item)=>item.userId===currentMockUser.id)];

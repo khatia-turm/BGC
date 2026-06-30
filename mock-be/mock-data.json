@@ -18,7 +18,10 @@
     "phone": "+995555123456",
     "avatarUrl": "https://i.pravatar.cc/300?img=12",
     "status": "Active",
-    "roles": ["Player", "ClubAdmin"],
+    "roles": [
+      "Player",
+      "ClubAdmin"
+    ],
     "clubs": [
       {
         "id": 456,
@@ -126,6 +129,22 @@
       "createdAt": "2026-04-20T10:00:00Z",
       "updatedAt": "2026-06-23T10:00:00Z",
       "deletedAt": null
+    },
+    {
+      "id": 240,
+      "nickname": "malakotekalo",
+      "firstName": "tekalo",
+      "lastName": "malakamo",
+      "email": "tekal@gmail.com",
+      "phone": "+955599435665",
+      "birthday": "2026-06-11T00:00:00.000Z",
+      "gender": "Female",
+      "avatarUrl": "",
+      "status": "Active",
+      "adminNote": null,
+      "createdAt": "2026-06-30T17:49:29.628Z",
+      "updatedAt": "2026-06-30T17:49:40.163Z",
+      "deletedAt": null
     }
   ],
   "clubs": [
@@ -192,6 +211,23 @@
       "createdAt": "2026-04-04T10:15:00Z",
       "updatedAt": "2026-06-21T17:30:00Z",
       "deletedAt": null
+    },
+    {
+      "id": 460,
+      "name": "we ball",
+      "logoUrl": "",
+      "description": "we ball idk",
+      "address": "tbilisi bro",
+      "city": "Tbilisi",
+      "email": "tekl@gmail.com",
+      "phone": "+995599435665",
+      "workingHours": "Mon-Sun ",
+      "status": "Pending",
+      "adminNote": null,
+      "ownerId": 240,
+      "createdAt": "2026-06-30T18:10:47.670Z",
+      "updatedAt": "2026-06-30T18:10:47.670Z",
+      "deletedAt": null
     }
   ],
   "clubDashboard": {
@@ -249,12 +285,24 @@
       "bggAvgRating": 8.35,
       "bggVoters": 106000,
       "bggCommunityPlayerCounts": {
-        "best": [3],
-        "recommended": [2, 3, 4],
-        "notRecommended": [1, 5]
+        "best": [
+          3
+        ],
+        "recommended": [
+          2,
+          3,
+          4
+        ],
+        "notRecommended": [
+          1,
+          5
+        ]
       },
       "imageUrl": "https://placehold.co/600x600/037971/FFFFFF?text=Terraforming+Mars",
-      "categoryIds": [9, 10],
+      "categoryIds": [
+        9,
+        10
+      ],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
     },
@@ -276,12 +324,24 @@
       "bggAvgRating": 8.1,
       "bggVoters": 92000,
       "bggCommunityPlayerCounts": {
-        "best": [3],
-        "recommended": [1, 2, 3, 4],
-        "notRecommended": [5]
+        "best": [
+          3
+        ],
+        "recommended": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "notRecommended": [
+          5
+        ]
       },
       "imageUrl": "https://placehold.co/600x600/85BDBF/040F0F?text=Wingspan",
-      "categoryIds": [10, 11],
+      "categoryIds": [
+        10,
+        11
+      ],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
     },
@@ -303,12 +363,22 @@
       "bggAvgRating": 8.6,
       "bggVoters": 65000,
       "bggCommunityPlayerCounts": {
-        "best": [3, 4],
-        "recommended": [2, 3, 4],
+        "best": [
+          3,
+          4
+        ],
+        "recommended": [
+          2,
+          3,
+          4
+        ],
         "notRecommended": []
       },
       "imageUrl": "https://placehold.co/600x600/023436/C2FCF7?text=Brass+Birmingham",
-      "categoryIds": [9, 10],
+      "categoryIds": [
+        9,
+        10
+      ],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
     },
@@ -330,12 +400,21 @@
       "bggAvgRating": 7.8,
       "bggVoters": 56000,
       "bggCommunityPlayerCounts": {
-        "best": [2],
-        "recommended": [2, 3, 4],
+        "best": [
+          2
+        ],
+        "recommended": [
+          2,
+          3,
+          4
+        ],
         "notRecommended": []
       },
       "imageUrl": "https://placehold.co/600x600/03B5AA/040F0F?text=Race+for+the+Galaxy",
-      "categoryIds": [11, 13],
+      "categoryIds": [
+        11,
+        13
+      ],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
     }
@@ -428,10 +507,14 @@
       "startsAt": "2026-07-18T10:00:00Z",
       "endsAt": "2026-07-19T18:00:00Z",
       "maxPlayers": 32,
-      "registeredPlayers": 2,
+      "registeredPlayers": 3,
       "entryFee": 25,
       "scoringPolicy": "WinnerHeavyPlacementPoints",
-      "tieBreakRules": ["HeadToHead", "MostWins", "Manual"],
+      "tieBreakRules": [
+        "HeadToHead",
+        "MostWins",
+        "Manual"
+      ],
       "createdAt": "2026-06-10T09:00:00Z",
       "updatedAt": "2026-06-25T16:00:00Z"
     },
@@ -453,7 +536,10 @@
       "registeredPlayers": 24,
       "entryFee": 15,
       "scoringPolicy": "LinearPlacementPoints",
-      "tieBreakRules": ["MostWins", "HighestRawScore"],
+      "tieBreakRules": [
+        "MostWins",
+        "HighestRawScore"
+      ],
       "createdAt": "2026-06-18T09:00:00Z",
       "updatedAt": "2026-06-26T13:30:00Z"
     },
@@ -475,7 +561,11 @@
       "registeredPlayers": 11,
       "entryFee": null,
       "scoringPolicy": "WinnerHeavyPlacementPoints",
-      "tieBreakRules": ["HeadToHead", "HighestRawScore", "Manual"],
+      "tieBreakRules": [
+        "HeadToHead",
+        "HighestRawScore",
+        "Manual"
+      ],
       "createdAt": "2026-06-22T10:00:00Z",
       "updatedAt": "2026-06-27T08:15:00Z"
     },
@@ -497,7 +587,10 @@
       "registeredPlayers": 6,
       "entryFee": 30,
       "scoringPolicy": "WinLossOnly",
-      "tieBreakRules": ["HeadToHead", "Manual"],
+      "tieBreakRules": [
+        "HeadToHead",
+        "Manual"
+      ],
       "createdAt": "2026-06-26T15:00:00Z",
       "updatedAt": "2026-06-27T09:00:00Z"
     },
@@ -519,7 +612,10 @@
       "registeredPlayers": 9,
       "entryFee": null,
       "scoringPolicy": "LinearPlacementPoints",
-      "tieBreakRules": ["MostWins", "HeadToHead"],
+      "tieBreakRules": [
+        "MostWins",
+        "HeadToHead"
+      ],
       "createdAt": "2026-06-27T10:00:00Z",
       "updatedAt": "2026-06-27T10:00:00Z"
     }
@@ -538,6 +634,13 @@
       "userId": 235,
       "status": "Accepted",
       "registeredAt": "2026-06-17T12:00:00Z"
+    },
+    {
+      "id": 902,
+      "tournamentId": 700,
+      "userId": 240,
+      "status": "Accepted",
+      "registeredAt": "2026-06-30T17:49:58.066Z"
     }
   ],
   "tournamentStages": [
@@ -549,7 +652,10 @@
       "order": 1,
       "roundCount": 1,
       "status": "Scheduled",
-      "playerIds": [234, 235]
+      "playerIds": [
+        234,
+        235
+      ]
     }
   ],
   "tournamentRounds": [
@@ -778,5 +884,16 @@
     "pageSize": 10,
     "totalItems": 5,
     "totalPages": 1
-  }
+  },
+  "notifications": [
+    {
+      "id": "registration-902",
+      "userId": 240,
+      "type": "Registration",
+      "title": "Registration confirmed",
+      "message": "Tbilisi Terraforming Mars Open: Accepted.",
+      "createdAt": "2026-06-30T17:49:58.066Z",
+      "tournamentId": 700
+    }
+  ]
 }
