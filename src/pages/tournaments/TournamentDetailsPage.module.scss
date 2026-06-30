@@ -167,6 +167,14 @@
   font-weight: 800;
   cursor: pointer;
 }
+.infoGrid strong a{color:colors.$primary-400;text-decoration:none}.participants{display:flex;flex-wrap:wrap;gap:.7rem}.participants a{display:flex;align-items:center;gap:.45rem;padding:.45rem .65rem;color:colors.$neutral-100;border:1px solid rgba(colors.$primary-400,.18);border-radius:99px;text-decoration:none}.participants img{width:1.8rem;height:1.8rem;object-fit:cover;border-radius:50%}
+.registrationCard button:disabled { cursor:not-allowed; opacity:.5; }
+.rulesAgreement { display:flex; align-items:flex-start; gap:.6rem; margin-top:1.25rem; color:colors.$neutral-300; font-size:.78rem; line-height:1.45; cursor:pointer; }
+.rulesAgreement input { margin-top:.15rem; accent-color:colors.$primary-400; }
+.registrationStatus { margin-top:1.25rem; padding:.85rem; color:colors.$neutral-100; border:1px solid rgba(colors.$primary-400,.3); background:rgba(colors.$primary-400,.08); border-radius:.65rem; }
+.registrationStatus span,.registrationStatus strong { display:block; }.registrationStatus span{color:colors.$primary-400;font-weight:800}.registrationStatus strong{margin-top:.35rem;font-size:.72rem;line-height:1.45}
+.registrationCard .cancelButton { color:#ffb3b3; border:1px solid rgba(#ff6b6b,.3); background:rgba(#ff6b6b,.08); box-shadow:none; }
+.registrationCard .registrationError { color:#ff9999; }
 .registrationCard small {
   display: block;
   margin-top: 0.8rem;

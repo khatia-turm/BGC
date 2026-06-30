@@ -8,7 +8,19 @@
     "leaderboards": "Leaderboards",
     "players": "Players",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "myEvents": "My Events",
+    "player": "Player",
+    "signedInAs": "Signed in as",
+    "myProfile": "My Profile",
+    "myStats": "My Stats",
+    "myHistory": "My History",
+    "notifications": "Notifications",
+    "clubDashboard": "Switch to Club Dashboard",
+    "logout": "Logout",
+    "playerArea": "Player dashboard",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
   },
   "home": {
     "eyebrow": "Georgia's board game community",
@@ -82,6 +94,14 @@
     "loginRequiredCopy": "You need to be logged in before you can register for a tournament or join its waitlist.",
     "loginRequiredCta": "Go to login",
     "closeLoginPrompt": "Close login prompt"
+    ,"rulesAgreement": "I agree to the tournament rules"
+    ,"registrationConfirmed": "You're registered"
+    ,"onWaitlist": "You're on the waitlist"
+    ,"confirmationSent": "A confirmation message will be sent using the contact details from your profile."
+    ,"cancelRegistration": "Cancel registration"
+    ,"cancelling": "Cancelling…"
+    ,"registering": "Registering…"
+    ,"cancellationClosed": "The cancellation period set by the club has ended."
   },
   "clubs": {
     "eyebrow": "Discover local communities",

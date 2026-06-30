@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   useForgotPasswordMutation,
   useLoginMutation,
@@ -8,6 +8,7 @@ import { setAuthSession } from "@shared/auth/session";
 
 export const useLoginForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const login = useLoginMutation();
   const recovery = useForgotPasswordMutation();
   const [email, setEmail] = useState("");
@@ -27,7 +28,8 @@ export const useLoginForm = () => {
       {
         onSuccess: (response) => {
           setAuthSession(response.token, response.expiresAt, rememberMe);
-          navigate("/me/events");
+          const destination = (location.state as { from?: string } | null)?.from ?? "/me/events";
+          navigate(destination, { replace: true });
         },
       },
     );

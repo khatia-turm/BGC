@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@shared/api/client";
 import type {
   CurrentUser,
@@ -43,10 +43,14 @@ export const updateUserStatus = (id: number, status: UserStatus, reason?: string
 export const deactivateCurrentUser = () =>
   apiClient<void>("/api/users/me", { method: "DELETE" });
 
-export const useCurrentUser = () => useQuery({ queryKey: userKeys.me, queryFn: getCurrentUser });
+export const useCurrentUser = (enabled = true) =>
+  useQuery({ queryKey: userKeys.me, queryFn: getCurrentUser, enabled });
 export const useUsers = (status?: UserStatus, page = 1, pageSize = 50) =>
   useQuery({ queryKey: userKeys.list(status, page, pageSize), queryFn: () => getUsers(status, page, pageSize) });
 export const useUser = (id: number) =>
   useQuery({ queryKey: userKeys.detail(id), queryFn: () => getUser(id), enabled: Number.isInteger(id) && id > 0 });
-export const useUpdateUser = () => useMutation({ mutationFn: ({ id, payload }: { id: number; payload: UpdateUserPayload }) => updateUser(id, payload) });
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({ mutationFn: ({ id, payload }: { id: number; payload: UpdateUserPayload }) => updateUser(id, payload), onSuccess: () => void queryClient.invalidateQueries({ queryKey: userKeys.all }) });
+};
 export const useDeactivateCurrentUser = () => useMutation({ mutationFn: deactivateCurrentUser });

@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useTournament } from "@entities/tournament/api";
+import {
+  useCancelTournamentRegistration,
+  useMyTournamentRegistration,
+  useRegisterForTournament,
+  useTournament,
+  useTournamentParticipants,
+} from "@entities/tournament/api";
 import { useGames } from "@entities/game/api";
 import { useClubs } from "@entities/club/api";
 import { routes } from "@shared/config/routes";
 import { LoginRequiredModal } from "@shared/ui/LoginRequiredModal";
-import { isAuthenticated } from "@shared/auth/session";
+import { useAuthSession } from "@shared/auth/useAuthSession";
 import styles from "./TournamentDetailsPage.module.scss";
 
 export const TournamentDetailsPage = () => {
@@ -14,7 +20,17 @@ export const TournamentDetailsPage = () => {
   const tournamentId = Number(id);
   const { t, i18n } = useTranslation();
   const [loginPromptOpen, setLoginPromptOpen] = useState(false);
+  const [rulesAccepted, setRulesAccepted] = useState(false);
+  const [pageOpenedAt] = useState(() => Date.now());
+  const authenticated = useAuthSession();
   const tournamentQuery = useTournament(tournamentId);
+  const participantsQuery = useTournamentParticipants(tournamentId);
+  const registrationQuery = useMyTournamentRegistration(
+    tournamentId,
+    authenticated,
+  );
+  const registerMutation = useRegisterForTournament(tournamentId);
+  const cancelMutation = useCancelTournamentRegistration(tournamentId);
   const { data: games = [] } = useGames();
   const { data: clubs = [] } = useClubs({ status: "Active" });
 
@@ -36,8 +52,16 @@ export const TournamentDetailsPage = () => {
     (tournament.registeredPlayers / tournament.maxPlayers) * 100,
   );
   const requestRegistration = () => {
-    if (!isAuthenticated()) setLoginPromptOpen(true);
+    if (!authenticated) {
+      setLoginPromptOpen(true);
+      return;
+    }
+    if (rulesAccepted) registerMutation.mutate();
   };
+  const registration = registrationQuery.data;
+  const cancellationOpen = registration
+    ? new Date(registration.cancellationClosesAt).getTime() > pageOpenedAt
+    : false;
 
   return (
     <main className={styles.page}>
@@ -84,12 +108,42 @@ export const TournamentDetailsPage = () => {
             </div>
             <div>
               <span>{t("tournaments.hostedBy")}</span>
-              <strong>{club?.name ?? "—"}</strong>
+              <strong>
+                {club ? <Link to={`/clubs/${club.id}`}>{club.name}</Link> : "—"}
+              </strong>
             </div>
             <div>
               <span>{t("tournaments.format")}</span>
               <strong>{tournament.type}</strong>
             </div>
+            <div>
+              <span>Entry fee</span>
+              <strong>
+                {tournament.entryFee != null && tournament.entryFee > 0
+                  ? `${tournament.entryFee.toFixed(2)} GEL`
+                  : "Free entry"}
+              </strong>
+            </div>
+            <div>
+              <span>Waitlist</span>
+              <strong>{tournament.waitlistCount ?? 0} players</strong>
+            </div>
+          </section>
+
+          <section className={styles.about}>
+            <h2>Registered players</h2>
+            {participantsQuery.data?.length ? (
+              <div className={styles.participants}>
+                {participantsQuery.data.map((player) => (
+                  <Link to={`/players/${player.id}`} key={player.id}>
+                    <img src={player.avatarUrl ?? ""} alt="" />
+                    <span>{player.nickname}</span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p>No public participants yet.</p>
+            )}
           </section>
 
           <section className={styles.about}>
@@ -121,9 +175,59 @@ export const TournamentDetailsPage = () => {
           <div className={styles.progress}>
             <span style={{ width: `${capacity}%` }} />
           </div>
-          <button type="button" onClick={requestRegistration}>
-            {isFull ? t("cards.joinWaitlist") : t("cards.register")}
-          </button>
+          {registration ? (
+            <div className={styles.registrationStatus}>
+              <span>
+                {registration.status === "Waitlisted"
+                  ? t("tournaments.onWaitlist")
+                  : t("tournaments.registrationConfirmed")}
+              </span>
+              <strong>{t("tournaments.confirmationSent")}</strong>
+            </div>
+          ) : authenticated ? (
+            <label className={styles.rulesAgreement}>
+              <input
+                type="checkbox"
+                checked={rulesAccepted}
+                onChange={(event) => setRulesAccepted(event.target.checked)}
+              />
+              <span>{t("tournaments.rulesAgreement")}</span>
+            </label>
+          ) : null}
+          {registration ? (
+            <button
+              className={styles.cancelButton}
+              type="button"
+              disabled={!cancellationOpen || cancelMutation.isPending}
+              onClick={() => cancelMutation.mutate()}
+            >
+              {cancelMutation.isPending
+                ? t("tournaments.cancelling")
+                : t("tournaments.cancelRegistration")}
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={
+                authenticated && (!rulesAccepted || registerMutation.isPending)
+              }
+              onClick={requestRegistration}
+            >
+              {registerMutation.isPending
+                ? t("tournaments.registering")
+                : isFull
+                  ? t("cards.joinWaitlist")
+                  : t("cards.register")}
+            </button>
+          )}
+          {!cancellationOpen && registration && (
+            <small>{t("tournaments.cancellationClosed")}</small>
+          )}
+          {(registerMutation.error || cancelMutation.error) && (
+            <small className={styles.registrationError}>
+              {(registerMutation.error ?? cancelMutation.error)?.message}
+            </small>
+          )}
           <small>
             {t("tournaments.registrationCloses", {
               date: new Intl.DateTimeFormat(i18n.resolvedLanguage, {

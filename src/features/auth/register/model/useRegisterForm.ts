@@ -38,6 +38,7 @@ export const useRegisterForm = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [values, setValues] = useState(initialValues);
+  const [favoriteGameIds, setFavoriteGameIds] = useState<number[]>([]);
   const passwordScore = useMemo(
     () => passwordRules.filter((rule) => rule(values.password)).length,
     [values.password],
@@ -71,6 +72,7 @@ export const useRegisterForm = () => {
       {
         onSuccess: (response) => {
           setAuthSession(response.token, undefined, rememberMe);
+          localStorage.setItem("playerPreferences", JSON.stringify({ favoriteGameIds, experienceLevel: "Beginner" }));
           navigate("/me/profile");
         },
       },
@@ -89,9 +91,11 @@ export const useRegisterForm = () => {
     isPending: register.isPending,
     showPassword,
     rememberMe,
+    favoriteGameIds,
     update,
     chooseAvatar,
     setRememberMe,
+    toggleFavoriteGame: (id: number) => setFavoriteGameIds((games) => games.includes(id) ? games.filter((gameId) => gameId !== id) : [...games, id]),
     togglePassword: () => setShowPassword((value) => !value),
     submit,
   };
