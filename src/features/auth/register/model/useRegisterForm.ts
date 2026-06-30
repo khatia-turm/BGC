@@ -1,6 +1,7 @@
 import { type ChangeEvent, type FormEvent, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../api";
+import { setAuthSession } from "@shared/auth/session";
 
 const initialValues = {
   firstName: "",
@@ -35,6 +36,7 @@ export const useRegisterForm = () => {
   const register = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [values, setValues] = useState(initialValues);
   const passwordScore = useMemo(
     () => passwordRules.filter((rule) => rule(values.password)).length,
@@ -68,7 +70,7 @@ export const useRegisterForm = () => {
       },
       {
         onSuccess: (response) => {
-          localStorage.setItem("authToken", response.token);
+          setAuthSession(response.token, undefined, rememberMe);
           navigate("/me/profile");
         },
       },
@@ -86,8 +88,10 @@ export const useRegisterForm = () => {
     error: register.error,
     isPending: register.isPending,
     showPassword,
+    rememberMe,
     update,
     chooseAvatar,
+    setRememberMe,
     togglePassword: () => setShowPassword((value) => !value),
     submit,
   };

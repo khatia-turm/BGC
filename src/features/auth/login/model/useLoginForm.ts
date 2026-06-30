@@ -4,6 +4,7 @@ import {
   useForgotPasswordMutation,
   useLoginMutation,
 } from "../api";
+import { setAuthSession } from "@shared/auth/session";
 
 export const useLoginForm = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export const useLoginForm = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [recoveryMode, setRecoveryMode] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -24,10 +26,7 @@ export const useLoginForm = () => {
       { email, password },
       {
         onSuccess: (response) => {
-          localStorage.setItem("authToken", response.token);
-          if (response.expiresAt) {
-            localStorage.setItem("authTokenExpiresAt", response.expiresAt);
-          }
+          setAuthSession(response.token, response.expiresAt, rememberMe);
           navigate("/me/events");
         },
       },
@@ -45,11 +44,13 @@ export const useLoginForm = () => {
     password,
     showPassword,
     recoveryMode,
+    rememberMe,
     error: login.error ?? recovery.error,
     isPending: login.isPending || recovery.isPending,
     recoverySent: recovery.isSuccess,
     setEmail,
     setPassword,
+    setRememberMe,
     togglePassword: () => setShowPassword((value) => !value),
     openRecovery,
     closeRecovery,

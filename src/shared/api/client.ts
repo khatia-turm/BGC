@@ -1,5 +1,6 @@
 import { mockRequest } from "./mockApi";
 import { ApiError } from "./errors";
+import { getAuthToken } from "@shared/auth/session";
 
 export { ApiError } from "./errors";
 
@@ -14,7 +15,7 @@ export async function apiClient<T>(
     return mockRequest<T>(path, options);
   }
 
-  const token = localStorage.getItem("authToken");
+  const token = getAuthToken();
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
     headers: {

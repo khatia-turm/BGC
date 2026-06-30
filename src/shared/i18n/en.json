@@ -76,7 +76,12 @@
     "registration": "Registration",
     "eventFull": "This event is full",
     "spotsAvailable": "{{count}} spots available",
-    "registrationCloses": "Registration closes {{date}}"
+    "registrationCloses": "Registration closes {{date}}",
+    "loginRequiredEyebrow": "Player access",
+    "loginRequiredTitle": "Sign in to claim your seat",
+    "loginRequiredCopy": "You need to be logged in before you can register for a tournament or join its waitlist.",
+    "loginRequiredCta": "Go to login",
+    "closeLoginPrompt": "Close login prompt"
   },
   "clubs": {
     "eyebrow": "Discover local communities",
@@ -267,7 +272,8 @@
     "and": "and",
     "privacy": "Privacy policy",
     "registerAction": "Create my account",
-    "haveAccount": "Already have an account?"
+    "haveAccount": "Already have an account?",
+    "rememberMe": "Remember me on this device"
   },
   "common": {
     "loading": "Loading…",

@@ -76,7 +76,12 @@
     "registration": "რეგისტრაცია",
     "eventFull": "ყველა ადგილი დაკავებულია",
     "spotsAvailable": "დარჩენილია {{count}} ადგილი",
-    "registrationCloses": "რეგისტრაცია დასრულდება {{date}}"
+    "registrationCloses": "რეგისტრაცია დასრულდება {{date}}",
+    "loginRequiredEyebrow": "მოთამაშის წვდომა",
+    "loginRequiredTitle": "ადგილის დასაკავებლად შედი ანგარიშში",
+    "loginRequiredCopy": "ტურნირზე რეგისტრაციისთვის ან მოლოდინის სიაში ჩასაწერად ავტორიზაცია აუცილებელია.",
+    "loginRequiredCta": "შესვლა",
+    "closeLoginPrompt": "შეტყობინების დახურვა"
   },
   "clubs": {
     "eyebrow": "აღმოაჩინე ადგილობრივი საზოგადოებები",
@@ -267,7 +272,8 @@
     "and": "და",
     "privacy": "კონფიდენციალურობის პოლიტიკას",
     "registerAction": "ანგარიშის შექმნა",
-    "haveAccount": "უკვე გაქვს ანგარიში?"
+    "haveAccount": "უკვე გაქვს ანგარიში?",
+    "rememberMe": "დამიმახსოვრე ამ მოწყობილობაზე"
   },
   "common": {
     "loading": "იტვირთება…",
