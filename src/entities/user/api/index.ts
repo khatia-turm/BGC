@@ -1,42 +1,52 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiClient } from "@shared/api/client";
-import type { CurrentUser, User, UserStatus } from "../model/types";
+import type {
+  CurrentUser,
+  ManagedClub,
+  PaginatedUsers,
+  UpdateUserPayload,
+  UserDetail,
+  UserProfile,
+  UserPublicProfile,
+  UserStatus,
+} from "../model/types";
 
 export const userKeys = {
   all: ["users"] as const,
-  list: (status?: UserStatus) => [...userKeys.all, "list", { status }] as const,
+  list: (status?: UserStatus, page = 1, pageSize = 50) =>
+    [...userKeys.all, "list", { status, page, pageSize }] as const,
   detail: (id: number) => [...userKeys.all, "detail", id] as const,
   me: ["auth", "me"] as const,
 };
 
-export function getCurrentUser() {
-  return apiClient<CurrentUser>("/api/auth/me");
+export const getCurrentUser = () => apiClient<CurrentUser>("/api/auth/me");
+
+export function getUsers(status?: UserStatus, page = 1, pageSize = 50) {
+  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
+  if (status) params.set("status", status);
+  return apiClient<PaginatedUsers>(`/api/users?${params}`);
 }
 
-export function getUsers(status?: UserStatus) {
-  const query = status ? `?status=${encodeURIComponent(status)}` : "";
-  return apiClient<User[]>(`/api/users${query}`);
-}
+export const searchUsers = (query: string) =>
+  apiClient<UserPublicProfile[]>(`/api/users/search?q=${encodeURIComponent(query.trim())}`);
 
-export function getUser(id: number) {
-  return apiClient<User>(`/api/users/${id}`);
-}
-
-export function useCurrentUser() {
-  return useQuery({ queryKey: userKeys.me, queryFn: getCurrentUser });
-}
-
-export function useUsers(status?: UserStatus) {
-  return useQuery({
-    queryKey: userKeys.list(status),
-    queryFn: () => getUsers(status),
+export const getUser = (id: number) => apiClient<UserProfile>(`/api/users/${id}`);
+export const getUserClubs = (id: number) =>
+  apiClient<Pick<ManagedClub, "id" | "name" | "role">[]>(`/api/users/${id}/clubs`);
+export const updateUser = (id: number, payload: UpdateUserPayload) =>
+  apiClient<UserDetail>(`/api/users/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+export const updateUserStatus = (id: number, status: UserStatus, reason?: string) =>
+  apiClient<UserDetail>(`/api/users/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status, reason }),
   });
-}
+export const deactivateCurrentUser = () =>
+  apiClient<void>("/api/users/me", { method: "DELETE" });
 
-export function useUser(id: number) {
-  return useQuery({
-    queryKey: userKeys.detail(id),
-    queryFn: () => getUser(id),
-    enabled: Number.isFinite(id),
-  });
-}
+export const useCurrentUser = () => useQuery({ queryKey: userKeys.me, queryFn: getCurrentUser });
+export const useUsers = (status?: UserStatus, page = 1, pageSize = 50) =>
+  useQuery({ queryKey: userKeys.list(status, page, pageSize), queryFn: () => getUsers(status, page, pageSize) });
+export const useUser = (id: number) =>
+  useQuery({ queryKey: userKeys.detail(id), queryFn: () => getUser(id), enabled: Number.isInteger(id) && id > 0 });
+export const useUpdateUser = () => useMutation({ mutationFn: ({ id, payload }: { id: number; payload: UpdateUserPayload }) => updateUser(id, payload) });
+export const useDeactivateCurrentUser = () => useMutation({ mutationFn: deactivateCurrentUser });

@@ -4,8 +4,11 @@ import { apiClient } from "@shared/api/client";
 export type LoginPayload = { email: string; password: string };
 export type LoginResponse = {
   token: string;
-  expiresAt?: string;
-  user: { id: number; nickname: string };
+  userId: number;
+  nickname: string;
+  firstName: string;
+  lastName: string;
+  expiresAt: string;
 };
 
 const login = (payload: LoginPayload) =>
@@ -15,7 +18,7 @@ const login = (payload: LoginPayload) =>
   });
 
 const forgotPassword = (email: string) =>
-  apiClient<{ message: string }>("/api/auth/forgot-password", {
+  apiClient<string>("/api/auth/forgot-password", {
     method: "POST",
     body: JSON.stringify({ email }),
   });

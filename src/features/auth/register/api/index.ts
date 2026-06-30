@@ -8,6 +8,8 @@ export type RegisterPayload = {
   email: string;
   phone: string;
   password: string;
+  birthday: string;
+  gender: 0 | 1 | 2;
 };
 
 export type RegisterResponse = {

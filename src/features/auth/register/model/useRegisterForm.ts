@@ -10,6 +10,8 @@ const initialValues = {
   phone: "",
   password: "",
   confirmPassword: "",
+  birthday: "",
+  gender: "" as "" | "0" | "1" | "2",
 };
 
 export const useRegisterForm = () => {
@@ -30,7 +32,7 @@ export const useRegisterForm = () => {
   );
 
   const update = (field: keyof typeof values) =>
-    (event: ChangeEvent<HTMLInputElement>) =>
+    (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setValues((current) => ({ ...current, [field]: event.target.value }));
 
   const chooseAvatar = (event: ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +50,8 @@ export const useRegisterForm = () => {
       email: values.email,
       phone: values.phone,
       password: values.password,
+      birthday: new Date(`${values.birthday}T00:00:00Z`).toISOString(),
+      gender: Number(values.gender) as 0 | 1 | 2,
     }, {
       onSuccess: (response) => {
         localStorage.setItem("authToken", response.token);

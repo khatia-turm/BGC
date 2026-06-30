@@ -3,7 +3,7 @@ import { ApiError } from "./errors";
 
 export { ApiError } from "./errors";
 
-const API_URL = import.meta.env.VITE_API_URL ?? "/api";
+const API_URL = (import.meta.env.VITE_API_URL ?? "http://localhost:5051").replace(/\/$/, "");
 const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API !== "false";
 
 export async function apiClient<T>(
@@ -37,8 +37,14 @@ export async function apiClient<T>(
 
 async function readErrorMessage(response: Response): Promise<string> {
   try {
-    const body = (await response.json()) as { message?: string };
-    return body.message ?? `Request failed with status ${response.status}`;
+    const body = (await response.json()) as
+      | string
+      | { message?: string; detail?: string; errors?: Record<string, string[]> };
+    if (typeof body === "string") return body;
+    if (body.detail) return body.detail;
+    if (body.message) return body.message;
+    if (body.errors) return Object.values(body.errors).flat().join(" ");
+    return `Request failed with status ${response.status}`;
   } catch {
     return `Request failed with status ${response.status}`;
   }
