@@ -14,6 +14,22 @@ const initialValues = {
   gender: "" as "" | "0" | "1" | "2",
 };
 
+const passwordRules = [
+  (password: string) => password.length >= 8,
+  (password: string) => /[A-Z]/.test(password),
+  (password: string) => /[a-z]/.test(password),
+  (password: string) => /\d/.test(password),
+  (password: string) => /[^A-Za-z0-9]/.test(password),
+];
+
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+export const maximumBirthday = [
+  yesterday.getFullYear(),
+  String(yesterday.getMonth() + 1).padStart(2, "0"),
+  String(yesterday.getDate()).padStart(2, "0"),
+].join("-");
+
 export const useRegisterForm = () => {
   const navigate = useNavigate();
   const register = useRegisterMutation();
@@ -21,17 +37,13 @@ export const useRegisterForm = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [values, setValues] = useState(initialValues);
   const passwordScore = useMemo(
-    () =>
-      [
-        values.password.length >= 8,
-        /[A-Z]/.test(values.password),
-        /\d/.test(values.password),
-        /[^A-Za-z0-9]/.test(values.password),
-      ].filter(Boolean).length,
+    () => passwordRules.filter((rule) => rule(values.password)).length,
     [values.password],
   );
+  const passwordValid = passwordRules.every((rule) => rule(values.password));
 
-  const update = (field: keyof typeof values) =>
+  const update =
+    (field: keyof typeof values) =>
     (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setValues((current) => ({ ...current, [field]: event.target.value }));
 
@@ -42,28 +54,32 @@ export const useRegisterForm = () => {
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    if (values.password !== values.confirmPassword) return;
-    register.mutate({
-      firstName: values.firstName,
-      lastName: values.lastName,
-      nickname: values.nickname,
-      email: values.email,
-      phone: values.phone,
-      password: values.password,
-      birthday: new Date(`${values.birthday}T00:00:00Z`).toISOString(),
-      gender: Number(values.gender) as 0 | 1 | 2,
-    }, {
-      onSuccess: (response) => {
-        localStorage.setItem("authToken", response.token);
-        navigate("/me/profile");
+    if (!passwordValid || values.password !== values.confirmPassword) return;
+    register.mutate(
+      {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        nickname: values.nickname,
+        email: values.email,
+        phone: values.phone,
+        password: values.password,
+        birthday: new Date(`${values.birthday}T00:00:00Z`).toISOString(),
+        gender: Number(values.gender) as 0 | 1 | 2,
       },
-    });
+      {
+        onSuccess: (response) => {
+          localStorage.setItem("authToken", response.token);
+          navigate("/me/profile");
+        },
+      },
+    );
   };
 
   return {
     values,
     avatarUrl,
     passwordScore,
+    passwordValid,
     passwordsMismatch: Boolean(
       values.confirmPassword && values.password !== values.confirmPassword,
     ),
