@@ -16,6 +16,7 @@ import { TournamentBuilderPage } from "@pages/club-admin/TournamentBuilderPage";
 import { TournamentMessagesPage } from "@pages/club-admin/TournamentMessagesPage";
 import { TournamentStructurePage } from "@pages/club-admin/TournamentStructurePage";
 import { TournamentsPage } from "@pages/club-admin/TournamentsPage";
+import { JoinRequestsPage } from "@pages/club-admin/JoinRequestsPage";
 
 export const clubAdminRoutes: RouteObject = {
   path: "/club-admin/:clubId",
@@ -23,6 +24,7 @@ export const clubAdminRoutes: RouteObject = {
   children: [
     { index: true, element: <DashboardPage /> },
     { path: "tournaments", element: <TournamentsPage /> },
+    { path: "requests", element: <JoinRequestsPage /> },
     { path: "tournaments/new", element: <TournamentBuilderPage /> },
     { path: "tournaments/:id", element: <ManageTournamentPage /> },
     { path: "tournaments/:id/edit", element: <EditTournamentPage /> },

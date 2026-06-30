@@ -1,3 +1,2 @@
-import { PagePlaceholder } from "@pages/_components/PagePlaceholder";
-
-export const StaffPage = () => <PagePlaceholder title="Staff" />;
+import { useParams } from "react-router-dom";import { useClubStaff } from "@entities/club/api";import styles from "./ClubAdminPages.module.scss";
+export const StaffPage=()=>{const clubId=Number(useParams().clubId);const staff=useClubStaff(clubId);return <main className={styles.page}><header className={styles.heading}><div><p>People and permissions</p><h1>Staff</h1></div><button className={styles.button}>＋ Invite staff member</button></header><section className={styles.panel}><table className={styles.table}><thead><tr><th>Member</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody>{staff.data?.map((member)=><tr key={member.id}><td><strong>{member.nickname}</strong></td><td>{member.email}</td><td><span className={styles.badge}>{member.role}</span></td><td>Active</td><td>{member.role==="Admin"?"Owner":"Change role"}</td></tr>)}</tbody></table></section></main>};

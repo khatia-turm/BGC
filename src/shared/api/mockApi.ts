@@ -74,11 +74,19 @@ export async function mockRequest<T>(
   if (method === "POST" && matches(segments, ["api", "clubs"])) {
     const body = JSON.parse(String(options.body ?? "{}")) as Record<string, string>;
     if (!body.name || !body.address || !body.city || !body.email || !body.phone) throw new ApiError(400, "Required club details are missing");
-    if (mockData.clubs.some((club) => club.name.toLowerCase() === body.name.toLowerCase())) throw new ApiError(409, "A club with this name already exists");
+    if (mockData.clubs.some((club) => String(club.name).toLowerCase() === body.name.toLowerCase())) throw new ApiError(409, "A club with this name already exists");
     if (mockClubRequest?.status === "Pending") throw new ApiError(409, "You already have a club application waiting for approval");
     const clubId = Math.max(...mockData.clubs.map((club) => club.id)) + 1;
     mockClubRequest = { clubId, clubName:body.name, status:"Pending", submittedAt:new Date().toISOString(), adminNote:null };
     return { clubId, status: "Pending", message: "Club application submitted successfully and is awaiting admin approval." } as T;
+  }
+  if (method === "PATCH" && segments[0] === "api" && segments[1] === "clubs" && segments.length === 3) {
+    const club=mockData.clubs.find((item)=>item.id===Number(segments[2]));
+    if(!club)throw new ApiError(404,"Club not found");
+    Object.assign(club,JSON.parse(String(options.body??"{}")),{updatedAt:new Date().toISOString()});return structuredClone(club) as T;
+  }
+  if(method==="PATCH"&&segments[0]==="api"&&segments[1]==="tournament-registrations"&&segments[3]==="status"){
+    const registration=mockRegistrations.find((item)=>item.id===Number(segments[2]));if(!registration)throw new ApiError(404,"Registration request not found");const body=JSON.parse(String(options.body??"{}")) as {status:string};registration.status=body.status;return structuredClone(registration) as T;
   }
 
   if (
@@ -258,10 +266,12 @@ function resolveGet(
   if (segments[0] === "api" && segments[1] === "clubs" && segments[2]) {
     const clubId = Number(segments[2]);
     if (segments[3] === "dashboard") {
-      return mockData.clubDashboard.clubId === clubId
-        ? mockData.clubDashboard
-        : undefined;
+      const tournamentIds=mockData.tournaments.filter((item)=>item.clubId===clubId).map((item)=>item.id);
+      const registrations=mockRegistrations.filter((item)=>tournamentIds.includes(item.tournamentId));
+      return {clubId,pendingMembers:registrations.filter((item)=>item.status==="Pending").length,upcomingTournaments:mockData.tournaments.filter((item)=>item.clubId===clubId&&new Date(item.startsAt)>new Date()).length,totalPlayers:new Set(registrations.map((item)=>item.userId)).size};
     }
+    if (segments[3] === "staff") return mockData.userClubs.filter((item)=>item.clubId===clubId).map((item)=>{const user=mockData.users.find((candidate)=>candidate.id===item.userId)!;return {id:user.id,nickname:user.nickname,email:user.email,avatarUrl:user.avatarUrl??"",role:item.role};});
+    if(segments[3]==="registration-requests"){const tournamentIds=mockData.tournaments.filter((item)=>item.clubId===clubId).map((item)=>item.id);return mockRegistrations.filter((item)=>tournamentIds.includes(item.tournamentId)&&item.status==="Pending").map((item)=>{const user=mockData.users.find((candidate)=>candidate.id===item.userId)!;const tournament=mockData.tournaments.find((candidate)=>candidate.id===item.tournamentId)!;const game=mockData.games.find((candidate)=>candidate.id===tournament.gameId)!;const rating=mockData.platformLeaderboards.find((entry)=>entry.userId===user.id&&entry.gameId===game.id)?.ratingPoints??null;return{id:item.id,tournamentId:tournament.id,tournamentName:tournament.name,gameTitle:game.title,userId:user.id,nickname:user.nickname,avatarUrl:user.avatarUrl,rating,registeredAt:item.registeredAt,status:item.status};});}
     if (segments[3] === "games") {
       const gameIds = mockData.clubGames
         .filter((item) => item.clubId === clubId && item.deletedAt === null)

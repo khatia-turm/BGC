@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const app = express();
 const port = Number(process.env.PORT || 5051);
+// Seed data is loaded at process start; restart the mock process after manual seed edits.
 const dataFile = fileURLToPath(new URL("./mock-data.json", import.meta.url));
 let db = JSON.parse(await readFile(dataFile, "utf8"));
 db.notifications ??= [];
@@ -282,10 +283,38 @@ app.get("/api/clubs/:id/games", (req, res) => {
   res.json(db.games.filter((game) => ids.includes(game.id)));
 });
 app.get("/api/clubs/:id/dashboard", (req, res) =>
-  res.json(
-    db.clubDashboard.clubId === Number(req.params.id) ? db.clubDashboard : null,
-  ),
+  res.json({
+    clubId:Number(req.params.id),
+    pendingMembers:db.tournamentRegistrations.filter((item)=>db.tournaments.some((t)=>t.id===item.tournamentId&&t.clubId===Number(req.params.id))&&item.status==="Pending").length,
+    upcomingTournaments:db.tournaments.filter((item)=>item.clubId===Number(req.params.id)&&new Date(item.startsAt)>new Date()).length,
+    totalPlayers:new Set(db.tournamentRegistrations.filter((item)=>db.tournaments.some((t)=>t.id===item.tournamentId&&t.clubId===Number(req.params.id))).map((item)=>item.userId)).size,
+  }),
 );
+app.get("/api/clubs/:id/staff", requireUser, (req,res)=>{
+  const memberships=db.userClubs.filter((item)=>item.clubId===Number(req.params.id));
+  res.json(memberships.map((item)=>{const user=db.users.find((candidate)=>candidate.id===item.userId);return {id:user.id,nickname:user.nickname,email:user.email,avatarUrl:user.avatarUrl??"",role:item.role};}));
+});
+app.get("/api/clubs/:id/registration-requests", requireUser, (req,res)=>{
+  const clubId=Number(req.params.id);
+  const tournamentIds=db.tournaments.filter((item)=>item.clubId===clubId).map((item)=>item.id);
+  res.json(db.tournamentRegistrations.filter((item)=>tournamentIds.includes(item.tournamentId)&&item.status==="Pending").map((item)=>{const user=db.users.find((candidate)=>candidate.id===item.userId);const tournament=db.tournaments.find((candidate)=>candidate.id===item.tournamentId);const game=db.games.find((candidate)=>candidate.id===tournament.gameId);const rating=db.platformLeaderboards.find((entry)=>entry.userId===user.id&&entry.gameId===game.id)?.ratingPoints??null;return {id:item.id,tournamentId:tournament.id,tournamentName:tournament.name,gameTitle:game.title,userId:user.id,nickname:user.nickname,avatarUrl:user.avatarUrl??null,rating,registeredAt:item.registeredAt,status:item.status};}));
+});
+app.patch("/api/tournament-registrations/:id/status",requireUser,async(req,res)=>{
+  const registration=db.tournamentRegistrations.find((item)=>item.id===Number(req.params.id));
+  if(!registration)return problem(res,404,"Registration request not found.");
+  const tournament=db.tournaments.find((item)=>item.id===registration.tournamentId);
+  const membership=db.userClubs.find((item)=>item.clubId===tournament.clubId&&item.userId===req.user.id);
+  if(!membership)return problem(res,403,"Club staff access is required.");
+  if(registration.status==="Pending"&&req.body.status==="Accepted")tournament.registeredPlayers+=1;
+  registration.status=req.body.status;await save();res.json(registration);
+});
+app.patch("/api/clubs/:id", requireUser, async (req,res)=>{
+  const club=db.clubs.find((item)=>item.id===Number(req.params.id));
+  const membership=db.userClubs.find((item)=>item.clubId===club?.id&&item.userId===req.user.id&&item.role==="Admin");
+  if(!club)return problem(res,404,"Club not found.");
+  if(!membership)return problem(res,403,"Club administrator access is required.");
+  Object.assign(club,req.body,{updatedAt:new Date().toISOString()});await save();res.json(club);
+});
 app.get("/api/clubs/:id/leaderboards", (req, res) =>
   res.json(
     db.clubLeaderboards.filter(

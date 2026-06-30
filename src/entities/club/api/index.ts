@@ -22,6 +22,7 @@ export type MyClubRequest = {
   submittedAt: string;
   adminNote: string | null;
 };
+export type ClubStaffMember = { id:number; nickname:string; email:string; avatarUrl:string; role:"Admin"|"Moderator" };
 
 export const clubKeys = {
   all: ["clubs"] as const,
@@ -30,6 +31,7 @@ export const clubKeys = {
   dashboard: (id: number) => [...clubKeys.detail(id), "dashboard"] as const,
   games: (id: number) => [...clubKeys.detail(id), "games"] as const,
   myRequest: ["clubs", "my-request"] as const,
+  staff: (id:number) => ["clubs", id, "staff"] as const,
 };
 
 export function getClubs(filters: ClubFilters = {}) {
@@ -48,6 +50,8 @@ export const getClubGames = (id: number) =>
 export const createClub = (payload: CreateClubPayload) =>
   apiClient<CreateClubResponse>("/api/clubs", { method: "POST", body: JSON.stringify(payload) });
 export const getMyClubRequest = () => apiClient<MyClubRequest | null>("/api/clubs/my-request");
+export const updateClub = (id:number, payload:CreateClubPayload) => apiClient<Club>(`/api/clubs/${id}`, { method:"PATCH", body:JSON.stringify(payload) });
+export const getClubStaff = (id:number) => apiClient<ClubStaffMember[]>(`/api/clubs/${id}/staff`);
 
 export function useClubs(filters: ClubFilters = {}) {
   return useQuery({
@@ -70,6 +74,16 @@ export function useClubGames(id: number) {
     queryFn: () => getClubGames(id),
     enabled: Number.isFinite(id),
   });
+}
+export function useClubDashboard(id:number) {
+  return useQuery({ queryKey:clubKeys.dashboard(id), queryFn:()=>getClubDashboard(id), enabled:Number.isFinite(id) });
+}
+export function useClubStaff(id:number) {
+  return useQuery({ queryKey:clubKeys.staff(id), queryFn:()=>getClubStaff(id), enabled:Number.isFinite(id) });
+}
+export function useUpdateClub(id:number) {
+  const queryClient=useQueryClient();
+  return useMutation({ mutationFn:(payload:CreateClubPayload)=>updateClub(id,payload), onSuccess:(club)=>{queryClient.setQueryData(clubKeys.detail(id),club);void queryClient.invalidateQueries({queryKey:clubKeys.all});} });
 }
 
 export function useCreateClub() {
