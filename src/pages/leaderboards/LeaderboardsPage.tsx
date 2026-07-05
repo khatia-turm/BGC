@@ -33,13 +33,20 @@ export const LeaderboardsPage = () => {
       ) : leaderboard.entries.length ? (
         <>
           <LeaderboardPodium entries={leaderboard.entries} />
-          <section className={styles.fullRanking} aria-labelledby="full-ranking-title">
+          <section
+            className={styles.fullRanking}
+            aria-labelledby="full-ranking-title"
+          >
             <div className={styles.sectionHeading}>
               <div>
                 <p>{t("leaderboard.completeStandings")}</p>
                 <h2 id="full-ranking-title">{t("leaderboard.fullRanking")}</h2>
               </div>
-              <span>{t("leaderboard.playersRanked", { count: leaderboard.entries.length })}</span>
+              <span>
+                {t("leaderboard.playersRanked", {
+                  count: leaderboard.entries.length,
+                })}
+              </span>
             </div>
             <LeaderboardTable entries={leaderboard.entries} />
           </section>

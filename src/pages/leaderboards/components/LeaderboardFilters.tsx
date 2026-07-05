@@ -23,17 +23,34 @@ export const LeaderboardFilters = ({
   const { t } = useTranslation();
 
   return (
-    <section className={styles.filters} aria-label={t("leaderboard.filtersLabel")}>
+    <section
+      className={styles.filters}
+      aria-label={t("leaderboard.filtersLabel")}
+    >
       <label>
         <span>{t("leaderboard.game")}</span>
-        <select value={gameId ?? ""} onChange={(event) => setGameId(Number(event.target.value))}>
-          {games.map((game) => <option key={game.id} value={game.id}>{game.title}</option>)}
+        <select
+          value={gameId ?? ""}
+          onChange={(event) => setGameId(Number(event.target.value))}
+        >
+          {games.map((game) => (
+            <option key={game.id} value={game.id}>
+              {game.title}
+            </option>
+          ))}
         </select>
       </label>
       <label>
         <span>{t("leaderboard.season")}</span>
-        <select value={season} onChange={(event) => setSeason(event.target.value)}>
-          {seasons.map((item) => <option key={item} value={item}>{item}</option>)}
+        <select
+          value={season}
+          onChange={(event) => setSeason(event.target.value)}
+        >
+          {seasons.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
         </select>
       </label>
     </section>

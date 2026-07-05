@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@entities/user/api";
@@ -11,6 +11,7 @@ import styles from "./PlayerNavigation.module.scss";
 export const PlayerNavigation = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const userQuery = useCurrentUser();
   const clubRequest = useMyClubRequest();
@@ -42,6 +43,7 @@ export const PlayerNavigation = () => {
   const nickname = user?.nickname ?? t("navigation.player");
   const initial = nickname.charAt(0).toUpperCase();
   const firstClub = user?.clubs[0];
+  const inClubDashboard = location.pathname.startsWith("/club-admin/");
 
   return (
     <div className={styles.profile} ref={menuRef}>
@@ -64,8 +66,9 @@ export const PlayerNavigation = () => {
           <NavLink to={routes.myHistory} role="menuitem" onClick={() => setOpen(false)}>{t("navigation.myHistory")}</NavLink>
           <NavLink to={routes.notifications} role="menuitem" onClick={() => setOpen(false)}>{t("navigation.notifications")}</NavLink>
           {firstClub && (
-            <NavLink className={styles.clubLink} to={`/club-admin/${firstClub.id}`} role="menuitem" onClick={() => setOpen(false)}>
-              {t("navigation.clubDashboard")}<small>{firstClub.name}</small>
+            <NavLink className={styles.clubLink} to={inClubDashboard ? routes.myProfile : `/club-admin/${firstClub.id}`} role="menuitem" onClick={() => setOpen(false)}>
+              {t(inClubDashboard ? "navigation.playerDashboard" : "navigation.clubDashboard")}
+              <small>{inClubDashboard ? nickname : firstClub.name}</small>
             </NavLink>
           )}
           {!firstClub && clubRequest.data?.status === "Pending" && (

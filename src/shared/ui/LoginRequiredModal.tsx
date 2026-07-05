@@ -40,7 +40,13 @@ export const LoginRequiredModal = ({
       >
         <div className={styles.controls}>
           <LanguageSwitcher contained />
-          <button ref={closeButtonRef} className={styles.close} type="button" onClick={onClose} aria-label={t("tournaments.closeLoginPrompt")}>
+          <button
+            ref={closeButtonRef}
+            className={styles.close}
+            type="button"
+            onClick={onClose}
+            aria-label={t("tournaments.closeLoginPrompt")}
+          >
             <span aria-hidden="true" />
           </button>
         </div>
