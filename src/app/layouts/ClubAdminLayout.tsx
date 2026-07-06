@@ -1,6 +1,6 @@
 import { NavLink, Navigate, Outlet, useParams } from "react-router-dom";
 import { useCurrentUser } from "@entities/user/api";
-import { useClub } from "@entities/club/api";
+import { useMyClub } from "@entities/club/api";
 import { Logo } from "@shared/ui/Logo";
 import { PlayerNavigation } from "@widgets/public-navigation";
 import styles from "./ClubAdminLayout.module.scss";
@@ -16,7 +16,7 @@ const links = [
 export const ClubAdminLayout = () => {
   const clubId = Number(useParams().clubId);
   const user = useCurrentUser();
-  const club = useClub(clubId);
+  const club = useMyClub(clubId);
   if (user.isLoading || club.isLoading)
     return <div className={styles.loading}>Opening club workspace…</div>;
   if (!user.data?.clubs.some((item) => item.id === clubId))

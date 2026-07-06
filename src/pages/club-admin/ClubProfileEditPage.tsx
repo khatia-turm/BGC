@@ -1,9 +1,9 @@
 import { type FormEvent,useState } from "react";
 import { Link,useParams } from "react-router-dom";
-import { useClub,useUpdateClub,type CreateClubPayload } from "@entities/club/api";
+import { useMyClub,useUpdateClub,type CreateClubPayload } from "@entities/club/api";
 import styles from "./ClubSettingsPage.module.scss";
 
-export const ClubProfileEditPage=()=>{const clubId=Number(useParams().clubId);const club=useClub(clubId);if(!club.data)return <main className={styles.page}>Loading club settings…</main>;return <Editor key={club.data.updatedAt} clubId={clubId} initial={{name:club.data.name,logoUrl:club.data.logoUrl,description:club.data.description??"",address:club.data.address,city:club.data.city,email:club.data.email??"",phone:club.data.phone??"",workingHours:club.data.workingHours??""}}/>};
+export const ClubProfileEditPage=()=>{const clubId=Number(useParams().clubId);const club=useMyClub(clubId);if(!club.data)return <main className={styles.page}>Loading club settings…</main>;return <Editor key={club.data.updatedAt} clubId={clubId} initial={{name:club.data.name,logoUrl:club.data.logoUrl,description:club.data.description??"",address:club.data.address,city:club.data.city,email:club.data.email??"",phone:club.data.phone??"",workingHours:club.data.workingHours??""}}/>};
 
 const Editor=({clubId,initial}:{clubId:number;initial:CreateClubPayload})=>{
   const [form,setForm]=useState(initial);const [saved,setSaved]=useState(false);const update=useUpdateClub(clubId);

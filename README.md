@@ -161,23 +161,21 @@ npm.cmd run dev
 Copy `.env.example` to `.env` when custom values are needed:
 
 ```env
-VITE_API_URL=http://localhost:5000
-VITE_USE_MOCK_API=true
+VITE_API_URL=mock
 ```
 
-`VITE_USE_MOCK_API` defaults to enabled unless it is explicitly set to `false`.
+`VITE_API_URL` is the only transport setting. The special value `mock` uses the in-process API implementation.
 
 For local frontend development:
 
 ```env
-VITE_USE_MOCK_API=true
+VITE_API_URL=mock
 ```
 
 For a real backend:
 
 ```env
 VITE_API_URL=https://api.example.com
-VITE_USE_MOCK_API=false
 ```
 
 Pages call the same entity API functions in both modes, so switching from mock data to the backend should not require page-level rewrites.
