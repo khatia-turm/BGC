@@ -57,7 +57,6 @@ export const GameDetailsPage = () => {
             ))}
           </div>
           <h1>{item.title}</h1>
-          <p className={styles.subtitle}>{item.subtitle}</p>
           <p className={styles.description}>{item.description}</p>
           <dl className={styles.quickFacts}>
             <div>

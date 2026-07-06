@@ -49,6 +49,7 @@ type Page<T> = {
   totalPages: number;
   items: T[];
 };
+export type ClubPage = Page<Club>;
 type ClubListDto = {
   clubId: number;
   name: string;
@@ -145,7 +146,6 @@ const toGame = (dto: BoardGameDto): Game => ({
   id: dto.boardGameId,
   bggId: 0,
   title: dto.title,
-  subtitle: "",
   description: dto.description,
   year: dto.year,
   minPlayers: dto.minPlayers,
@@ -169,7 +169,9 @@ const toGame = (dto: BoardGameDto): Game => ({
   updatedAt: "",
 });
 
-export async function getClubs(filters: ClubFilters = {}) {
+export async function getClubsPage(
+  filters: ClubFilters = {},
+): Promise<ClubPage> {
   const params = new URLSearchParams({
     page: String(filters.page ?? 1),
     pageSize: String(filters.pageSize ?? 100),
@@ -178,8 +180,10 @@ export async function getClubs(filters: ClubFilters = {}) {
   if (filters.status && filters.status !== "Active")
     params.set("status", filters.status);
   const response = await apiClient<Page<ClubListDto>>(`/api/clubs?${params}`);
-  return response.items.map(toClub);
+  return { ...response, items: response.items.map(toClub) };
 }
+export const getClubs = async (filters: ClubFilters = {}) =>
+  (await getClubsPage(filters)).items;
 export const getClub = async (id: number) =>
   toClub(await apiClient<ClubDetailDto>(`/api/clubs/${id}`));
 export const getMyClub = async (id: number) =>
@@ -254,6 +258,13 @@ export function useClubs(filters: ClubFilters = {}) {
   return useQuery({
     queryKey: clubKeys.list(filters),
     queryFn: () => getClubs(filters),
+  });
+}
+export function useClubPage(filters: ClubFilters = {}) {
+  return useQuery({
+    queryKey: [...clubKeys.list(filters), "page"],
+    queryFn: () => getClubsPage(filters),
+    placeholderData: (previous) => previous,
   });
 }
 export function useClub(id: number) {

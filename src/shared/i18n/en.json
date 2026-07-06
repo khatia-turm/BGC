@@ -46,8 +46,12 @@
     "clubsEyebrow": "Find your people",
     "featuredClubs": "Featured clubs",
     "viewAllClubs": "View all clubs",
+    "gamesEyebrow": "Choose your next table",
+    "findGames": "Find games",
+    "viewAllGames": "View all games",
     "noEvents": "No upcoming tournaments yet.",
-    "noClubs": "No clubs to show yet."
+    "noClubs": "No clubs to show yet.",
+    "noGames": "No games to show yet."
   },
   "cards": {
     "registrationOpen": "Registration open",

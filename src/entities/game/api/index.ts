@@ -19,12 +19,12 @@ type Page<T> = {
   totalPages: number;
   items: T[];
 };
+export type GamePage = Page<Game>;
 type BoardGameDto = {
   boardGameId?: number;
   id?: number;
   bggId?: number;
   title: string;
-  subtitle?: string;
   description: string;
   year: number;
   minPlayers: number;
@@ -63,7 +63,6 @@ const toGame = (dto: BoardGameDto): Game => ({
   id: dto.boardGameId ?? dto.id ?? 0,
   bggId: dto.bggId ?? 0,
   title: dto.title,
-  subtitle: dto.subtitle ?? "",
   description: dto.description,
   year: dto.year,
   minPlayers: dto.minPlayers,
@@ -86,10 +85,9 @@ const toGame = (dto: BoardGameDto): Game => ({
   createdAt: dto.createdAt ?? "",
   updatedAt: dto.updatedAt ?? "",
 });
-const itemsOf = <T>(response: Page<T> | T[]): T[] =>
-  Array.isArray(response) ? response : response.items;
-
-export async function getGames(filters: GameFilters = {}) {
+export async function getGamesPage(
+  filters: GameFilters = {},
+): Promise<GamePage> {
   const params = new URLSearchParams({
     page: String(filters.page ?? 1),
     pageSize: String(filters.pageSize ?? 100),
@@ -104,8 +102,18 @@ export async function getGames(filters: GameFilters = {}) {
   const response = await apiClient<Page<BoardGameDto> | BoardGameDto[]>(
     `/api/boardgames?${params}`,
   );
-  return itemsOf(response).map(toGame);
+  if (Array.isArray(response))
+    return {
+      page: filters.page ?? 1,
+      pageSize: filters.pageSize ?? response.length,
+      totalCount: response.length,
+      totalPages: 1,
+      items: response.map(toGame),
+    };
+  return { ...response, items: response.items.map(toGame) };
 }
+export const getGames = async (filters: GameFilters = {}) =>
+  (await getGamesPage(filters)).items;
 export const getGame = async (id: number) =>
   toGame(await apiClient<BoardGameDto>(`/api/boardgames/${id}`));
 export const getGameCategories = () =>
@@ -122,6 +130,13 @@ export function useGames(filters: GameFilters = {}) {
   return useQuery({
     queryKey: gameKeys.list(filters),
     queryFn: () => getGames(filters),
+  });
+}
+export function useGamePage(filters: GameFilters = {}) {
+  return useQuery({
+    queryKey: [...gameKeys.list(filters), "page"],
+    queryFn: () => getGamesPage(filters),
+    placeholderData: (previous) => previous,
   });
 }
 export function useGame(id: number) {

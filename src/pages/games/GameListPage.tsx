@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useGameCategories, useGames } from "@entities/game/api";
+import { useGameCategories, useGamePage } from "@entities/game/api";
 import { GameCard } from "@entities/game/ui/GameCard";
+import { Pagination } from "@shared/ui/Pagination";
 import styles from "./GameListPage.module.scss";
 
 export const GameListPage = () => {
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const games = useGames({
+  const [page, setPage] = useState(1);
+  const games = useGamePage({
     search: search.trim() || undefined,
     categoryId: categoryId ? Number(categoryId) : undefined,
+    page,
+    pageSize: 20,
   });
   const categories = useGameCategories();
   return (
@@ -26,7 +30,10 @@ export const GameListPage = () => {
           <input
             type="search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             placeholder={t("games.searchPlaceholder")}
           />
         </label>
@@ -34,7 +41,10 @@ export const GameListPage = () => {
           <span>{t("games.categoryLabel")}</span>
           <select
             value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
+            onChange={(e) => {
+              setCategoryId(e.target.value);
+              setPage(1);
+            }}
           >
             <option value="">{t("games.allCategories")}</option>
             {categories.data?.map((category) => (
@@ -46,21 +56,27 @@ export const GameListPage = () => {
         </label>
       </section>
       <p className={styles.resultCount}>
-        {t("games.results", { count: games.data?.length ?? 0 })}
+        {t("games.results", { count: games.data?.totalCount ?? 0 })}
       </p>
       {games.isPending ? (
         <div className={styles.message}>{t("common.loading")}</div>
       ) : games.isError ? (
         <div className={styles.message}>{t("common.loadError")}</div>
-      ) : games.data?.length ? (
+      ) : games.data?.items.length ? (
         <section className={styles.grid} aria-label={t("games.resultsLabel")}>
-          {games.data.map((game) => (
+          {games.data.items.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}
         </section>
       ) : (
         <div className={styles.message}>{t("games.noResults")}</div>
       )}
+      <Pagination
+        page={page}
+        totalPages={games.data?.totalPages ?? 0}
+        isPending={games.isFetching}
+        onPageChange={setPage}
+      />
     </main>
   );
 };

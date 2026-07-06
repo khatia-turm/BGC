@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Tournament } from "../model/types";
+import { truncateText } from "@shared/lib/truncateText";
 import styles from "./TournamentCard.module.scss";
 
 type TournamentCardProps = {
@@ -38,7 +39,7 @@ export const TournamentCard = ({
           {gameTitle} {gameTitle && clubName ? "·" : ""} {clubName}
         </p>
       )}
-      <p className={styles.description}>{tournament.description}</p>
+      <p className={styles.description}>{truncateText(tournament.description)}</p>
       <dl className={styles.details}>
         <div>
           <dt>{t("cards.date")}</dt>

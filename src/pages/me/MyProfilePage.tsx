@@ -4,14 +4,14 @@ import { useCurrentUser, useUpdateUser, useUser } from "@entities/user/api";
 import { useGames } from "@entities/game/api";
 import styles from "./MePage.module.scss";
 
-type Preferences = { favoriteGameIds: number[]; experienceLevel: string };
+type Preferences = { favoriteGameIds: number[] };
 const readPreferences = (): Preferences => {
   try {
     return JSON.parse(
       localStorage.getItem("playerPreferences") ?? "",
     ) as Preferences;
   } catch {
-    return { favoriteGameIds: [], experienceLevel: "Beginner" };
+    return { favoriteGameIds: [] };
   }
 };
 
@@ -78,7 +78,7 @@ const ProfileEditor = ({
         <p>Player profile</p>
         <h1>My Profile</h1>
         <span>
-          Keep your identity, preferences and experience level up to date.
+          Keep your identity and favorite games up to date.
         </span>
       </header>
       <form className={styles.form} onSubmit={submit}>
@@ -142,23 +142,6 @@ const ProfileEditor = ({
               setForm({ ...form, avatarUrl: event.target.value })
             }
           />
-        </label>
-        <label>
-          Experience level
-          <select
-            value={preferences.experienceLevel}
-            onChange={(event) =>
-              setPreferences({
-                ...preferences,
-                experienceLevel: event.target.value,
-              })
-            }
-          >
-            <option>Beginner</option>
-            <option>Intermediate</option>
-            <option>Advanced</option>
-            <option>Competitive</option>
-          </select>
         </label>
         <fieldset className={`${styles.wide} ${styles.choices}`}>
           <legend>Favorite board games</legend>

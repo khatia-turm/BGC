@@ -46,8 +46,12 @@
     "clubsEyebrow": "იპოვე შენი თანამოაზრეები",
     "featuredClubs": "რჩეული კლუბები",
     "viewAllClubs": "ყველა კლუბი",
+    "gamesEyebrow": "აირჩიე შემდეგი თამაში",
+    "findGames": "იპოვე თამაშები",
+    "viewAllGames": "ყველა თამაში",
     "noEvents": "მომავალი ტურნირები ჯერ არ არის.",
-    "noClubs": "კლუბები ჯერ არ არის."
+    "noClubs": "კლუბები ჯერ არ არის.",
+    "noGames": "თამაშები ჯერ არ არის."
   },
   "cards": {
     "registrationOpen": "რეგისტრაცია ღიაა",

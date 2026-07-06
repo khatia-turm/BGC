@@ -1,5 +1,6 @@
-games in clubs on main page
-paging ->
+games in clubs on main page ✔️
+paging -> / thee needs to be paging. for example on tournaments page, fetch 20 tournaments first/ then little go to next page button that fetches new 20 tournaments.
+they have something like this written in backend that i should use: ✔️
 public-ze statusi ar unda arc playerze
 no subtitle in games/ but first sentence ..
 on games page search -> paging -> add game player sort -> rank sort

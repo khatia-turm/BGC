@@ -726,7 +726,7 @@ function resolveGet(
   }
 
   if (matches(segments, ["api", "tournaments"]))
-    return mockData.tournaments.map(withTournamentCounts);
+    return page(mockData.tournaments.map(withTournamentCounts), searchParams);
   if (segments[0] === "api" && segments[1] === "tournaments" && segments[2]) {
     const tournament = mockData.tournaments.find(
       (tournament) => tournament.id === Number(segments[2]),
@@ -827,7 +827,6 @@ function toBoardGameDto(game: (typeof mockData.games)[number]) {
     boardGameId: game.id,
     bggId: game.bggId,
     title: game.title,
-    subtitle: game.subtitle,
     description: game.description,
     year: game.year,
     minPlayers: game.minPlayers,
