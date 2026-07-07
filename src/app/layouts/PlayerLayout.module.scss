@@ -14,6 +14,7 @@
   border-bottom: 1px solid rgba(colors.$primary-400, 0.14);
   background: rgba(colors.$neutral-950, 0.94);
   box-shadow: 0 0.6rem 1.5rem rgba(#000, 0.16);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
 .inner {
@@ -107,6 +108,7 @@
     display: block;
     border: 0;
     background: rgba(#020909, 0.72);
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
   }
   .inner {

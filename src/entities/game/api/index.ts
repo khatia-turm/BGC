@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@shared/api/client";
 import type { Game, GameCategory } from "../model/types";
 
@@ -51,6 +51,12 @@ type BoardGameDto = {
   updatedAt?: string;
 };
 export type BggSearchResult = { bggId: number; title: string; year?: number };
+export type ImportBoardGamesResponse = {
+  requestedCount: number;
+  processedCount: number;
+  insertedCount: number;
+  updatedCount: number;
+};
 
 export const gameKeys = {
   all: ["boardgames"] as const,
@@ -122,6 +128,15 @@ export const searchBgg = (keyword: string) =>
   });
 export const getBggGame = (bggId: number) =>
   apiClient<BoardGameDto>(`/api/boardgames/bgg-search?bggid=${bggId}`);
+export const importHotBoardGames = () =>
+  apiClient<ImportBoardGamesResponse>("/api/boardgames/import/hot", {
+    method: "POST",
+  });
+export const seedBoardGamesFromCsv = (offset = 0, count = 100) =>
+  apiClient<ImportBoardGamesResponse>(
+    `/api/boardgames/seed-from-csv?offset=${offset}&count=${count}`,
+    { method: "POST" },
+  );
 
 export function useGames(filters: GameFilters = {}) {
   return useQuery({
@@ -151,6 +166,21 @@ export function useGameCategories() {
 }
 export function useBggSearch() {
   return useMutation({ mutationFn: (keyword: string) => searchBgg(keyword) });
+}
+export function useImportHotBoardGames() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: importHotBoardGames,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: gameKeys.all }),
+  });
+}
+export function useSeedBoardGamesFromCsv() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ offset, count }: { offset: number; count: number }) =>
+      seedBoardGamesFromCsv(offset, count),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: gameKeys.all }),
+  });
 }
 export function useBggGame(bggId: number | undefined) {
   return useQuery({

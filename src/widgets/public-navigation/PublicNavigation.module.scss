@@ -26,6 +26,7 @@
   margin-inline: auto;
 }
 .drawer{display:contents}.account{grid-column:3;grid-row:1}.menuButton,.drawerHeading,.backdrop{display:none}
+.adminAccount{display:flex;align-items:center;gap:.55rem}.adminAccount a,.adminAccount button{display:inline-flex;min-height:2.35rem;align-items:center;justify-content:center;padding:0 .75rem;color:colors.$primary-400;border:1px solid rgba(colors.$primary-400,.35);background:transparent;border-radius:.5rem;font:inherit;font-size:.74rem;font-weight:850;text-decoration:none;cursor:pointer}.adminAccount button{color:#ffabab;border-color:rgba(#ffabab,.4)}
 
 .logo {
   text-decoration: none;

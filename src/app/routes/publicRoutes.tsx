@@ -38,6 +38,13 @@ export const publicRoutes: RouteObject = {
     { path: "players/:playerId", element: <PublicPlayerProfilePage /> },
     { path: "login", element: <LoginPage /> },
     { path: "register", element: <RegisterPage /> },
-    { path: "register/club", element: <AuthRequired><ClubRegisterPage /></AuthRequired> },
+    {
+      path: "register/club",
+      element: (
+        <AuthRequired>
+          <ClubRegisterPage />
+        </AuthRequired>
+      ),
+    },
   ],
 };

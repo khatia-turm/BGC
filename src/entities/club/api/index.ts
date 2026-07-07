@@ -7,6 +7,7 @@ export type ClubFilters = {
   status?: ClubStatus;
   page?: number;
   pageSize?: number;
+  admin?: boolean;
 };
 export type CreateClubPayload = {
   name: string;
@@ -176,8 +177,9 @@ export async function getClubsPage(
     page: String(filters.page ?? 1),
     pageSize: String(filters.pageSize ?? 100),
   });
-  // Anonymous callers are forbidden from sending a status filter. The public endpoint returns public clubs.
-  if (filters.status && filters.status !== "Active")
+  // Anonymous callers are forbidden from sending a status filter.
+  // AppAdmin pages pass admin=true so every documented status filter is sent.
+  if (filters.status && (filters.admin || filters.status !== "Active"))
     params.set("status", filters.status);
   const response = await apiClient<Page<ClubListDto>>(`/api/clubs?${params}`);
   return { ...response, items: response.items.map(toClub) };

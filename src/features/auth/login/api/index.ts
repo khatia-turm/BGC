@@ -17,12 +17,4 @@ const login = (payload: LoginPayload) =>
     body: JSON.stringify(payload),
   });
 
-const forgotPassword = (email: string) =>
-  apiClient<string>("/api/auth/forgot-password", {
-    method: "POST",
-    body: JSON.stringify({ email }),
-  });
-
 export const useLoginMutation = () => useMutation({ mutationFn: login });
-export const useForgotPasswordMutation = () =>
-  useMutation({ mutationFn: forgotPassword });

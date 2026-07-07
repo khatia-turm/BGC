@@ -2,7 +2,7 @@ import { mockRequest } from "./mockApi";
 import { ApiError } from "./errors";
 import { getAuthToken } from "@shared/auth/session";
 
-export { ApiError } from "./errors";
+export { ApiError, getApiFieldError } from "./errors";
 
 const API_URL = (import.meta.env.VITE_API_URL ?? "mock").replace(/\/$/, "");
 const USE_MOCK_API = API_URL === "mock";
@@ -23,9 +23,7 @@ export async function apiClient<T>(
     },
   });
 
-  if (!response.ok) {
-    throw new ApiError(response.status, await readErrorMessage(response));
-  }
+  if (!response.ok) throw await readError(response);
 
   if (response.status === 204) {
     return undefined as T;
@@ -34,7 +32,7 @@ export async function apiClient<T>(
   return response.json() as Promise<T>;
 }
 
-async function readErrorMessage(response: Response): Promise<string> {
+async function readError(response: Response): Promise<ApiError> {
   try {
     const body = (await response.json()) as
       | string
@@ -43,12 +41,18 @@ async function readErrorMessage(response: Response): Promise<string> {
           detail?: string;
           errors?: Record<string, string[]>;
         };
-    if (typeof body === "string") return body;
-    if (body.detail) return body.detail;
-    if (body.message) return body.message;
-    if (body.errors) return Object.values(body.errors).flat().join(" ");
-    return `Request failed with status ${response.status}`;
+    if (typeof body === "string") return new ApiError(response.status, body);
+    const fieldMessage = Object.values(body.errors ?? {}).flat().join(" ");
+    const message =
+      body.detail ||
+      body.message ||
+      fieldMessage ||
+      `Request failed with status ${response.status}`;
+    return new ApiError(response.status, message, body.errors);
   } catch {
-    return `Request failed with status ${response.status}`;
+    return new ApiError(
+      response.status,
+      `Request failed with status ${response.status}`,
+    );
   }
 }

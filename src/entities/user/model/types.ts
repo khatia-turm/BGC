@@ -20,6 +20,7 @@ export type CurrentUser = {
   nickname: string;
   email: string;
   avatarUrl: string;
+  roles?: string[];
   clubs: ManagedClub[];
 };
 
@@ -55,6 +56,7 @@ export type PaginatedUsers = {
   totalCount: number;
   page: number;
   pageSize: number;
+  totalPages?: number;
 };
 
 export type UpdateUserPayload = Partial<{

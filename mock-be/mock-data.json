@@ -18,10 +18,7 @@
     "phone": "+995555123456",
     "avatarUrl": "https://i.pravatar.cc/300?img=12",
     "status": "Active",
-    "roles": [
-      "Player",
-      "ClubAdmin"
-    ],
+    "roles": ["Player", "ClubAdmin"],
     "clubs": [
       {
         "id": 456,
@@ -44,6 +41,24 @@
     "deletedAt": null
   },
   "users": [
+    {
+      "id": 1,
+      "nickname": "SystemAdmin",
+      "firstName": "System",
+      "lastName": "Admin",
+      "birthday": "1990-01-01",
+      "gender": "Other",
+      "email": "admin@example.com",
+      "phone": "+995555000001",
+      "password": "password",
+      "avatarUrl": "https://i.pravatar.cc/300?img=68",
+      "status": "Active",
+      "roles": ["AppAdmin"],
+      "adminNote": null,
+      "createdAt": "2026-01-01T09:00:00Z",
+      "updatedAt": "2026-01-01T09:00:00Z",
+      "deletedAt": null
+    },
     {
       "id": 234,
       "nickname": "TabletopKing",
@@ -826,24 +841,12 @@
       "bggAvgRating": 8.35,
       "bggVoters": 106000,
       "bggCommunityPlayerCounts": {
-        "best": [
-          3
-        ],
-        "recommended": [
-          2,
-          3,
-          4
-        ],
-        "notRecommended": [
-          1,
-          5
-        ]
+        "best": [3],
+        "recommended": [2, 3, 4],
+        "notRecommended": [1, 5]
       },
       "imageUrl": "https://placehold.co/600x600/037971/FFFFFF?text=Terraforming+Mars",
-      "categoryIds": [
-        9,
-        10
-      ],
+      "categoryIds": [9, 10],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
     },
@@ -865,24 +868,12 @@
       "bggAvgRating": 8.1,
       "bggVoters": 92000,
       "bggCommunityPlayerCounts": {
-        "best": [
-          3
-        ],
-        "recommended": [
-          1,
-          2,
-          3,
-          4
-        ],
-        "notRecommended": [
-          5
-        ]
+        "best": [3],
+        "recommended": [1, 2, 3, 4],
+        "notRecommended": [5]
       },
       "imageUrl": "https://placehold.co/600x600/85BDBF/040F0F?text=Wingspan",
-      "categoryIds": [
-        10,
-        11
-      ],
+      "categoryIds": [10, 11],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
     },
@@ -904,22 +895,12 @@
       "bggAvgRating": 8.6,
       "bggVoters": 65000,
       "bggCommunityPlayerCounts": {
-        "best": [
-          3,
-          4
-        ],
-        "recommended": [
-          2,
-          3,
-          4
-        ],
+        "best": [3, 4],
+        "recommended": [2, 3, 4],
         "notRecommended": []
       },
       "imageUrl": "https://placehold.co/600x600/023436/C2FCF7?text=Brass+Birmingham",
-      "categoryIds": [
-        9,
-        10
-      ],
+      "categoryIds": [9, 10],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
     },
@@ -941,21 +922,12 @@
       "bggAvgRating": 7.8,
       "bggVoters": 56000,
       "bggCommunityPlayerCounts": {
-        "best": [
-          2
-        ],
-        "recommended": [
-          2,
-          3,
-          4
-        ],
+        "best": [2],
+        "recommended": [2, 3, 4],
         "notRecommended": []
       },
       "imageUrl": "https://placehold.co/600x600/03B5AA/040F0F?text=Race+for+the+Galaxy",
-      "categoryIds": [
-        11,
-        13
-      ],
+      "categoryIds": [11, 13],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-06-25T03:00:00Z"
     }
@@ -1051,11 +1023,7 @@
       "registeredPlayers": 3,
       "entryFee": 25,
       "scoringPolicy": "WinnerHeavyPlacementPoints",
-      "tieBreakRules": [
-        "HeadToHead",
-        "MostWins",
-        "Manual"
-      ],
+      "tieBreakRules": ["HeadToHead", "MostWins", "Manual"],
       "createdAt": "2026-06-10T09:00:00Z",
       "updatedAt": "2026-06-25T16:00:00Z"
     },
@@ -1077,10 +1045,7 @@
       "registeredPlayers": 24,
       "entryFee": 15,
       "scoringPolicy": "LinearPlacementPoints",
-      "tieBreakRules": [
-        "MostWins",
-        "HighestRawScore"
-      ],
+      "tieBreakRules": ["MostWins", "HighestRawScore"],
       "createdAt": "2026-06-18T09:00:00Z",
       "updatedAt": "2026-06-26T13:30:00Z"
     },
@@ -1102,11 +1067,7 @@
       "registeredPlayers": 11,
       "entryFee": null,
       "scoringPolicy": "WinnerHeavyPlacementPoints",
-      "tieBreakRules": [
-        "HeadToHead",
-        "HighestRawScore",
-        "Manual"
-      ],
+      "tieBreakRules": ["HeadToHead", "HighestRawScore", "Manual"],
       "createdAt": "2026-06-22T10:00:00Z",
       "updatedAt": "2026-06-27T08:15:00Z"
     },
@@ -1128,10 +1089,7 @@
       "registeredPlayers": 6,
       "entryFee": 30,
       "scoringPolicy": "WinLossOnly",
-      "tieBreakRules": [
-        "HeadToHead",
-        "Manual"
-      ],
+      "tieBreakRules": ["HeadToHead", "Manual"],
       "createdAt": "2026-06-26T15:00:00Z",
       "updatedAt": "2026-06-27T09:00:00Z"
     },
@@ -1153,10 +1111,7 @@
       "registeredPlayers": 9,
       "entryFee": null,
       "scoringPolicy": "LinearPlacementPoints",
-      "tieBreakRules": [
-        "MostWins",
-        "HeadToHead"
-      ],
+      "tieBreakRules": ["MostWins", "HeadToHead"],
       "createdAt": "2026-06-27T10:00:00Z",
       "updatedAt": "2026-06-27T10:00:00Z"
     },
@@ -1178,10 +1133,7 @@
       "registeredPlayers": 14,
       "entryFee": 20,
       "scoringPolicy": "LinearPlacementPoints",
-      "tieBreakRules": [
-        "MostWins",
-        "HeadToHead"
-      ],
+      "tieBreakRules": ["MostWins", "HeadToHead"],
       "createdAt": "2026-06-01T09:00:00Z",
       "updatedAt": "2026-06-30T19:00:00Z"
     },
@@ -1203,10 +1155,7 @@
       "registeredPlayers": 11,
       "entryFee": null,
       "scoringPolicy": "LinearPlacementPoints",
-      "tieBreakRules": [
-        "MostWins",
-        "HeadToHead"
-      ],
+      "tieBreakRules": ["MostWins", "HeadToHead"],
       "createdAt": "2026-06-25T09:00:00Z",
       "updatedAt": "2026-06-30T19:00:00Z"
     },
@@ -1228,10 +1177,7 @@
       "registeredPlayers": 0,
       "entryFee": null,
       "scoringPolicy": "LinearPlacementPoints",
-      "tieBreakRules": [
-        "MostWins",
-        "HeadToHead"
-      ],
+      "tieBreakRules": ["MostWins", "HeadToHead"],
       "createdAt": "2026-06-30T19:00:00Z",
       "updatedAt": "2026-06-30T19:00:00Z"
     }
@@ -1289,10 +1235,7 @@
       "order": 1,
       "roundCount": 1,
       "status": "Scheduled",
-      "playerIds": [
-        234,
-        235
-      ]
+      "playerIds": [234, 235]
     }
   ],
   "tournamentRounds": [
