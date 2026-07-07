@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { PlatformLeaderboardEntry } from "@entities/leaderboard/model/types";
-import styles from "../LeaderboardsPage.module.scss";
+import styles from "./LeaderboardTable.module.scss";
 
 type LeaderboardTableProps = {
   entries: PlatformLeaderboardEntry[];

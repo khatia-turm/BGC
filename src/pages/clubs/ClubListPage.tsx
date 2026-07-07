@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useClubPage } from "@entities/club/api";
 import { ClubCard } from "@entities/club/ui/ClubCard";
 import { Pagination } from "@shared/ui/Pagination";
-import { useClubFilters } from "./hooks/useClubFilters";
+import { useClubFilters } from "@features/club-list/model/useClubFilters";
 import styles from "./ClubListPage.module.scss";
 
 export const ClubListPage = () => {

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { Dispatch, SetStateAction } from "react";
 import type { Game } from "@entities/game/model/types";
-import styles from "../LeaderboardsPage.module.scss";
+import styles from "./LeaderboardFilters.module.scss";
 
 type LeaderboardFiltersProps = {
   games: Game[];

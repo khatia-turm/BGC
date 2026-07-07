@@ -99,11 +99,22 @@
   min-height: calc(100dvh - 4.5rem);
   padding: clamp(2.5rem, 6vw, 5rem) max(1rem, calc((100% - 1200px) / 2)) 6rem;
   background:
-    radial-gradient(circle at 82% 0, rgba(colors.$primary-700, 0.16), transparent 28rem),
-    radial-gradient(circle at 10% 92%, rgba(colors.$primary-900, 0.38), transparent 32rem),
+    radial-gradient(
+      circle at 82% 0,
+      rgba(colors.$primary-700, 0.16),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 10% 92%,
+      rgba(colors.$primary-900, 0.38),
+      transparent 32rem
+    ),
     colors.$neutral-950;
 }
-.content > main { width: 100%; padding: 0; }
+.content > main {
+  width: 100%;
+  padding: 0;
+}
 .mobileClub {
   display: none;
 }

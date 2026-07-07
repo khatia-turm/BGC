@@ -1,4 +1,4 @@
-import { PagePlaceholder } from "@pages/_components/PagePlaceholder";
+import { PagePlaceholder } from "@shared/ui/PagePlaceholder";
 
 export const AdminDashboardPage = () => (
   <PagePlaceholder title="Admin dashboard" />

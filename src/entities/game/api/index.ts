@@ -5,9 +5,8 @@ import type { Game, GameCategory } from "../model/types";
 export type GameFilters = {
   search?: string;
   categoryId?: number;
-  categoryIds?: number[];
   players?: number;
-  sortBy?: "rank";
+  sortBy?: "rank" | "title";
   sortDirection?: "asc" | "desc";
   page?: number;
   pageSize?: number;
@@ -26,20 +25,20 @@ type BoardGameDto = {
   bggId?: number;
   title: string;
   description: string;
-  year: number;
-  minPlayers: number;
-  maxPlayers: number;
+  year: number | null;
+  minPlayers: number | null;
+  maxPlayers: number | null;
   bestPlayersCount?: number;
   minPlayerAge?: number;
   suggestedPlayerAge?: number;
-  minPlayingTime: number;
-  maxPlayingTime: number;
-  complexity: number;
+  minPlayingTime: number | null;
+  maxPlayingTime: number | null;
+  complexity: number | null;
   type?: string;
-  bggOverallRank: number;
-  bggGeekRating: number;
-  bggAvgRating: number;
-  bggVoters: number;
+  bggOverallRank: number | null;
+  bggGeekRating: number | null;
+  bggAvgRating: number | null;
+  bggVoters: number | null;
   imageUrl: string;
   categories?: GameCategory[];
   categoryIds?: number[];
@@ -64,17 +63,17 @@ const toGame = (dto: BoardGameDto): Game => ({
   bggId: dto.bggId ?? 0,
   title: dto.title,
   description: dto.description,
-  year: dto.year,
-  minPlayers: dto.minPlayers,
-  maxPlayers: dto.maxPlayers,
-  minPlayingTime: dto.minPlayingTime,
-  maxPlayingTime: dto.maxPlayingTime,
-  complexity: dto.complexity,
+  year: dto.year ?? 0,
+  minPlayers: dto.minPlayers ?? 0,
+  maxPlayers: dto.maxPlayers ?? 0,
+  minPlayingTime: dto.minPlayingTime ?? 0,
+  maxPlayingTime: dto.maxPlayingTime ?? 0,
+  complexity: dto.complexity ?? 0,
   type: dto.type ?? "Board Game",
-  bggOverallRank: dto.bggOverallRank,
-  bggGeekRating: dto.bggGeekRating,
-  bggAvgRating: dto.bggAvgRating,
-  bggVoters: dto.bggVoters,
+  bggOverallRank: dto.bggOverallRank ?? 0,
+  bggGeekRating: dto.bggGeekRating ?? 0,
+  bggAvgRating: dto.bggAvgRating ?? 0,
+  bggVoters: dto.bggVoters ?? 0,
   bggCommunityPlayerCounts: dto.bggCommunityPlayerCounts ?? {
     best: dto.bestPlayersCount ? [dto.bestPlayersCount] : [],
     recommended: [],
@@ -93,9 +92,7 @@ export async function getGamesPage(
     pageSize: String(filters.pageSize ?? 100),
   });
   if (filters.search) params.set("search", filters.search);
-  const ids =
-    filters.categoryIds ?? (filters.categoryId ? [filters.categoryId] : []);
-  ids.forEach((id) => params.append("categoryIds", String(id)));
+  if (filters.categoryId) params.set("categoryId", String(filters.categoryId));
   if (filters.players) params.set("players", String(filters.players));
   if (filters.sortBy) params.set("sortBy", filters.sortBy);
   if (filters.sortDirection) params.set("sortDirection", filters.sortDirection);

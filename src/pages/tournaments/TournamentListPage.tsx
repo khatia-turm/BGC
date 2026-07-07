@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { useTournamentPage } from "@entities/tournament/api";
 import { useGames } from "@entities/game/api";
 import { useClubs } from "@entities/club/api";
-import { TournamentFilters } from "./components/TournamentFilters";
-import { TournamentResults } from "./components/TournamentResults";
-import { useTournamentFilters } from "./hooks/useTournamentFilters";
+import { TournamentFilters } from "@features/tournament-list/ui/TournamentFilters";
+import { TournamentResults } from "@features/tournament-list/ui/TournamentResults";
+import { useTournamentFilters } from "@features/tournament-list/model/useTournamentFilters";
 import { Pagination } from "@shared/ui/Pagination";
 import styles from "./TournamentListPage.module.scss";
 

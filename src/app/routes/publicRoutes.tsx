@@ -31,6 +31,7 @@ export const publicRoutes: RouteObject = {
     { path: "clubs/:clubId/leaderboards", element: <ClubLeaderboardsPage /> },
     { path: "clubs/:clubId", element: <ClubDetailsPage /> },
     { path: "games", element: <GameListPage /> },
+    { path: "games/categories/:categoryId", element: <GameListPage /> },
     { path: "games/:gameId", element: <GameDetailsPage /> },
     { path: "leaderboards", element: <LeaderboardsPage /> },
     { path: "players", element: <PlayerSearchPage /> },

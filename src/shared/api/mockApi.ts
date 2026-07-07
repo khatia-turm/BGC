@@ -546,15 +546,17 @@ function resolveGet(
 
   if (matches(segments, ["api", "boardgames"])) {
     const search = searchParams.get("search")?.toLowerCase();
-    const categoryIds = searchParams.getAll("categoryIds").map(Number);
+    const categoryId = toNumber(searchParams.get("categoryId"));
+    const legacyCategoryIds = searchParams.getAll("categoryIds").map(Number);
     const players = toNumber(searchParams.get("players"));
 
     const games = mockData.games.filter((game) => {
       const matchesSearch =
         !search || game.title.toLowerCase().includes(search);
       const matchesCategory =
-        !categoryIds.length ||
-        categoryIds.every((id) => game.categoryIds.includes(id));
+        (categoryId ? game.categoryIds.includes(categoryId) : true) &&
+        (!legacyCategoryIds.length ||
+          legacyCategoryIds.every((id) => game.categoryIds.includes(id)));
       const matchesPlayers =
         !players || (game.minPlayers <= players && game.maxPlayers >= players);
       return matchesSearch && matchesCategory && matchesPlayers;
@@ -562,6 +564,8 @@ function resolveGet(
     const direction = searchParams.get("sortDirection") === "desc" ? -1 : 1;
     if (searchParams.get("sortBy") === "rank")
       games.sort((a, b) => (a.bggOverallRank - b.bggOverallRank) * direction);
+    if (searchParams.get("sortBy") === "title")
+      games.sort((a, b) => a.title.localeCompare(b.title) * direction);
     return page(games.map(toBoardGameDto), searchParams);
   }
 

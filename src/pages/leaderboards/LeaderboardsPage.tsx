@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { LeaderboardFilters } from "./components/LeaderboardFilters";
-import { LeaderboardPodium } from "./components/LeaderboardPodium";
-import { LeaderboardTable } from "./components/LeaderboardTable";
-import { useLeaderboardPage } from "./hooks/useLeaderboardPage";
+import { LeaderboardFilters } from "@features/leaderboard/ui/LeaderboardFilters";
+import { useLeaderboardPage } from "@features/leaderboard/model/useLeaderboardPage";
+import { LeaderboardPodium } from "@entities/leaderboard/ui/LeaderboardPodium";
+import { LeaderboardTable } from "@entities/leaderboard/ui/LeaderboardTable";
 import styles from "./LeaderboardsPage.module.scss";
 
 export const LeaderboardsPage = () => {

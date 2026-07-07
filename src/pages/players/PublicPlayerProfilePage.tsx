@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { usePlayer } from "@entities/player/api";
 import { useGames } from "@entities/game/api";
 import { routes } from "@shared/config/routes";
-import { PlayerStats } from "./components/PlayerStats";
-import { PlayerRankings } from "./components/PlayerRankings";
-import { PlayerTournaments } from "./components/PlayerTournaments";
+import { PlayerStats } from "@entities/player/ui/PlayerStats";
+import { PlayerRankings } from "@entities/player/ui/PlayerRankings";
+import { PlayerTournaments } from "@entities/player/ui/PlayerTournaments";
 import styles from "./PublicPlayerProfilePage.module.scss";
 
 export const PublicPlayerProfilePage = () => {

@@ -18,7 +18,10 @@
     "notifications": "Notifications",
     "clubDashboard": "Switch to Club Dashboard",
     "playerDashboard": "Switch to Player",
+    "myClubs": "My Clubs",
+    "myClubsCount": "{{count}} clubs",
     "registerClub": "Register a club",
+    "registerNewClub": "Register a new club",
     "registerClubHint": "Submit a club for approval",
     "clubApprovalPending": "Waiting for approval",
     "logout": "Logout",
@@ -101,15 +104,15 @@
     "loginRequiredTitle": "Sign in to claim your seat",
     "loginRequiredCopy": "You need to be logged in before you can register for a tournament or join its waitlist.",
     "loginRequiredCta": "Go to login",
-    "closeLoginPrompt": "Close login prompt"
-    ,"rulesAgreement": "I agree to the tournament rules"
-    ,"registrationConfirmed": "You're registered"
-    ,"onWaitlist": "You're on the waitlist"
-    ,"confirmationSent": "A confirmation message will be sent using the contact details from your profile."
-    ,"cancelRegistration": "Cancel registration"
-    ,"cancelling": "Cancelling…"
-    ,"registering": "Registering…"
-    ,"cancellationClosed": "The cancellation period set by the club has ended."
+    "closeLoginPrompt": "Close login prompt",
+    "rulesAgreement": "I agree to the tournament rules",
+    "registrationConfirmed": "You're registered",
+    "onWaitlist": "You're on the waitlist",
+    "confirmationSent": "A confirmation message will be sent using the contact details from your profile.",
+    "cancelRegistration": "Cancel registration",
+    "cancelling": "Cancelling…",
+    "registering": "Registering…",
+    "cancellationClosed": "The cancellation period set by the club has ended."
   },
   "clubs": {
     "eyebrow": "Discover local communities",
@@ -126,7 +129,7 @@
     "active": "Active",
     "notFound": "Club not found.",
     "backToClubs": "Back to clubs",
-    "verifiedClub": "Active MeepleHub club",
+    "verifiedClub": "MeepleHub club",
     "clubNavigation": "Club navigation",
     "overview": "Overview",
     "games": "Games",
@@ -171,11 +174,23 @@
     "eyebrow": "Choose your next challenge",
     "title": "Board games",
     "description": "Explore the games played across MeepleHub, learn what fits your table, and find clubs and tournaments where you can play.",
+    "categoryDescription": "Explore {{category}} board games and tune the results by search, player count, and ranking.",
     "filtersLabel": "Game filters",
     "searchLabel": "Search",
     "searchPlaceholder": "Search games by title…",
     "categoryLabel": "Category",
     "allCategories": "All categories",
+    "categoriesLabel": "Board game categories",
+    "previousCategories": "Previous",
+    "nextCategories": "Next",
+    "playersLabel": "Players",
+    "playersPlaceholder": "Any",
+    "sortLabel": "Sort by",
+    "sortByRank": "BGG rank",
+    "sortByTitle": "Title",
+    "directionLabel": "Order",
+    "sortAsc": "Ascending",
+    "sortDesc": "Descending",
     "results": "{{count}} games found",
     "resultsLabel": "Game results",
     "noResults": "No games match those filters.",

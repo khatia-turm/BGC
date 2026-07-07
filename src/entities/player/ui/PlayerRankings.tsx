@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { PlayerRanking } from "@entities/player/model/types";
 import type { Game } from "@entities/game/model/types";
-import styles from "../PublicPlayerProfilePage.module.scss";
+import styles from "./PlayerProfile.module.scss";
 
 type PlayerRankingsProps = {
   rankings: PlayerRanking[];
@@ -21,7 +21,14 @@ export const PlayerRankings = ({ rankings, games }: PlayerRankingsProps) => {
       {rankings.length ? (
         <div className={styles.tableWrap}>
           <table className={styles.table}>
-            <thead><tr><th>{t("playerProfile.game")}</th><th>{t("playerProfile.season")}</th><th>{t("playerProfile.rank")}</th><th>{t("playerProfile.points")}</th></tr></thead>
+            <thead>
+              <tr>
+                <th>{t("playerProfile.game")}</th>
+                <th>{t("playerProfile.season")}</th>
+                <th>{t("playerProfile.rank")}</th>
+                <th>{t("playerProfile.points")}</th>
+              </tr>
+            </thead>
             <tbody>
               {rankings.map((ranking) => (
                 <tr key={`${ranking.gameId}-${ranking.season}`}>
@@ -34,7 +41,9 @@ export const PlayerRankings = ({ rankings, games }: PlayerRankingsProps) => {
             </tbody>
           </table>
         </div>
-      ) : <div className={styles.empty}>{t("playerProfile.noRankings")}</div>}
+      ) : (
+        <div className={styles.empty}>{t("playerProfile.noRankings")}</div>
+      )}
     </section>
   );
 };

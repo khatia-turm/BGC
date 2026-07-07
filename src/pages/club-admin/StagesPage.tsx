@@ -1,3 +1,3 @@
-import { PagePlaceholder } from "@pages/_components/PagePlaceholder";
+import { PagePlaceholder } from "@shared/ui/PagePlaceholder";
 
 export const StagesPage = () => <PagePlaceholder title="Stages" />;

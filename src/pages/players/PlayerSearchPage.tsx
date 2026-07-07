@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { PlayerCard } from "@entities/player/ui/PlayerCard";
-import { usePlayerSearch } from "./hooks/usePlayerSearch";
+import { usePlayerSearch } from "@features/player-search/model/usePlayerSearch";
 import styles from "./PlayerSearchPage.module.scss";
 
 export const PlayerSearchPage = () => {
