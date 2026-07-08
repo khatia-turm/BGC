@@ -26,13 +26,21 @@ export const PlayerSearchPage = () => {
       </label>
 
       <div className={styles.resultLine} aria-live="polite">
-        {t("players.results", { count: playerSearch.players.length })}
+        {playerSearch.canSearch
+          ? t("players.results", { count: playerSearch.players.length })
+          : playerSearch.hasSearch
+            ? "Keep typing to search"
+            : "Find your friends"}
         {playerSearch.isFetching && !playerSearch.isPending && (
           <span>{t("players.searching")}</span>
         )}
       </div>
 
-      {playerSearch.isPending ? (
+      {!playerSearch.hasSearch ? (
+        <div className={styles.message}>Find your friends</div>
+      ) : !playerSearch.canSearch ? (
+        <div className={styles.message}>Enter at least 2 characters.</div>
+      ) : playerSearch.isPending ? (
         <div className={styles.message}>{t("common.loading")}</div>
       ) : playerSearch.isError ? (
         <div className={styles.message}>{t("common.loadError")}</div>

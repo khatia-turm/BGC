@@ -8,11 +8,7 @@ type PlayerCardProps = {
 };
 
 export const PlayerCard = ({ player }: PlayerCardProps) => {
-  const { t, i18n } = useTranslation();
-  const joinedAt = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
-    month: "short",
-    year: "numeric",
-  }).format(new Date(player.joinedAt));
+  const { t } = useTranslation();
 
   return (
     <article className={styles.card}>
@@ -24,7 +20,6 @@ export const PlayerCard = ({ player }: PlayerCardProps) => {
         <p>
           {player.firstName} {player.lastName}
         </p>
-        <span>{t("players.joined", { date: joinedAt })}</span>
       </div>
       <Link className={styles.action} to={`/players/${player.id}`}>
         {t("players.viewProfile")} <span aria-hidden="true">→</span>

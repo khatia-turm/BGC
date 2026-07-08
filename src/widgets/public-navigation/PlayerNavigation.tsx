@@ -104,7 +104,7 @@ export const PlayerNavigation = () => {
           {inClubDashboard ? (
             <>
               <NavLink
-                to={routes.myProfile}
+                to={routes.myEvents}
                 role="menuitem"
                 onClick={closeDropdown}
               >
@@ -135,6 +135,13 @@ export const PlayerNavigation = () => {
             </>
           ) : (
             <>
+              <NavLink
+                to={routes.myEvents}
+                role="menuitem"
+                onClick={closeDropdown}
+              >
+                {t("navigation.myEvents")}
+              </NavLink>
               <NavLink
                 to={routes.myProfile}
                 role="menuitem"

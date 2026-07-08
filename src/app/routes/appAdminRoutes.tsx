@@ -5,10 +5,15 @@ import { ClubRequestsPage } from "@pages/app-admin/ClubRequestsPage";
 import { ClubsManagementPage } from "@pages/app-admin/ClubsManagementPage";
 import { GamesManagementPage } from "@pages/app-admin/GamesManagementPage";
 import { UsersManagementPage } from "@pages/app-admin/UsersManagementPage";
+import { RoleRequired } from "./RoleRequired";
 
 export const appAdminRoutes: RouteObject = {
   path: "/admin",
-  element: <AppAdminLayout />,
+  element: (
+    <RoleRequired role="AppAdmin">
+      <AppAdminLayout />
+    </RoleRequired>
+  ),
   children: [
     { index: true, element: <AdminDashboardPage /> },
     { path: "club-requests", element: <ClubRequestsPage /> },

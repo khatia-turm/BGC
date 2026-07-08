@@ -57,6 +57,8 @@ Club's Game-Inventory Discovery:
 
 Query Parameters:
 
+http://localhost:8082/api/clubs/3/boardgames?page=1&pageSize=100
+
 - `?search=Catan`
 - `?page=1&pageSize=10`
 

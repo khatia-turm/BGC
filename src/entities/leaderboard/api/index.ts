@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@shared/api/client";
+import { mockRequest } from "@shared/api/mockApi";
 import type {
   ClubLeaderboardEntry,
   PlatformLeaderboardEntry,
@@ -19,8 +19,9 @@ export const getClubLeaderboard = (
   if (filters.season) params.set("season", filters.season);
   const query = params.size ? `?${params}` : "";
 
-  return apiClient<ClubLeaderboardEntry[]>(
+  return mockRequest<ClubLeaderboardEntry[]>(
     `/api/clubs/${clubId}/leaderboards${query}`,
+    {},
   );
 };
 
@@ -47,7 +48,10 @@ export const getPlatformLeaderboard = (
   if (filters.season) params.set("season", filters.season);
   const query = params.size ? `?${params}` : "";
 
-  return apiClient<PlatformLeaderboardEntry[]>(`/api/leaderboards${query}`);
+  return mockRequest<PlatformLeaderboardEntry[]>(
+    `/api/leaderboards${query}`,
+    {},
+  );
 };
 
 export const usePlatformLeaderboard = (

@@ -1,18 +1,21 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useGame, useGameCategories } from "@entities/game/api";
-import { useClubs } from "@entities/club/api";
-import { useTournaments } from "@entities/tournament/api";
+import { useClubs, useClubsWithGame } from "@entities/club/api";
 import { ClubCard } from "@entities/club/ui/ClubCard";
+import { useGame, useGameCategories } from "@entities/game/api";
+import { useTournaments } from "@entities/tournament/api";
 import { TournamentCard } from "@entities/tournament/ui/TournamentCard";
 import styles from "./GameDetailsPage.module.scss";
 
 export const GameDetailsPage = () => {
   const { t } = useTranslation();
   const gameId = Number(useParams().gameId);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const game = useGame(gameId);
   const categories = useGameCategories();
   const clubs = useClubs({ status: "Active" });
+  const clubsWithGame = useClubsWithGame(gameId, clubs.data);
   const tournaments = useTournaments();
 
   if (game.isPending)
@@ -21,6 +24,7 @@ export const GameDetailsPage = () => {
         <div className={styles.message}>{t("common.loading")}</div>
       </main>
     );
+
   if (game.isError || !game.data)
     return (
       <main className={styles.page}>
@@ -34,8 +38,7 @@ export const GameDetailsPage = () => {
   const item = game.data;
   const relatedTournaments =
     tournaments.data?.filter((entry) => entry.gameId === item.id) ?? [];
-  const clubIds = new Set(relatedTournaments.map((entry) => entry.clubId));
-  const relatedClubs = clubs.data?.filter((club) => clubIds.has(club.id)) ?? [];
+  const relatedClubs = clubsWithGame.data;
   const categoryNames =
     categories.data
       ?.filter((category) => item.categoryIds.includes(category.id))
@@ -44,7 +47,7 @@ export const GameDetailsPage = () => {
   return (
     <main className={styles.page}>
       <Link className={styles.back} to="/games">
-        ← {t("games.backToGames")}
+        {"<-"} {t("games.backToGames")}
       </Link>
       <section className={styles.hero}>
         <img src={item.imageUrl} alt={item.title} />
@@ -57,18 +60,56 @@ export const GameDetailsPage = () => {
             ))}
           </div>
           <h1>{item.title}</h1>
-          <p className={styles.description}>{item.description}</p>
+          <div
+            className={`${styles.descriptionBlock} ${
+              isDescriptionExpanded ? styles.descriptionBlockExpanded : ""
+            }`}
+          >
+            <p
+              className={`${styles.description} ${
+                isDescriptionExpanded ? styles.descriptionExpanded : ""
+              }`}
+            >
+              {item.description}
+            </p>
+            {item.description.length > 260 && (
+              <button
+                aria-label={
+                  isDescriptionExpanded
+                    ? "Collapse description"
+                    : "Show full description"
+                }
+                className={styles.descriptionToggle}
+                type="button"
+                onClick={() =>
+                  setIsDescriptionExpanded((isExpanded) => !isExpanded)
+                }
+              >
+                {isDescriptionExpanded ? "Show less" : "Read more"}
+              </button>
+            )}
+          </div>
           <dl className={styles.quickFacts}>
             <div>
               <dt>{t("games.players")}</dt>
               <dd>
-                {item.minPlayers}–{item.maxPlayers}
+                {item.minPlayers}-{item.maxPlayers}
+              </dd>
+            </div>
+            <div>
+              <dt>{t("games.minAge")}</dt>
+              <dd>{item.minPlayerAge ? `${item.minPlayerAge}+` : "-"}</dd>
+            </div>
+            <div>
+              <dt>{t("games.suggestedAge")}</dt>
+              <dd>
+                {item.suggestedPlayerAge ? `${item.suggestedPlayerAge}+` : "-"}
               </dd>
             </div>
             <div>
               <dt>{t("games.playTime")}</dt>
               <dd>
-                {item.minPlayingTime}–{item.maxPlayingTime} {t("games.minutes")}
+                {item.minPlayingTime}-{item.maxPlayingTime} {t("games.minutes")}
               </dd>
             </div>
             <div>
@@ -84,7 +125,9 @@ export const GameDetailsPage = () => {
       </section>
       <section className={styles.stats} aria-label={t("games.bggStats")}>
         <div>
-          <strong>#{item.bggOverallRank}</strong>
+          <strong>
+            {item.bggOverallRank ? `${item.bggAvgRating}` : "not ranked "}
+          </strong>
           <span>{t("games.overallRank")}</span>
         </div>
         <div>
@@ -108,8 +151,10 @@ export const GameDetailsPage = () => {
           </div>
           <span>{relatedClubs.length}</span>
         </div>
-        {clubs.isPending ? (
+        {clubs.isPending || clubsWithGame.isPending ? (
           <div className={styles.message}>{t("common.loading")}</div>
+        ) : clubs.isError || clubsWithGame.isError ? (
+          <div className={styles.message}>{t("common.loadError")}</div>
         ) : relatedClubs.length ? (
           <div className={styles.grid}>
             {relatedClubs.map((club) => (

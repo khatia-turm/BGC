@@ -1,7 +1,13 @@
 import { useTranslation } from "react-i18next";
-import type { PlayerRanking } from "@entities/player/model/types";
 import type { Game } from "@entities/game/model/types";
 import styles from "./PlayerProfile.module.scss";
+
+type PlayerRanking = {
+  gameId: number;
+  season: string;
+  rank: number;
+  ratingPoints: number;
+};
 
 type PlayerRankingsProps = {
   rankings: PlayerRanking[];

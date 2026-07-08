@@ -6,7 +6,7 @@ export type GameFilters = {
   search?: string;
   categoryId?: number;
   players?: number;
-  sortBy?: "rank" | "title";
+  sortBy?: "rank" | "title" | "minAge" | "suggestedAge";
   sortDirection?: "asc" | "desc";
   page?: number;
   pageSize?: number;
@@ -29,8 +29,8 @@ type BoardGameDto = {
   minPlayers: number | null;
   maxPlayers: number | null;
   bestPlayersCount?: number;
-  minPlayerAge?: number;
-  suggestedPlayerAge?: number;
+  minPlayerAge?: number | null;
+  suggestedPlayerAge?: number | null;
   minPlayingTime: number | null;
   maxPlayingTime: number | null;
   complexity: number | null;
@@ -72,6 +72,8 @@ const toGame = (dto: BoardGameDto): Game => ({
   year: dto.year ?? 0,
   minPlayers: dto.minPlayers ?? 0,
   maxPlayers: dto.maxPlayers ?? 0,
+  minPlayerAge: dto.minPlayerAge ?? 0,
+  suggestedPlayerAge: dto.suggestedPlayerAge ?? 0,
   minPlayingTime: dto.minPlayingTime ?? 0,
   maxPlayingTime: dto.maxPlayingTime ?? 0,
   complexity: dto.complexity ?? 0,
@@ -93,6 +95,10 @@ const toGame = (dto: BoardGameDto): Game => ({
 export async function getGamesPage(
   filters: GameFilters = {},
 ): Promise<GamePage> {
+  if (filters.sortBy === "minAge" || filters.sortBy === "suggestedAge") {
+    return getAgeSortedGamesPage(filters);
+  }
+
   const params = new URLSearchParams({
     page: String(filters.page ?? 1),
     pageSize: String(filters.pageSize ?? 100),
@@ -114,6 +120,55 @@ export async function getGamesPage(
       items: response.map(toGame),
     };
   return { ...response, items: response.items.map(toGame) };
+}
+
+async function getAgeSortedGamesPage(filters: GameFilters): Promise<GamePage> {
+  const page = filters.page ?? 1;
+  const pageSize = filters.pageSize ?? 20;
+  const firstPage = await getGamesPage({
+    ...filters,
+    sortBy: "rank",
+    sortDirection: "asc",
+    page: 1,
+    pageSize: 100,
+  });
+  const remainingPages = Array.from(
+    { length: Math.max(firstPage.totalPages - 1, 0) },
+    (_, index) => index + 2,
+  );
+  const otherPages = await Promise.all(
+    remainingPages.map((pageNumber) =>
+      getGamesPage({
+        ...filters,
+        sortBy: "rank",
+        sortDirection: "asc",
+        page: pageNumber,
+        pageSize: 100,
+      }),
+    ),
+  );
+  const ageKey =
+    filters.sortBy === "suggestedAge" ? "suggestedPlayerAge" : "minPlayerAge";
+  const direction = filters.sortDirection === "desc" ? -1 : 1;
+  const items = [firstPage, ...otherPages]
+    .flatMap((result) => result.items)
+    .sort((first, second) => {
+      const firstAge = first[ageKey] || Number.MAX_SAFE_INTEGER;
+      const secondAge = second[ageKey] || Number.MAX_SAFE_INTEGER;
+      return (
+        (firstAge - secondAge || first.title.localeCompare(second.title)) *
+        direction
+      );
+    });
+  const start = (page - 1) * pageSize;
+
+  return {
+    page,
+    pageSize,
+    totalCount: items.length,
+    totalPages: items.length === 0 ? 0 : Math.ceil(items.length / pageSize),
+    items: items.slice(start, start + pageSize),
+  };
 }
 export const getGames = async (filters: GameFilters = {}) =>
   (await getGamesPage(filters)).items;

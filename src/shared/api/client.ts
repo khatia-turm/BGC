@@ -42,7 +42,9 @@ async function readError(response: Response): Promise<ApiError> {
           errors?: Record<string, string[]>;
         };
     if (typeof body === "string") return new ApiError(response.status, body);
-    const fieldMessage = Object.values(body.errors ?? {}).flat().join(" ");
+    const fieldMessage = Object.values(body.errors ?? {})
+      .flat()
+      .join(" ");
     const message =
       body.detail ||
       body.message ||
