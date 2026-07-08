@@ -34,14 +34,22 @@ export const TournamentResults = ({
 
   return (
     <section className={styles.grid} aria-label={t("tournaments.resultsLabel")}>
-      {tournaments.map((tournament) => (
-        <TournamentCard
-          key={tournament.id}
-          tournament={tournament}
-          gameTitle={gamesById.get(tournament.gameId)?.title}
-          clubName={clubsById.get(tournament.clubId)?.name}
-        />
-      ))}
+      {tournaments.map((tournament) => {
+        const primaryBoardGameId = tournament.boardGames?.[0]?.boardGameId;
+
+        return (
+          <TournamentCard
+            key={tournament.id}
+            tournament={tournament}
+            gameTitle={
+              primaryBoardGameId
+                ? gamesById.get(primaryBoardGameId)?.title
+                : undefined
+            }
+            clubName={clubsById.get(tournament.clubId)?.name}
+          />
+        );
+      })}
     </section>
   );
 };

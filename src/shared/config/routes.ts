@@ -24,18 +24,9 @@ export const routes = {
   clubAdminDashboard: "/club-admin/:clubId",
   clubAdminTournaments: "/club-admin/:clubId/tournaments",
   clubAdminTournamentBuilder: "/club-admin/:clubId/tournaments/new",
-  clubAdminManageTournament: "/club-admin/:clubId/tournaments/:id",
   clubAdminEditTournament: "/club-admin/:clubId/tournaments/:id/edit",
   clubAdminTournamentRegistrations:
     "/club-admin/:clubId/tournaments/:id/registrations",
-  clubAdminTournamentParticipants:
-    "/club-admin/:clubId/tournaments/:id/participants",
-  clubAdminTournamentStructure: "/club-admin/:clubId/tournaments/:id/structure",
-  clubAdminTournamentStages: "/club-admin/:clubId/tournaments/:id/stages",
-  clubAdminTournamentRounds: "/club-admin/:clubId/tournaments/:id/rounds",
-  clubAdminTournamentResults: "/club-admin/:clubId/tournaments/:id/results",
-  clubAdminTournamentStandings: "/club-admin/:clubId/tournaments/:id/standings",
-  clubAdminTournamentMessages: "/club-admin/:clubId/tournaments/:id/messages",
   clubAdminGameInventory: "/club-admin/:clubId/games",
   clubAdminStaff: "/club-admin/:clubId/staff",
   clubAdminProfileEdit: "/club-admin/:clubId/profile/edit",

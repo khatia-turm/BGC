@@ -101,16 +101,22 @@ export const ClubDetailsPage = () => {
               <p>{t("common.loading")}</p>
             ) : tournaments.length ? (
               <div className={styles.tournamentGrid}>
-                {tournaments.slice(0, 2).map((tournament) => (
-                  <TournamentCard
-                    key={tournament.id}
-                    tournament={tournament}
-                    clubName={club.name}
-                    gameTitle={
-                      games.find((game) => game.id === tournament.gameId)?.title
-                    }
-                  />
-                ))}
+                {tournaments.slice(0, 2).map((tournament) => {
+                  const boardGameId = tournament.boardGames?.[0]?.boardGameId;
+
+                  return (
+                    <TournamentCard
+                      key={tournament.id}
+                      tournament={tournament}
+                      clubName={club.name}
+                      gameTitle={
+                        boardGameId
+                          ? games.find((game) => game.id === boardGameId)?.title
+                          : undefined
+                      }
+                    />
+                  );
+                })}
               </div>
             ) : (
               <p className={styles.empty}>{t("clubs.noTournaments")}</p>

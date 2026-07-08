@@ -62,10 +62,30 @@
     "date": "Date",
     "location": "Location",
     "players": "Players",
+    "registrationWindow": "Registration",
     "viewEvent": "View event",
     "viewClub": "View club",
     "register": "Register",
     "joinWaitlist": "Join waitlist"
+  },
+  "tournamentTypes": {
+    "0": "League",
+    "1": "Knockout",
+    "2": "Multi-stage"
+  },
+  "tournamentStatuses": {
+    "0": "Draft",
+    "1": "Published",
+    "2": "Registration Open",
+    "3": "Registration Closed",
+    "4": "In Progress",
+    "5": "Finished",
+    "6": "Cancelled"
+  },
+  "registrationStatuses": {
+    "0": "Accepted",
+    "1": "Waitlisted",
+    "2": "Cancelled"
   },
   "tournaments": {
     "eyebrow": "Find your next table",
@@ -93,6 +113,9 @@
     "game": "Game",
     "hostedBy": "Hosted by",
     "format": "Format",
+    "entryFee": "Entry fee",
+    "freeEntry": "Free entry",
+    "waitlist": "Waitlist",
     "aboutTournament": "About this tournament",
     "aboutCopy": "This {{type}} tournament is played with {{game}}. Register before the deadline to secure your place; final round and table details will be shared by the host club.",
     "theGame": "the selected game",
@@ -270,6 +293,65 @@
     "activity": "Recent activity",
     "recentTournaments": "Tournaments",
     "noTournaments": "No public tournament activity yet."
+  },
+  "clubAdmin": {
+    "common": {
+      "createTournament": "Create Tournament",
+      "manage": "Manage",
+      "edit": "Edit",
+      "close": "Close"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome back, {{nickname}}! Here's your club overview",
+      "activeTournaments": "Active Tournaments",
+      "activeSummary": "{{inProgress}} in progress, {{upcoming}} upcoming",
+      "registeredPlayers": "Registered Players",
+      "registeredPlayersHint": "Seats reserved across tournaments",
+      "gameInventory": "Game Inventory",
+      "gameInventoryHint": "Board games listed by this club",
+      "tournaments": "Tournaments",
+      "tournamentsHint": "Published tournaments visible to players",
+      "upcomingTournaments": "Upcoming Tournaments",
+      "viewAll": "View All",
+      "format": "{{type}} Format",
+      "spots": "{{current}}/{{max}} Spots",
+      "noUpcoming": "No upcoming tournaments",
+      "noUpcomingHint": "Create your club's first tournament and start taking registrations."
+    },
+    "tournaments": {
+      "title": "Tournaments",
+      "description": "Create draft tournaments, publish them for player registration, and cancel them when plans change.",
+      "tabs": {
+        "All": "All",
+        "Draft": "Draft",
+        "Published": "Published",
+        "Open": "Registration open",
+        "Closed": "Closed"
+      },
+      "lifecycleTitle": "Tournament lifecycle",
+      "lifecycleDescription": "Club admins create a tournament as a draft, edit its details, publish it, then players register from the public tournament page. The current API supports registrations and cancellation, not rounds, standings, or result entry.",
+      "notPublished": "Not yet published",
+      "format": "{{type}} Format",
+      "registrations": "Registrations",
+      "games": "Games",
+      "status": "Status",
+      "starts": "Starts",
+      "registrationWindow": "Registration window",
+      "publish": "Publish",
+      "publishing": "Publishing...",
+      "cancelling": "Cancelling...",
+      "viewRegistrations": "View registrations",
+      "noRows": "No {{tab}} tournaments",
+      "noRowsHint": "Try another filter or create a new tournament.",
+      "cancelTournament": "Cancel Tournament"
+    },
+    "joinRequests": {
+      "title": "Join Requests",
+      "description": "Tournament registrations are accepted or waitlisted automatically.",
+      "emptyTitle": "No pending requests",
+      "emptyDescription": "Use each tournament's registrations view to review players."
+    }
   },
   "auth": {
     "loginStoryEyebrow": "Your seat is waiting",
