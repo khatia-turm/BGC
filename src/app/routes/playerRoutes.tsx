@@ -5,10 +5,11 @@ import { MyHistoryPage } from "@pages/me/MyHistoryPage";
 import { MyProfilePage } from "@pages/me/MyProfilePage";
 import { MyStatsPage } from "@pages/me/MyStatsPage";
 import { NotificationsPage } from "@pages/me/NotificationsPage";
+import { AuthRequired } from "./AuthRequired";
 
 export const playerRoutes: RouteObject = {
   path: "/me",
-  element: <PlayerLayout />,
+  element: <AuthRequired><PlayerLayout /></AuthRequired>,
   children: [
     { path: "events", element: <MyEventsPage /> },
     { path: "profile", element: <MyProfilePage /> },

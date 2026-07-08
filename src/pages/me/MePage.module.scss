@@ -1,0 +1,207 @@
+@use "@shared/styles/colors" as colors;
+.page {
+  min-height: calc(100dvh - 4.5rem);
+  padding: clamp(2rem, 5vw, 4.5rem) max(1rem, calc((100% - 1100px) / 2)) 6rem;
+  color: colors.$neutral-100;
+  background:
+    radial-gradient(
+      circle at 85% 0,
+      rgba(colors.$primary-700, 0.16),
+      transparent 28rem
+    ),
+    colors.$neutral-950;
+}
+.header p,
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: colors.$primary-400;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.header h1 {
+  margin: 0;
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  letter-spacing: -0.055em;
+}
+.header > span {
+  display: block;
+  max-width: 42rem;
+  margin-top: 0.8rem;
+  color: colors.$neutral-300;
+  line-height: 1.65;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.card,
+.form,
+.empty {
+  padding: 1.25rem;
+  border: 1px solid rgba(colors.$primary-400, 0.16);
+  background: rgba(colors.$primary-900, 0.14);
+  border-radius: 0.9rem;
+}
+.card h2,
+.card h3 {
+  margin: 0.2rem 0;
+}
+.card p,
+.card span {
+  color: colors.$neutral-300;
+}
+.card a {
+  color: colors.$primary-400;
+  text-decoration: none;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+.meta span {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid rgba(colors.$primary-400, 0.2);
+  border-radius: 99px;
+  font-size: 0.68rem;
+}
+.status {
+  color: colors.$primary-400 !important;
+  font-weight: 800;
+}
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.form label {
+  display: grid;
+  gap: 0.4rem;
+  color: colors.$neutral-300;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.form input,
+.form select {
+  min-height: 2.9rem;
+  padding: 0 0.8rem;
+  color: colors.$neutral-100;
+  border: 1px solid rgba(colors.$neutral-300, 0.22);
+  background: #071717;
+  border-radius: 0.6rem;
+  font: inherit;
+}
+.wide {
+  grid-column: 1/-1;
+}
+.choices {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.5rem !important;
+}
+.choices label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid rgba(colors.$primary-400, 0.2);
+  border-radius: 0.5rem;
+}
+.choices input {
+  min-height: auto;
+}
+.button {
+  grid-column: 1/-1;
+  min-height: 3rem;
+  color: colors.$neutral-950;
+  border: 0;
+  background: colors.$primary-400;
+  border-radius: 0.65rem;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+.button:disabled {
+  opacity: 0.55;
+}
+.success {
+  grid-column: 1/-1;
+  margin: 0;
+  color: colors.$primary-400;
+}
+.profileTop {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  grid-column: 1/-1;
+}
+.avatar {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border: 2px solid colors.$primary-400;
+  border-radius: 50%;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.stat {
+  padding: 1rem;
+  border: 1px solid rgba(colors.$primary-400, 0.18);
+  border-radius: 0.8rem;
+}
+.stat strong {
+  display: block;
+  color: colors.$primary-400;
+  font-size: 1.5rem;
+}
+.stat span {
+  color: colors.$neutral-300;
+  font-size: 0.7rem;
+}
+.list {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+.notification {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.8rem;
+}
+.dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-top: 0.35rem;
+  background: colors.$primary-400;
+  border-radius: 50%;
+  box-shadow: 0 0 10px colors.$primary-400;
+}
+.empty {
+  margin-top: 2rem;
+  color: colors.$neutral-300;
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .grid,
+  .form {
+    grid-template-columns: 1fr;
+  }
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .wide,
+  .button,
+  .profileTop {
+    grid-column: auto;
+  }
+}

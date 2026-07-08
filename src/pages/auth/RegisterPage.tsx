@@ -1,3 +1,3 @@
-import { PagePlaceholder } from "@pages/_components/PagePlaceholder";
+import { RegisterForm } from "@features/auth/register";
 
-export const RegisterPage = () => <PagePlaceholder title="Register" />;
+export const RegisterPage = () => <RegisterForm />;

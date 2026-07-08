@@ -21,6 +21,7 @@ export const useTournamentFilters = ({
   const [clubId, setClubId] = useState("all");
   const [dateFilter, setDateFilter] =
     useState<TournamentDateFilter>("upcoming");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const filteredTournaments = useMemo(() => {
     const now = new Date();
@@ -51,15 +52,14 @@ export const useTournamentFilters = ({
       })
       .sort(
         (first, second) =>
-          new Date(first.startsAt).getTime() -
-          new Date(second.startsAt).getTime(),
+          (new Date(first.startsAt).getTime() - new Date(second.startsAt).getTime()) * (sortOrder === "asc" ? 1 : -1),
       );
-  }, [clubId, clubs, dateFilter, gameId, games, search, tournaments]);
+  }, [clubId, clubs, dateFilter, gameId, games, search, sortOrder, tournaments]);
 
   return {
     filteredTournaments,
-    filters: { search, gameId, clubId, dateFilter },
-    actions: { setSearch, setGameId, setClubId, setDateFilter },
+    filters: { search, gameId, clubId, dateFilter, sortOrder },
+    actions: { setSearch, setGameId, setClubId, setDateFilter, setSortOrder },
   };
 };
 

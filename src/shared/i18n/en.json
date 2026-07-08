@@ -8,7 +8,19 @@
     "leaderboards": "Leaderboards",
     "players": "Players",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "myEvents": "My Events",
+    "player": "Player",
+    "signedInAs": "Signed in as",
+    "myProfile": "My Profile",
+    "myStats": "My Stats",
+    "myHistory": "My History",
+    "notifications": "Notifications",
+    "clubDashboard": "Switch to Club Dashboard",
+    "logout": "Logout",
+    "playerArea": "Player dashboard",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
   },
   "home": {
     "eyebrow": "Georgia's board game community",
@@ -76,7 +88,20 @@
     "registration": "Registration",
     "eventFull": "This event is full",
     "spotsAvailable": "{{count}} spots available",
-    "registrationCloses": "Registration closes {{date}}"
+    "registrationCloses": "Registration closes {{date}}",
+    "loginRequiredEyebrow": "Player access",
+    "loginRequiredTitle": "Sign in to claim your seat",
+    "loginRequiredCopy": "You need to be logged in before you can register for a tournament or join its waitlist.",
+    "loginRequiredCta": "Go to login",
+    "closeLoginPrompt": "Close login prompt"
+    ,"rulesAgreement": "I agree to the tournament rules"
+    ,"registrationConfirmed": "You're registered"
+    ,"onWaitlist": "You're on the waitlist"
+    ,"confirmationSent": "A confirmation message will be sent using the contact details from your profile."
+    ,"cancelRegistration": "Cancel registration"
+    ,"cancelling": "Cancelling…"
+    ,"registering": "Registering…"
+    ,"cancellationClosed": "The cancellation period set by the club has ended."
   },
   "clubs": {
     "eyebrow": "Discover local communities",
@@ -218,6 +243,57 @@
     "activity": "Recent activity",
     "recentTournaments": "Tournaments",
     "noTournaments": "No public tournament activity yet."
+  },
+  "auth": {
+    "loginStoryEyebrow": "Your seat is waiting",
+    "loginStoryTitle": "Back to the table.",
+    "loginStoryCopy": "Your tournaments, rankings, and favorite game nights are right where you left them.",
+    "quote": "The best games are the ones that bring us back together.",
+    "quoteAuthor": "The MeepleHub community",
+    "welcomeBack": "Welcome back",
+    "loginTitle": "Sign in to MeepleHub",
+    "loginCopy": "Enter your details to pick up where you left off.",
+    "email": "Email address",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "togglePassword": "Show or hide password",
+    "loginAction": "Sign in",
+    "working": "One moment…",
+    "noAccount": "New around the table?",
+    "createAccount": "Create an account",
+    "recoveryEyebrow": "Account recovery",
+    "recoveryTitle": "Reset your password",
+    "recoveryCopy": "Enter your account email and we'll send you a secure recovery link.",
+    "sendRecovery": "Send recovery link",
+    "recoverySent": "Check your inbox—your recovery link is on its way.",
+    "backToLogin": "Back to sign in",
+    "registerStoryEyebrow": "Find your people",
+    "registerStoryTitle": "Every table starts with a hello.",
+    "registerStoryCopy": "Build your player profile, follow the games you love, and discover tournaments made for you.",
+    "benefitEvents": "Personal tournament recommendations",
+    "benefitStats": "Rankings, results, and progress in one place",
+    "benefitCommunity": "Clubs and players across Georgia",
+    "playersJoined": "players already at the table",
+    "joinCommunity": "Join the community",
+    "registerTitle": "Create your player profile",
+    "registerCopy": "A few details and you're ready to find your next game.",
+    "profilePhoto": "Profile photo",
+    "photoHint": "Optional · JPG, PNG or WebP",
+    "choosePhoto": "Choose photo",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "nickname": "Player nickname",
+    "phone": "Phone number",
+    "confirmPassword": "Confirm password",
+    "passwordStrength": "Password strength",
+    "passwordMismatch": "Passwords do not match.",
+    "termsPrefix": "I agree to the",
+    "terms": "Terms of use",
+    "and": "and",
+    "privacy": "Privacy policy",
+    "registerAction": "Create my account",
+    "haveAccount": "Already have an account?",
+    "rememberMe": "Remember me on this device"
   },
   "common": {
     "loading": "Loading…",

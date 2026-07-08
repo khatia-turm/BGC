@@ -18,6 +18,11 @@
   backdrop-filter: blur(12px);
 }
 
+.contained {
+  position: static;
+  box-shadow: none;
+}
+
 .option {
   min-width: 2.35rem;
   min-height: 2rem;

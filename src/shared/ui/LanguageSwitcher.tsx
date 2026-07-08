@@ -6,12 +6,14 @@ const languages = [
   { code: "en", label: "EN", name: "English" },
 ] as const;
 
-export const LanguageSwitcher = () => {
+type LanguageSwitcherProps = { contained?: boolean };
+
+export const LanguageSwitcher = ({ contained = false }: LanguageSwitcherProps) => {
   const { i18n } = useTranslation();
   const currentLanguage = i18n.resolvedLanguage?.split("-")[0] ?? "ka";
 
   return (
-    <div className={styles.switcher} role="group" aria-label="Language / ენა">
+    <div className={`${styles.switcher} ${contained ? styles.contained : ""}`} role="group" aria-label="Language / ენა">
       {languages.map((language) => {
         const isActive = currentLanguage === language.code;
 

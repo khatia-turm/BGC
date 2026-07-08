@@ -25,6 +25,7 @@
   min-height: 4.5rem;
   margin-inline: auto;
 }
+.drawer{display:contents}.account{grid-column:3;grid-row:1}.menuButton,.drawerHeading,.backdrop{display:none}
 
 .logo {
   text-decoration: none;
@@ -147,7 +148,9 @@
   color: colors.$neutral-300;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1120px) {
+  .navigation{justify-content:flex-start!important}.account{grid-column:auto;grid-row:auto;margin-left:auto}
+  .header{min-height:4.5rem}.navigation{display:flex;min-height:4.5rem;padding:0;justify-content:space-between}.menuButton{display:grid;width:2.7rem;height:2.7rem;padding:.65rem;align-content:center;gap:.3rem;color:colors.$neutral-100;border:1px solid rgba(colors.$primary-400,.22);background:rgba(colors.$primary-400,.06);border-radius:.6rem;cursor:pointer}.menuButton i{display:block;height:2px;background:currentColor;border-radius:99px}.backdrop{position:fixed;inset:0;z-index:40;display:block;border:0;background:rgba(#020909,.72);backdrop-filter:blur(4px)}.drawer{position:fixed;top:0;right:0;z-index:41;display:flex;width:min(86vw,20rem);height:100dvh;padding:1rem;flex-direction:column;gap:1.25rem;color:colors.$neutral-100;border-left:1px solid rgba(colors.$primary-400,.25);background:linear-gradient(160deg,#0c2928,#061313);box-shadow:-2rem 0 5rem rgba(#000,.45);transform:translateX(105%);transition:transform 200ms ease}.drawerOpen{transform:translateX(0)}.drawerHeading{display:flex;align-items:center;justify-content:space-between;padding-bottom:.85rem;border-bottom:1px solid rgba(colors.$primary-400,.14)}.drawerBrand{color:colors.$primary-400}.drawerHeading button{width:2.2rem;height:2.2rem;color:colors.$neutral-300;border:0;background:transparent;font-size:1.4rem;cursor:pointer}.primaryLinks{display:grid;align-self:auto;justify-content:stretch;gap:.25rem;overflow:visible}.link{min-height:3rem;padding:0 .8rem;border-radius:.5rem}.link::after{top:.55rem;right:auto;bottom:.55rem;left:0;width:2px;height:auto}.authLinks{justify-content:flex-start;margin-top:auto;padding-top:1rem;border-top:1px solid rgba(colors.$primary-400,.14)}
   .navigation {
     grid-template-columns: auto 1fr;
     gap: 0.75rem 1rem;
@@ -158,19 +161,5 @@
     justify-self: end;
   }
 
-  .primaryLinks {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    justify-content: flex-start;
-    gap: 1.25rem;
-    overflow-x: auto;
-  }
-
-  .link {
-    min-height: 3.25rem;
-
-    &::after {
-      bottom: -1px;
-    }
-  }
+  .primaryLinks{grid-column:auto;grid-row:auto}
 }
