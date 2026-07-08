@@ -10,13 +10,10 @@ docker
 
 admin pages
 
-club sees their games, sheudzlia daamatos, pop up detailed info bgc moaq,
-ori button add or cancel, it was added successfuly + and allat shit
-my profile no experience level
-
-new tournament
-
-auth reset password
+1. club sees their games, sheudzlia daamatos, pop up detailed info bgc moaq,
+   ori button add or cancel, it was added successfuly + and allat shit
+2. auth reset password
+3. new tournament
 
 tests ?
 

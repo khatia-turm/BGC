@@ -2,6 +2,12 @@ import mockData from "../../../mock-be/mock-data.json";
 import { ApiError } from "./errors";
 
 const MOCK_DELAY_MS = 250;
+const DEFAULT_MOCK_PASSWORD = "password";
+type MockUser = (typeof mockData.users)[number] & {
+  password?: string;
+  roles?: string[];
+  clubs?: typeof mockData.currentUser.clubs;
+};
 type MockRegistration = {
   id: number;
   tournamentId: number;
@@ -51,20 +57,33 @@ export async function mockRequest<T>(
     const matchedUser = mockData.users.find(
       (user) => user.email.toLowerCase() === body.email?.toLowerCase(),
     );
+    const user = matchedUser as MockUser | undefined;
+    const mockPassword = user?.password ?? DEFAULT_MOCK_PASSWORD;
+    if (!matchedUser || body.password !== mockPassword) {
+      throw new ApiError(401, "Invalid email or password.");
+    }
+    if (matchedUser.status !== "Active") {
+      throw new ApiError(403, "User is not active.");
+    }
     if (matchedUser)
       currentMockUser = {
         ...currentMockUser,
         ...matchedUser,
         avatarUrl: matchedUser.avatarUrl ?? "",
-        clubs: mockData.currentUser.clubs,
+        roles: user?.roles ?? ["Player"],
+        clubs:
+          user?.clubs ??
+          (matchedUser.id === mockData.currentUser.id
+            ? mockData.currentUser.clubs
+            : []),
       };
     return {
-      token: mockData.auth.token,
+      token: createMockJwt(matchedUser as MockUser),
       expiresAt: mockData.auth.expiresAt,
-      userId: matchedUser?.id ?? currentMockUser.id,
-      nickname: matchedUser?.nickname ?? currentMockUser.nickname,
-      firstName: matchedUser?.firstName ?? currentMockUser.firstName,
-      lastName: matchedUser?.lastName ?? currentMockUser.lastName,
+      userId: matchedUser.id,
+      nickname: matchedUser.nickname,
+      firstName: matchedUser.firstName,
+      lastName: matchedUser.lastName,
     } as T;
   }
 
@@ -73,7 +92,33 @@ export async function mockRequest<T>(
       string,
       string | number | undefined
     >;
-    if (!body.nickname) throw new ApiError(400, "Nickname is required");
+    const errors: Record<string, string[]> = {};
+    if (!body.firstName) errors.firstName = ["First name is required."];
+    if (!body.lastName) errors.lastName = ["Last name is required."];
+    if (!body.nickname) errors.nickname = ["Nickname is required."];
+    if (!body.email) errors.email = ["Email is required."];
+    if (!body.phone) errors.phone = ["Phone is required."];
+    if (!body.password) errors.password = ["Password is required."];
+    if (!body.birthday) errors.birthday = ["Birthday is required."];
+    if (![0, 1, 2].includes(Number(body.gender)))
+      errors.gender = ["Gender is required."];
+    if (Object.keys(errors).length) {
+      throw new ApiError(400, "Please fix the highlighted fields.", errors);
+    }
+    const normalizedEmail = String(body.email).trim().toLowerCase();
+    const normalizedNickname = String(body.nickname).trim().toLowerCase();
+    const duplicate = mockData.users.find(
+      (user) =>
+        user.email.toLowerCase() === normalizedEmail ||
+        user.nickname.toLowerCase() === normalizedNickname ||
+        user.phone === body.phone,
+    );
+    if (duplicate) {
+      throw new ApiError(
+        409,
+        "Email, nickname, or phone is already registered.",
+      );
+    }
     const userId = Math.max(...mockData.users.map((user) => user.id)) + 1;
     const newUser = {
       id: userId,
@@ -87,8 +132,9 @@ export async function mockRequest<T>(
           : Number(body.gender) === 2
             ? "Other"
             : "Male",
-      email: String(body.email ?? ""),
+      email: normalizedEmail,
       phone: String(body.phone ?? ""),
+      password: String(body.password ?? DEFAULT_MOCK_PASSWORD),
       avatarUrl: "",
       status: "Active",
       adminNote: null,
@@ -108,6 +154,49 @@ export async function mockRequest<T>(
       token: mockData.auth.token,
       message: "User account created successfully.",
     } as T;
+  }
+
+  if (
+    method === "POST" &&
+    matches(segments, ["api", "boardgames", "import", "hot"])
+  ) {
+    return {
+      requestedCount: 50,
+      processedCount: 50,
+      insertedCount: 0,
+      updatedCount: 50,
+    } as T;
+  }
+
+  if (
+    method === "POST" &&
+    matches(segments, ["api", "boardgames", "seed-from-csv"])
+  ) {
+    const count = Number(url.searchParams.get("count") ?? 100);
+    return {
+      requestedCount: count,
+      processedCount: count,
+      insertedCount: 0,
+      updatedCount: count,
+    } as T;
+  }
+
+  if (
+    method === "PATCH" &&
+    segments[0] === "api" &&
+    segments[1] === "users" &&
+    segments[3] === "status"
+  ) {
+    const user = mockData.users.find((item) => item.id === Number(segments[2]));
+    if (!user) throw new ApiError(404, "User not found");
+    const body = JSON.parse(String(options.body ?? "{}")) as {
+      status?: string;
+      reason?: string;
+    };
+    user.status = body.status ?? user.status;
+    (user as { adminNote: string | null }).adminNote = body.reason ?? null;
+    user.updatedAt = new Date().toISOString();
+    return structuredClone(user) as T;
   }
 
   if (
@@ -291,13 +380,6 @@ export async function mockRequest<T>(
         title: game.title,
         year: game.year,
       })) as T;
-  }
-
-  if (
-    method === "POST" &&
-    matches(segments, ["api", "auth", "forgot-password"])
-  ) {
-    return { message: "Password recovery email sent." } as T;
   }
 
   if (
@@ -591,11 +673,19 @@ function resolveGet(
 
   if (segments[0] === "api" && segments[1] === "users" && segments[2]) {
     const userId = Number(segments[2]);
-    if (segments[3] === "clubs") {
-      const clubIds = mockData.userClubs
+    if (segments[3] === "club" || segments[3] === "clubs") {
+      return mockData.userClubs
         .filter((item) => item.userId === userId)
-        .map((item) => item.clubId);
-      return mockData.clubs.filter((club) => clubIds.includes(club.id));
+        .map((membership) => {
+          const club = mockData.clubs.find(
+            (item) => item.id === membership.clubId,
+          );
+          return {
+            id: membership.clubId,
+            name: club?.name ?? "Club",
+            role: membership.role,
+          };
+        });
     }
     return mockData.users.find((user) => user.id === userId);
   }
@@ -858,6 +948,27 @@ function toBoardGameDto(game: (typeof mockData.games)[number]) {
 
 function delay(milliseconds: number) {
   return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
+function createMockJwt(user: MockUser) {
+  const encode = (value: unknown) =>
+    btoa(JSON.stringify(value))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+  const roles = user.roles ?? ["Player"];
+  return [
+    encode({ alg: "none", typ: "JWT" }),
+    encode({
+      UserId: String(user.id),
+      email: user.email,
+      unique_name: user.nickname,
+      role: roles.length === 1 ? roles[0] : roles,
+      roles,
+      exp: Math.floor(Date.now() / 1000) + 3600,
+    }),
+    "mock",
+  ].join(".");
 }
 
 function toPublicPlayer(user: (typeof mockData.users)[number]) {

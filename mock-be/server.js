@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const app = express();
 const port = Number(process.env.PORT || 5051);
+const DEFAULT_MOCK_PASSWORD = "password";
 // Seed data is loaded at process start; restart the mock process after manual seed edits.
 const dataFile = fileURLToPath(new URL("./mock-data.json", import.meta.url));
 let db = JSON.parse(await readFile(dataFile, "utf8"));
@@ -21,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 const save = () => writeFile(dataFile, `${JSON.stringify(db, null, 2)}\n`);
-const problem = (res, status, detail) =>
+const problem = (res, status, detail, errors) =>
   res
     .status(status)
     .type("application/problem+json")
@@ -29,11 +30,13 @@ const problem = (res, status, detail) =>
       title: status === 404 ? "Not Found" : "Request failed",
       status,
       detail,
+      ...(errors ? { errors } : {}),
     });
 const tokenFor = (user) => {
   const encode = (value) =>
     Buffer.from(JSON.stringify(value)).toString("base64url");
-  return `${encode({ alg: "none", typ: "JWT" })}.${encode({ UserId: String(user.id), email: user.email, unique_name: user.nickname, role: "Player", exp: Math.floor(Date.now() / 1000) + 3600 })}.mock`;
+  const roles = user.roles ?? ["Player"];
+  return `${encode({ alg: "none", typ: "JWT" })}.${encode({ UserId: String(user.id), email: user.email, unique_name: user.nickname, role: roles.length === 1 ? roles[0] : roles, roles, exp: Math.floor(Date.now() / 1000) + 3600 })}.mock`;
 };
 const currentUser = (req) => {
   try {
@@ -72,7 +75,8 @@ app.post("/api/auth/login", (req, res) => {
     (item) =>
       item.email.toLowerCase() === String(req.body.email).trim().toLowerCase(),
   );
-  if (!user) return problem(res, 401, "Invalid email or password.");
+  if (!user || req.body.password !== (user.password ?? DEFAULT_MOCK_PASSWORD))
+    return problem(res, 401, "Invalid email or password.");
   if (user.status !== "Active") return problem(res, 403, "User is not active.");
   const expiresAt = new Date(Date.now() + 3600_000).toISOString();
   res.json({
@@ -90,6 +94,7 @@ app.get("/api/auth/me", requireUser, (req, res) =>
     nickname: req.user.nickname,
     email: req.user.email,
     avatarUrl: req.user.avatarUrl ?? "",
+    roles: req.user.roles ?? ["Player"],
     clubs: db.userClubs
       .filter((membership) => membership.userId === req.user.id)
       .map((membership) => ({
@@ -99,13 +104,20 @@ app.get("/api/auth/me", requireUser, (req, res) =>
   }),
 );
 app.post("/api/auth/password", requireUser, (_req, res) => res.sendStatus(204));
-app.post("/api/auth/forgot-password", (_req, res) =>
-  res.json("If the account exists, a reset token has been generated."),
-);
-app.post("/api/auth/reset-password", (_req, res) => res.sendStatus(204));
-
 app.post("/api/users", async (req, res) => {
   const body = req.body;
+  const errors = {};
+  if (!body.firstName) errors.firstName = ["First name is required."];
+  if (!body.lastName) errors.lastName = ["Last name is required."];
+  if (!body.nickname) errors.nickname = ["Nickname is required."];
+  if (!body.email) errors.email = ["Email is required."];
+  if (!body.phone) errors.phone = ["Phone is required."];
+  if (!body.password) errors.password = ["Password is required."];
+  if (!body.birthday) errors.birthday = ["Birthday is required."];
+  if (![0, 1, 2].includes(Number(body.gender)))
+    errors.gender = ["Gender is required."];
+  if (Object.keys(errors).length)
+    return problem(res, 400, "Please fix the highlighted fields.", errors);
   const duplicate = db.users.some(
     (user) =>
       user.email.toLowerCase() === String(body.email).toLowerCase() ||
@@ -124,6 +136,7 @@ app.post("/api/users", async (req, res) => {
     firstName: body.firstName,
     lastName: body.lastName,
     email: String(body.email).trim().toLowerCase(),
+    password: body.password ?? DEFAULT_MOCK_PASSWORD,
     phone: body.phone,
     birthday: body.birthday,
     gender: ["Male", "Female", "Other"][body.gender],

@@ -1,0 +1,238 @@
+@use "@shared/styles/colors" as colors;
+
+.page {
+  display: grid;
+  gap: 1.5rem;
+}
+.heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  p {
+    margin: 0 0 0.45rem;
+    color: colors.$primary-400;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.04em;
+  }
+  span {
+    display: block;
+    max-width: 42rem;
+    margin-top: 0.55rem;
+    color: colors.$neutral-300;
+    line-height: 1.55;
+  }
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.statCard,
+.panel {
+  border: 1px solid rgba(colors.$primary-400, 0.16);
+  background: rgba(colors.$primary-900, 0.18);
+  border-radius: 0.75rem;
+}
+.statCard {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem;
+  span {
+    color: colors.$neutral-300;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  strong {
+    color: colors.$neutral-100;
+    font-size: 2rem;
+  }
+}
+.panel {
+  overflow: hidden;
+}
+.panelHeader,
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(colors.$primary-400, 0.12);
+}
+.panelHeader h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+.filters {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  label {
+    display: grid;
+    gap: 0.35rem;
+    min-width: min(14rem, 100%);
+  }
+  span {
+    color: colors.$neutral-300;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  input,
+  select {
+    min-height: 2.75rem;
+    padding: 0 0.8rem;
+    color: colors.$neutral-100;
+    border: 1px solid rgba(colors.$neutral-300, 0.2);
+    background: colors.$neutral-950;
+    border-radius: 0.5rem;
+    font: inherit;
+  }
+}
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  th,
+  td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid rgba(colors.$primary-400, 0.1);
+    text-align: left;
+    vertical-align: middle;
+  }
+  th {
+    color: colors.$neutral-300;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  td {
+    color: colors.$neutral-100;
+    font-size: 0.88rem;
+  }
+  small {
+    display: block;
+    margin-top: 0.2rem;
+    color: colors.$neutral-300;
+  }
+}
+.badge {
+  display: inline-flex;
+  min-width: 5.5rem;
+  justify-content: center;
+  padding: 0.35rem 0.55rem;
+  color: colors.$primary-400;
+  border: 1px solid rgba(colors.$primary-400, 0.28);
+  background: rgba(colors.$primary-900, 0.32);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.button,
+.ghostButton,
+.dangerButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.45rem;
+  padding: 0 0.75rem;
+  border-radius: 0.45rem;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+}
+.button {
+  color: colors.$neutral-950;
+  border: 0;
+  background: colors.$primary-400;
+}
+.ghostButton {
+  color: colors.$primary-400;
+  border: 1px solid rgba(colors.$primary-400, 0.45);
+  background: transparent;
+}
+.dangerButton {
+  color: #ff8b91;
+  border: 1px solid rgba(#ff8b91, 0.55);
+  background: transparent;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.message {
+  display: grid;
+  min-height: 12rem;
+  place-items: center;
+  padding: 1rem;
+  color: colors.$neutral-300;
+}
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  article {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+    padding: 0.9rem;
+    border: 1px solid rgba(colors.$primary-400, 0.12);
+    background: rgba(colors.$neutral-950, 0.42);
+    border-radius: 0.55rem;
+  }
+  span {
+    color: colors.$neutral-300;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  strong {
+    overflow-wrap: anywhere;
+    color: colors.$neutral-100;
+    font-size: 0.9rem;
+  }
+}
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}

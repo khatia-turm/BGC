@@ -2,7 +2,11 @@ const TOKEN_KEY = "authToken";
 const EXPIRY_KEY = "authTokenExpiresAt";
 const AUTH_CHANGE_EVENT = "auth-session-change";
 
-export function setAuthSession(token: string, expiresAt?: string, remember = false) {
+export function setAuthSession(
+  token: string,
+  expiresAt?: string,
+  remember = false,
+) {
   const storage = remember ? localStorage : sessionStorage;
   const otherStorage = remember ? sessionStorage : localStorage;
   otherStorage.removeItem(TOKEN_KEY);
@@ -23,7 +27,9 @@ export function clearAuthSession() {
 }
 
 export function getAuthToken() {
-  const storage = sessionStorage.getItem(TOKEN_KEY) ? sessionStorage : localStorage;
+  const storage = sessionStorage.getItem(TOKEN_KEY)
+    ? sessionStorage
+    : localStorage;
   const token = storage.getItem(TOKEN_KEY);
   if (!token) return null;
 
@@ -37,6 +43,15 @@ export function getAuthToken() {
 }
 
 export const isAuthenticated = () => Boolean(getAuthToken());
+
+export function getAuthRoles() {
+  const token = getAuthToken();
+  return token ? readJwtRoles(token) : [];
+}
+
+export function hasAuthRole(role: string) {
+  return getAuthRoles().includes(role);
+}
 
 export function subscribeToAuthSession(onChange: () => void) {
   window.addEventListener(AUTH_CHANGE_EVENT, onChange);
@@ -53,13 +68,30 @@ function notifyAuthChange() {
 
 function readJwtExpiry(token: string) {
   try {
-    const encodedPayload = token.split(".")[1];
-    if (!encodedPayload) return undefined;
-    const payload = JSON.parse(
-      atob(encodedPayload.replace(/-/g, "+").replace(/_/g, "/")),
-    ) as { exp?: number };
-    return payload.exp ? new Date(payload.exp * 1000).toISOString() : undefined;
+    const payload = readJwtPayload(token) as { exp?: number } | undefined;
+    return payload?.exp ? new Date(payload.exp * 1000).toISOString() : undefined;
   } catch {
     return undefined;
   }
+}
+
+function readJwtRoles(token: string) {
+  try {
+    const payload = readJwtPayload(token) as
+      | { role?: string | string[]; roles?: string[] }
+      | undefined;
+    if (!payload) return [];
+    return [
+      ...(Array.isArray(payload.role) ? payload.role : [payload.role]),
+      ...(payload.roles ?? []),
+    ].filter((role): role is string => Boolean(role));
+  } catch {
+    return [];
+  }
+}
+
+function readJwtPayload(token: string) {
+  const encodedPayload = token.split(".")[1];
+  if (!encodedPayload) return undefined;
+  return JSON.parse(atob(encodedPayload.replace(/-/g, "+").replace(/_/g, "/")));
 }
