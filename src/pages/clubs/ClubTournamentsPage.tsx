@@ -21,9 +21,23 @@ export const ClubTournamentsPage = () => {
       <Link className={styles.back} to={`/clubs/${id}`}>← {clubQuery.data.name}</Link>
       <header className={styles.header}><p>{t("clubs.eventsLabel")}</p><h1>{t("clubs.clubTournaments")}</h1><span>{t("clubs.clubTournamentsDescription")}</span></header>
       {tournamentsQuery.isPending ? <div className={styles.message}>{t("common.loading")}</div> : tournaments.length ? (
-        <section className={styles.grid}>{tournaments.map((tournament) => (
-          <TournamentCard key={tournament.id} tournament={tournament} clubName={clubQuery.data.name} gameTitle={gamesQuery.data?.find((game) => game.id === tournament.gameId)?.title} />
-        ))}</section>
+        <section className={styles.grid}>{tournaments.map((tournament) => {
+          const boardGameId = tournament.boardGames?.[0]?.boardGameId;
+
+          return (
+            <TournamentCard
+              key={tournament.id}
+              tournament={tournament}
+              clubName={clubQuery.data.name}
+              gameTitle={
+                boardGameId
+                  ? gamesQuery.data?.find((game) => game.id === boardGameId)
+                      ?.title
+                  : undefined
+              }
+            />
+          );
+        })}</section>
       ) : <div className={styles.message}>{t("clubs.noTournaments")}</div>}
     </main>
   );

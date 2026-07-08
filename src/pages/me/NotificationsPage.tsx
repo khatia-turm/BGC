@@ -4,15 +4,13 @@ import styles from "./MePage.module.scss";
 
 export const NotificationsPage = () => {
   const notifications = useNotifications();
+
   return (
     <main className={styles.page}>
       <header className={styles.header}>
         <p>Inbox</p>
         <h1>Notifications</h1>
-        <span>
-          Registration confirmations, waitlist promotions, reminders and
-          cancellations appear here.
-        </span>
+        <span>Notifications are not available yet.</span>
       </header>
       {notifications.data?.length ? (
         <section className={styles.list}>
@@ -28,7 +26,7 @@ export const NotificationsPage = () => {
                 <p>{item.message}</p>
                 {item.tournamentId && (
                   <Link to={`/tournaments/${item.tournamentId}`}>
-                    View tournament →
+                    View tournament -&gt;
                   </Link>
                 )}
               </div>
@@ -38,7 +36,7 @@ export const NotificationsPage = () => {
       ) : (
         <div className={styles.empty}>
           {notifications.isPending
-            ? "Loading notifications…"
+            ? "Loading notifications..."
             : "You have no notifications."}
         </div>
       )}

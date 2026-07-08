@@ -37,7 +37,9 @@ export const GameDetailsPage = () => {
 
   const item = game.data;
   const relatedTournaments =
-    tournaments.data?.filter((entry) => entry.gameId === item.id) ?? [];
+    tournaments.data?.filter((entry) =>
+      entry.boardGames?.some((boardGame) => boardGame.boardGameId === item.id),
+    ) ?? [];
   const relatedClubs = clubsWithGame.data;
   const categoryNames =
     categories.data
@@ -139,7 +141,11 @@ export const GameDetailsPage = () => {
           <span>{t("games.voters")}</span>
         </div>
         <div>
-          <strong>{item.bggCommunityPlayerCounts.best.join(", ")}</strong>
+          <strong>
+            {item.bggCommunityPlayerCounts.best.join(", ")
+              ? item.bggCommunityPlayerCounts.best.join(", ")
+              : "no suggestion"}
+          </strong>
           <span>{t("games.bestWith")}</span>
         </div>
       </section>

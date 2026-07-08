@@ -35,17 +35,21 @@ export const useTournamentFilters = ({
     return tournaments
       .filter((tournament) => {
         const startsAt = new Date(tournament.startsAt);
-        const game = gamesById.get(tournament.gameId);
+        const primaryBoardGameId = tournament.boardGames?.[0]?.boardGameId;
+        const game = primaryBoardGameId
+          ? gamesById.get(primaryBoardGameId)
+          : undefined;
         const club = clubsById.get(tournament.clubId);
 
         return (
           matchesSearch(term, [
             tournament.name,
             game?.title,
+            tournament.boardGames?.map((boardGame) => boardGame.title).join(" "),
             club?.name,
-            tournament.city,
+            tournament.location ?? undefined,
           ]) &&
-          matchesId(gameId, tournament.gameId) &&
+          matchesBoardGameId(gameId, tournament.boardGames) &&
           matchesId(clubId, tournament.clubId) &&
           matchesDate(dateFilter, startsAt, now, weekEnd)
         );
@@ -70,6 +74,13 @@ const matchesSearch = (
 
 const matchesId = (selectedId: string, itemId: number) =>
   selectedId === "all" || itemId === Number(selectedId);
+
+const matchesBoardGameId = (
+  selectedId: string,
+  boardGames: Tournament["boardGames"],
+) =>
+  selectedId === "all" ||
+  boardGames?.some((boardGame) => boardGame.boardGameId === Number(selectedId));
 
 const matchesDate = (
   filter: TournamentDateFilter,

@@ -345,6 +345,24 @@ app.get("/api/clubs/:id/games", (req, res) => {
     .map((item) => item.gameId);
   res.json(db.games.filter((game) => ids.includes(game.id)));
 });
+app.get("/api/clubs/:id/tournaments", requireUser, (req, res) => {
+  const clubId = Number(req.params.id);
+  const membership = db.userClubs.find(
+    (item) =>
+      item.clubId === clubId && item.userId === req.user.id && item.role === "Admin",
+  );
+  if (!membership)
+    return problem(res, 403, "Club administrator access is required.");
+  res.json(
+    db.tournaments
+      .filter(
+        (item) =>
+          item.clubId === clubId &&
+          (!req.query.status || item.status === req.query.status),
+      )
+      .map(tournamentResponse),
+  );
+});
 app.get("/api/clubs/:id/dashboard", (req, res) =>
   res.json({
     clubId: Number(req.params.id),

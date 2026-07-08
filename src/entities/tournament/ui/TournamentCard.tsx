@@ -16,12 +16,15 @@ export const TournamentCard = ({
   gameTitle,
 }: TournamentCardProps) => {
   const { t, i18n } = useTranslation();
-  const isFull = tournament.registeredPlayers >= tournament.maxPlayers;
+  const isFull = tournament.currentParticipants >= tournament.maxParticipants;
+  const primaryGameTitle = gameTitle ?? tournament.boardGames?.[0]?.title;
+  const hostName = clubName ?? tournament.clubName;
   const date = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
     day: "numeric",
     month: "short",
     year: "numeric",
   }).format(new Date(tournament.startsAt));
+  const registrationWindow = getRegistrationWindowLabel(tournament, i18n.resolvedLanguage);
 
   return (
     <article className={styles.card}>
@@ -29,17 +32,22 @@ export const TournamentCard = ({
         <span className={styles.status}>
           {isFull ? t("cards.waitlistOpen") : t("cards.registrationOpen")}
         </span>
-        <span className={styles.type}>{tournament.type}</span>
+        <span className={styles.type}>
+          {t(`tournamentTypes.${tournament.tournamentType}`)}
+        </span>
       </div>
       <h3 className={styles.title}>
         <Link to={`/tournaments/${tournament.id}`}>{tournament.name}</Link>
       </h3>
-      {(gameTitle || clubName) && (
+      {(primaryGameTitle || hostName) && (
         <p className={styles.host}>
-          {gameTitle} {gameTitle && clubName ? "·" : ""} {clubName}
+          {primaryGameTitle} {primaryGameTitle && hostName ? "-" : ""}{" "}
+          {hostName}
         </p>
       )}
-      <p className={styles.description}>{truncateText(tournament.description)}</p>
+      <p className={styles.description}>
+        {truncateText(tournament.description ?? "")}
+      </p>
       <dl className={styles.details}>
         <div>
           <dt>{t("cards.date")}</dt>
@@ -47,19 +55,62 @@ export const TournamentCard = ({
         </div>
         <div>
           <dt>{t("cards.location")}</dt>
-          <dd>{tournament.city}</dd>
+          <dd>{tournament.location ?? "-"}</dd>
         </div>
         <div>
           <dt>{t("cards.players")}</dt>
           <dd>
-            {tournament.registeredPlayers}/{tournament.maxPlayers}
+            {tournament.currentParticipants}/{tournament.maxParticipants}
           </dd>
         </div>
+        {registrationWindow && (
+          <div>
+            <dt>{t("cards.registrationWindow")}</dt>
+            <dd>{registrationWindow}</dd>
+          </div>
+        )}
       </dl>
       <Link className={styles.cardLink} to={`/tournaments/${tournament.id}`}>
         {isFull ? t("cards.joinWaitlist") : t("cards.register")}{" "}
-        <span aria-hidden="true">→</span>
+        <span aria-hidden="true">-&gt;</span>
       </Link>
     </article>
   );
+};
+
+const getRegistrationWindowLabel = (
+  tournament: Tournament,
+  locale?: string,
+) => {
+  if (!tournament.registrationOpensAt && !tournament.registrationClosesAt) {
+    return null;
+  }
+
+  const formatter = new Intl.DateTimeFormat(locale, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  const now = Date.now();
+  const opensAt = tournament.registrationOpensAt
+    ? new Date(tournament.registrationOpensAt)
+    : null;
+  const closesAt = tournament.registrationClosesAt
+    ? new Date(tournament.registrationClosesAt)
+    : null;
+
+  if (opensAt && now < opensAt.getTime()) {
+    return `Opens ${formatter.format(opensAt)}`;
+  }
+
+  if (closesAt && now <= closesAt.getTime()) {
+    return `Closes ${formatter.format(closesAt)}`;
+  }
+
+  if (closesAt) {
+    return `Closed ${formatter.format(closesAt)}`;
+  }
+
+  return opensAt ? `Opened ${formatter.format(opensAt)}` : null;
 };

@@ -6,7 +6,6 @@ import {
   useMyTournamentRegistration,
   useRegisterForTournament,
   useTournament,
-  useTournamentParticipants,
 } from "@entities/tournament/api";
 import { useGames } from "@entities/game/api";
 import { useClubs } from "@entities/club/api";
@@ -24,7 +23,6 @@ export const TournamentDetailsPage = () => {
   const [pageOpenedAt] = useState(() => Date.now());
   const authenticated = useAuthSession();
   const tournamentQuery = useTournament(tournamentId);
-  const participantsQuery = useTournamentParticipants(tournamentId);
   const registrationQuery = useMyTournamentRegistration(
     tournamentId,
     authenticated,
@@ -41,15 +39,20 @@ export const TournamentDetailsPage = () => {
 
   const tournament = tournamentQuery.data;
   const club = clubs.find((item) => item.id === tournament.clubId);
-  const game = games.find((item) => item.id === tournament.gameId);
-  const isFull = tournament.registeredPlayers >= tournament.maxPlayers;
+  const primaryBoardGame = tournament.boardGames?.[0];
+  const game = primaryBoardGame
+    ? games.find((item) => item.id === primaryBoardGame.boardGameId)
+    : undefined;
+  const boardGameTitle = game?.title ?? primaryBoardGame?.title;
+  const isFull = tournament.currentParticipants >= tournament.maxParticipants;
+  const tournamentType = t(`tournamentTypes.${tournament.tournamentType}`);
   const dateFormatter = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
     dateStyle: "long",
     timeStyle: "short",
   });
   const capacity = Math.min(
     100,
-    (tournament.registeredPlayers / tournament.maxPlayers) * 100,
+    (tournament.currentParticipants / tournament.maxParticipants) * 100,
   );
   const requestRegistration = () => {
     if (!authenticated) {
@@ -60,13 +63,15 @@ export const TournamentDetailsPage = () => {
   };
   const registration = registrationQuery.data;
   const cancellationOpen = registration
-    ? new Date(registration.cancellationClosesAt).getTime() > pageOpenedAt
+    ? new Date(
+        tournament.cancellationDeadline ?? tournament.startsAt,
+      ).getTime() > pageOpenedAt
     : false;
 
   return (
     <main className={styles.page}>
       <Link className={styles.back} to={routes.tournaments}>
-        ← {t("tournaments.backToEvents")}
+        {"<-"} {t("tournaments.backToEvents")}
       </Link>
 
       <div className={styles.layout}>
@@ -75,7 +80,7 @@ export const TournamentDetailsPage = () => {
             <span>
               {isFull ? t("cards.waitlistOpen") : t("cards.registrationOpen")}
             </span>
-            <span>{tournament.type}</span>
+            <span>{tournamentType}</span>
           </div>
           <h1>{tournament.name}</h1>
           <p className={styles.lead}>{tournament.description}</p>
@@ -93,65 +98,57 @@ export const TournamentDetailsPage = () => {
             <div>
               <span>{t("tournaments.ends")}</span>
               <strong>
-                {dateFormatter.format(new Date(tournament.endsAt))}
+                {tournament.endsAt
+                  ? dateFormatter.format(new Date(tournament.endsAt))
+                  : "-"}
               </strong>
             </div>
             <div>
               <span>{t("cards.location")}</span>
-              <strong>
-                {tournament.venue}, {tournament.city}
-              </strong>
+              <strong>{tournament.location ?? "-"}</strong>
             </div>
             <div>
               <span>{t("tournaments.game")}</span>
-              <strong>{game?.title ?? "—"}</strong>
+              <strong>{boardGameTitle ?? "-"}</strong>
             </div>
             <div>
               <span>{t("tournaments.hostedBy")}</span>
               <strong>
-                {club ? <Link to={`/clubs/${club.id}`}>{club.name}</Link> : "—"}
+                {club ? (
+                  <Link to={`/clubs/${club.id}`}>{club.name}</Link>
+                ) : (
+                  (tournament.clubName ?? "-")
+                )}
               </strong>
             </div>
             <div>
               <span>{t("tournaments.format")}</span>
-              <strong>{tournament.type}</strong>
+              <strong>{tournamentType}</strong>
             </div>
             <div>
-              <span>Entry fee</span>
+              <span>{t("tournaments.entryFee")}</span>
               <strong>
                 {tournament.entryFee != null && tournament.entryFee > 0
                   ? `${tournament.entryFee.toFixed(2)} GEL`
-                  : "Free entry"}
+                  : t("tournaments.freeEntry")}
               </strong>
             </div>
             <div>
-              <span>Waitlist</span>
-              <strong>{tournament.waitlistCount ?? 0} players</strong>
+              <span>{t("tournaments.waitlist")}</span>
+              <strong>
+                {registration?.waitlistPosition
+                  ? `#${registration.waitlistPosition}`
+                  : "-"}
+              </strong>
             </div>
-          </section>
-
-          <section className={styles.about}>
-            <h2>Registered players</h2>
-            {participantsQuery.data?.length ? (
-              <div className={styles.participants}>
-                {participantsQuery.data.map((player) => (
-                  <Link to={`/players/${player.id}`} key={player.id}>
-                    <img src={player.avatarUrl ?? ""} alt="" />
-                    <span>{player.nickname}</span>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <p>No public participants yet.</p>
-            )}
           </section>
 
           <section className={styles.about}>
             <h2>{t("tournaments.aboutTournament")}</h2>
             <p>
               {t("tournaments.aboutCopy", {
-                game: game?.title ?? t("tournaments.theGame"),
-                type: tournament.type,
+                game: boardGameTitle ?? t("tournaments.theGame"),
+                type: tournamentType,
               })}
             </p>
           </section>
@@ -163,13 +160,14 @@ export const TournamentDetailsPage = () => {
             {isFull
               ? t("tournaments.eventFull")
               : t("tournaments.spotsAvailable", {
-                  count: tournament.maxPlayers - tournament.registeredPlayers,
+                  count:
+                    tournament.maxParticipants - tournament.currentParticipants,
                 })}
           </strong>
           <div className={styles.capacityText}>
             <span>{t("cards.players")}</span>
             <span>
-              {tournament.registeredPlayers} / {tournament.maxPlayers}
+              {tournament.currentParticipants} / {tournament.maxParticipants}
             </span>
           </div>
           <div className={styles.progress}>
@@ -178,11 +176,13 @@ export const TournamentDetailsPage = () => {
           {registration ? (
             <div className={styles.registrationStatus}>
               <span>
-                {registration.status === "Waitlisted"
+                {registration.status === 1
                   ? t("tournaments.onWaitlist")
                   : t("tournaments.registrationConfirmed")}
               </span>
-              <strong>{t("tournaments.confirmationSent")}</strong>
+              <strong>
+                {t(`registrationStatuses.${registration.status}`)}
+              </strong>
             </div>
           ) : authenticated ? (
             <label className={styles.rulesAgreement}>
@@ -232,7 +232,11 @@ export const TournamentDetailsPage = () => {
             {t("tournaments.registrationCloses", {
               date: new Intl.DateTimeFormat(i18n.resolvedLanguage, {
                 dateStyle: "medium",
-              }).format(new Date(tournament.registrationClosesAt)),
+              }).format(
+                new Date(
+                  tournament.registrationClosesAt ?? tournament.startsAt,
+                ),
+              ),
             })}
           </small>
         </aside>

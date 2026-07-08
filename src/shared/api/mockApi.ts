@@ -409,7 +409,7 @@ export async function mockRequest<T>(
     segments[0] === "api" &&
     segments[1] === "tournaments" &&
     segments[2] &&
-    segments[3] === "registration"
+    (segments[3] === "registration" || segments[3] === "registrations")
   ) {
     const tournamentId = Number(segments[2]);
     const tournament = mockData.tournaments.find(
@@ -421,11 +421,41 @@ export async function mockRequest<T>(
         item.tournamentId === tournamentId &&
         item.userId === currentMockUser.id,
     );
+    if (method === "GET" && segments[3] === "registrations") {
+      const registrations = mockRegistrations
+        .filter((item) => item.tournamentId === tournamentId)
+        .map((registration) => {
+          const user = mockData.users.find(
+            (candidate) => candidate.id === registration.userId,
+          );
+
+          return {
+            registrationId: registration.id,
+            status: registration.status === "Waitlisted" ? 1 : 0,
+            waitlistPosition:
+              registration.status === "Waitlisted" ? registration.id : null,
+            registeredAt: registration.registeredAt,
+            user: {
+              id: user?.id ?? registration.userId,
+              displayName: user?.nickname ?? "Player",
+              avatarUrl: user?.avatarUrl ?? null,
+            },
+          };
+        });
+
+      return {
+        page: 1,
+        pageSize: registrations.length,
+        totalCount: registrations.length,
+        totalPages: 1,
+        items: registrations,
+      } as T;
+    }
     if (method === "POST") {
       const body = JSON.parse(String(options.body ?? "{}")) as {
         agreementAccepted?: boolean;
       };
-      if (!body.agreementAccepted)
+      if (segments[3] === "registration" && !body.agreementAccepted)
         throw new ApiError(400, "Tournament rules must be accepted");
       if (existingIndex >= 0)
         throw new ApiError(409, "You are already registered");
@@ -462,7 +492,11 @@ export async function mockRequest<T>(
         tournament.registrationClosesAt,
       ) as T;
     }
-    if (method === "DELETE") {
+    if (
+      method === "DELETE" &&
+      (segments[3] === "registration" ||
+        (segments[3] === "registrations" && segments[4] === "me"))
+    ) {
       if (existingIndex < 0) throw new ApiError(404, "Registration not found");
       const [registration] = mockRegistrations.splice(existingIndex, 1);
       if (registration.status === "Accepted") tournament.registeredPlayers -= 1;
@@ -730,6 +764,17 @@ function resolveGet(
         )
         .map(toBoardGameDto);
       return page(games, searchParams);
+    }
+    if (segments[3] === "tournaments") {
+      const status = searchParams.get("status");
+      const tournaments = mockData.tournaments
+        .filter(
+          (tournament) =>
+            tournament.clubId === clubId &&
+            (!status || tournament.status === status),
+        )
+        .map(withTournamentCounts);
+      return page(tournaments, searchParams);
     }
     if (segments[3] === "dashboard") {
       const tournamentIds = mockData.tournaments
