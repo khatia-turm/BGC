@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@shared/api/client";
-import type { Tournament, TournamentParticipant, TournamentRegistration } from "../model/types";
+import type {
+  Tournament,
+  TournamentParticipant,
+  TournamentRegistration,
+} from "../model/types";
 
 export const tournamentKeys = {
   all: ["tournaments"] as const,
@@ -8,9 +12,49 @@ export const tournamentKeys = {
   detail: (id: number) => ["tournaments", "detail", id] as const,
   registration: (id: number) => ["tournaments", "registration", id] as const,
   participants: (id: number) => ["tournaments", "participants", id] as const,
+  clubRequests: (clubId: number) =>
+    ["tournaments", "club", clubId, "requests"] as const,
 };
 
-export const getTournaments = () => apiClient<Tournament[]>("/api/tournaments");
+export type ClubRegistrationRequest = {
+  id: number;
+  tournamentId: number;
+  tournamentName: string;
+  gameTitle: string;
+  userId: number;
+  nickname: string;
+  avatarUrl: string | null;
+  rating: number | null;
+  registeredAt: string;
+  status: "Pending" | "Accepted" | "Rejected";
+};
+export type TournamentPage = {
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  items: Tournament[];
+};
+
+export const getTournamentPage = async (
+  page = 1,
+  pageSize = 20,
+): Promise<TournamentPage> => {
+  const response = await apiClient<TournamentPage | Tournament[]>(
+    `/api/tournaments?page=${page}&pageSize=${pageSize}`,
+  );
+  return Array.isArray(response)
+    ? {
+        page,
+        pageSize,
+        totalCount: response.length,
+        totalPages: 1,
+        items: response,
+      }
+    : response;
+};
+export const getTournaments = async () =>
+  (await getTournamentPage(1, 100)).items;
 export const getTournament = (id: number) =>
   apiClient<Tournament>(`/api/tournaments/${id}`);
 
@@ -18,6 +62,13 @@ export function useTournaments() {
   return useQuery({
     queryKey: tournamentKeys.list,
     queryFn: getTournaments,
+  });
+}
+export function useTournamentPage(page: number, pageSize = 20) {
+  return useQuery({
+    queryKey: [...tournamentKeys.list, { page, pageSize }],
+    queryFn: () => getTournamentPage(page, pageSize),
+    placeholderData: (previous) => previous,
   });
 }
 
@@ -82,4 +133,41 @@ export function useTournament(id: number) {
 }
 
 export const useTournamentParticipants = (id: number) =>
-  useQuery({ queryKey: tournamentKeys.participants(id), queryFn: () => apiClient<TournamentParticipant[]>(`/api/tournaments/${id}/participants`), enabled: Number.isFinite(id) });
+  useQuery({
+    queryKey: tournamentKeys.participants(id),
+    queryFn: () =>
+      apiClient<TournamentParticipant[]>(`/api/tournaments/${id}/participants`),
+    enabled: Number.isFinite(id),
+  });
+
+export const useClubRegistrationRequests = (clubId: number) =>
+  useQuery({
+    queryKey: tournamentKeys.clubRequests(clubId),
+    queryFn: () =>
+      apiClient<ClubRegistrationRequest[]>(
+        `/api/clubs/${clubId}/registration-requests`,
+      ),
+    enabled: Number.isFinite(clubId),
+  });
+export const useReviewRegistrationRequest = (clubId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      status,
+    }: {
+      id: number;
+      status: "Accepted" | "Rejected";
+    }) =>
+      apiClient<ClubRegistrationRequest>(
+        `/api/tournament-registrations/${id}/status`,
+        { method: "PATCH", body: JSON.stringify({ status }) },
+      ),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: tournamentKeys.clubRequests(clubId),
+      });
+      void queryClient.invalidateQueries({ queryKey: tournamentKeys.all });
+    },
+  });
+};

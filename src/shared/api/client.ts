@@ -4,16 +4,14 @@ import { getAuthToken } from "@shared/auth/session";
 
 export { ApiError } from "./errors";
 
-const API_URL = (import.meta.env.VITE_API_URL ?? "http://localhost:5051").replace(/\/$/, "");
-const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API !== "false";
+const API_URL = (import.meta.env.VITE_API_URL ?? "mock").replace(/\/$/, "");
+const USE_MOCK_API = API_URL === "mock";
 
 export async function apiClient<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  if (USE_MOCK_API) {
-    return mockRequest<T>(path, options);
-  }
+  if (USE_MOCK_API) return mockRequest<T>(path, options);
 
   const token = getAuthToken();
   const response = await fetch(`${API_URL}${path}`, {
@@ -40,7 +38,11 @@ async function readErrorMessage(response: Response): Promise<string> {
   try {
     const body = (await response.json()) as
       | string
-      | { message?: string; detail?: string; errors?: Record<string, string[]> };
+      | {
+          message?: string;
+          detail?: string;
+          errors?: Record<string, string[]>;
+        };
     if (typeof body === "string") return body;
     if (body.detail) return body.detail;
     if (body.message) return body.message;

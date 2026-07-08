@@ -1,5 +1,2 @@
-import { PagePlaceholder } from "@pages/_components/PagePlaceholder";
-
-export const GameInventoryPage = () => (
-  <PagePlaceholder title="Game inventory" />
-);
+import { useState } from "react";import { Link,useParams } from "react-router-dom";import { useClubGames } from "@entities/club/api";import styles from "./ClubAdminPages.module.scss";
+export const GameInventoryPage=()=>{const clubId=Number(useParams().clubId);const [search,setSearch]=useState("");const games=useClubGames(clubId);const shown=(games.data??[]).filter((item)=>item.title.toLowerCase().includes(search.toLowerCase()));return <main className={styles.page}><header className={styles.heading}><div><p>Club catalog</p><h1>Game inventory</h1></div><button className={styles.button}>＋ Add game</button></header><input className={styles.search} value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="Search current club games…"/><section className={styles.games} style={{marginTop:"1rem"}}>{shown.map((game)=><article className={styles.game} key={game.id}><img src={game.imageUrl} alt=""/><div><h3>{game.title}</h3><p>{game.minPlayers}–{game.maxPlayers} players · {game.minPlayingTime}–{game.maxPlayingTime} min · Complexity {game.complexity}</p><Link to={`/games/${game.id}`}>View details</Link></div></article>)}</section>{!shown.length&&<div className={styles.empty}>Your club inventory is empty. Add games before creating game-specific tournaments.</div>}</main>};

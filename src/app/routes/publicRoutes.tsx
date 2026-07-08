@@ -16,6 +16,7 @@ import { PlayerSearchPage } from "@pages/players/PlayerSearchPage";
 import { PublicPlayerProfilePage } from "@pages/players/PublicPlayerProfilePage";
 import { TournamentDetailsPage } from "@pages/tournaments/TournamentDetailsPage";
 import { TournamentListPage } from "@pages/tournaments/TournamentListPage";
+import { AuthRequired } from "./AuthRequired";
 
 export const publicRoutes: RouteObject = {
   path: "/",
@@ -30,12 +31,13 @@ export const publicRoutes: RouteObject = {
     { path: "clubs/:clubId/leaderboards", element: <ClubLeaderboardsPage /> },
     { path: "clubs/:clubId", element: <ClubDetailsPage /> },
     { path: "games", element: <GameListPage /> },
+    { path: "games/categories/:categoryId", element: <GameListPage /> },
     { path: "games/:gameId", element: <GameDetailsPage /> },
     { path: "leaderboards", element: <LeaderboardsPage /> },
     { path: "players", element: <PlayerSearchPage /> },
     { path: "players/:playerId", element: <PublicPlayerProfilePage /> },
     { path: "login", element: <LoginPage /> },
     { path: "register", element: <RegisterPage /> },
-    { path: "register/club", element: <ClubRegisterPage /> },
+    { path: "register/club", element: <AuthRequired><ClubRegisterPage /></AuthRequired> },
   ],
 };

@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { LeaderboardFilters } from "./components/LeaderboardFilters";
-import { LeaderboardPodium } from "./components/LeaderboardPodium";
-import { LeaderboardTable } from "./components/LeaderboardTable";
-import { useLeaderboardPage } from "./hooks/useLeaderboardPage";
+import { LeaderboardFilters } from "@features/leaderboard/ui/LeaderboardFilters";
+import { useLeaderboardPage } from "@features/leaderboard/model/useLeaderboardPage";
+import { LeaderboardPodium } from "@entities/leaderboard/ui/LeaderboardPodium";
+import { LeaderboardTable } from "@entities/leaderboard/ui/LeaderboardTable";
 import styles from "./LeaderboardsPage.module.scss";
 
 export const LeaderboardsPage = () => {
@@ -33,13 +33,20 @@ export const LeaderboardsPage = () => {
       ) : leaderboard.entries.length ? (
         <>
           <LeaderboardPodium entries={leaderboard.entries} />
-          <section className={styles.fullRanking} aria-labelledby="full-ranking-title">
+          <section
+            className={styles.fullRanking}
+            aria-labelledby="full-ranking-title"
+          >
             <div className={styles.sectionHeading}>
               <div>
                 <p>{t("leaderboard.completeStandings")}</p>
                 <h2 id="full-ranking-title">{t("leaderboard.fullRanking")}</h2>
               </div>
-              <span>{t("leaderboard.playersRanked", { count: leaderboard.entries.length })}</span>
+              <span>
+                {t("leaderboard.playersRanked", {
+                  count: leaderboard.entries.length,
+                })}
+              </span>
             </div>
             <LeaderboardTable entries={leaderboard.entries} />
           </section>

@@ -1,0 +1,63 @@
+@use "@shared/styles/colors" as colors;
+
+.tableWrap {
+  margin-top: 1.4rem;
+  overflow-x: auto;
+  border: 1px solid rgba(colors.$primary-400, 0.16);
+  border-radius: 1rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(colors.$neutral-300, 0.1);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table th {
+  color: colors.$neutral-300;
+  background: rgba(colors.$primary-900, 0.28);
+  font-size: 0.67rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table tbody tr {
+  transition: background 150ms ease;
+}
+
+.table tbody tr:hover {
+  background: rgba(colors.$primary-700, 0.09);
+}
+
+.table tr:last-child td {
+  border-bottom: 0;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: colors.$neutral-100;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.player img {
+  width: 2.3rem;
+  height: 2.3rem;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.rank,
+.points {
+  color: colors.$primary-400;
+  font-weight: 850;
+}

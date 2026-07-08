@@ -2,7 +2,6 @@ export type Game = {
   id: number;
   bggId: number;
   title: string;
-  subtitle: string;
   description: string;
   year: number;
   minPlayers: number;

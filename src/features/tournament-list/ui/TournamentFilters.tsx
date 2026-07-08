@@ -2,8 +2,8 @@ import { useTranslation } from "react-i18next";
 import type { Dispatch, SetStateAction } from "react";
 import type { Game } from "@entities/game/model/types";
 import type { Club } from "@entities/club/model/types";
-import type { TournamentDateFilter } from "../hooks/useTournamentFilters";
-import styles from "../TournamentListPage.module.scss";
+import type { TournamentDateFilter } from "../model/useTournamentFilters";
+import styles from "./TournamentList.module.scss";
 
 type TournamentFiltersProps = {
   games: Game[];

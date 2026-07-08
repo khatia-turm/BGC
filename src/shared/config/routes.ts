@@ -8,6 +8,7 @@ export const routes = {
   clubGames: "/clubs/:clubId/games",
   clubLeaderboards: "/clubs/:clubId/leaderboards",
   games: "/games",
+  gameCategory: "/games/categories/:categoryId",
   gameDetails: "/games/:gameId",
   leaderboards: "/leaderboards",
   players: "/players",

@@ -5,12 +5,17 @@ import { useTournaments } from "@entities/tournament/api";
 import { TournamentCard } from "@entities/tournament/ui/TournamentCard";
 import { useClubs } from "@entities/club/api";
 import { ClubCard } from "@entities/club/ui/ClubCard";
+import { useGames } from "@entities/game/api";
+import { GameCard } from "@entities/game/ui/GameCard";
+import { useAuthSession } from "@shared/auth/useAuthSession";
 import styles from "./HomePage.module.scss";
 
 export const HomePage = () => {
   const { t } = useTranslation();
+  const authenticated = useAuthSession();
   const tournamentsQuery = useTournaments();
   const clubsQuery = useClubs({ status: "Active" });
+  const gamesQuery = useGames({ sortBy: "rank", sortDirection: "asc" });
 
   return (
     <main className={styles.page}>
@@ -21,9 +26,11 @@ export const HomePage = () => {
           <p className={styles.description}>{t("home.description")}</p>
 
           <div className={styles.actions}>
-            <Link className={styles.primaryAction} to={routes.register}>
-              {t("home.registerCta")}
-            </Link>
+            {!authenticated && (
+              <Link className={styles.primaryAction} to={routes.register}>
+                {t("home.registerCta")}
+              </Link>
+            )}
             <Link className={styles.secondaryAction} to={routes.tournaments}>
               {t("home.eventsCta")}
               <span aria-hidden="true">→</span>
@@ -119,6 +126,34 @@ export const HomePage = () => {
             </div>
           ) : (
             <p className={styles.message}>{t("home.noClubs")}</p>
+          )}
+        </section>
+
+        <section
+          className={styles.previewSection}
+          aria-labelledby="games-title"
+        >
+          <div className={styles.sectionHeading}>
+            <div>
+              <p>{t("home.gamesEyebrow")}</p>
+              <h2 id="games-title">{t("home.findGames")}</h2>
+            </div>
+            <Link to={routes.games}>
+              {t("home.viewAllGames")} <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          {gamesQuery.isPending ? (
+            <div className={styles.loadingCard}>{t("common.loading")}</div>
+          ) : gamesQuery.isError ? (
+            <p className={styles.message}>{t("common.loadError")}</p>
+          ) : gamesQuery.data.length ? (
+            <div className={styles.cardRow}>
+              {gamesQuery.data.slice(0, 3).map((game) => (
+                <GameCard key={game.id} game={game} />
+              ))}
+            </div>
+          ) : (
+            <p className={styles.message}>{t("home.noGames")}</p>
           )}
         </section>
       </div>

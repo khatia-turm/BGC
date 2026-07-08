@@ -1,7 +1,7 @@
 @use "@shared/styles/colors" as colors;
 .page {
   min-height: calc(100dvh - 4.5rem);
-  padding: clamp(2rem, 5vw, 4.5rem) max(1rem, calc((100% - 1100px) / 2)) 6rem;
+  padding: clamp(2rem, 5vw, 4.5rem) max(1rem, calc((100% - 1200px) / 2)) 6rem;
   color: colors.$neutral-100;
   background:
     radial-gradient(

@@ -72,7 +72,7 @@ export const useRegisterForm = () => {
       {
         onSuccess: (response) => {
           setAuthSession(response.token, undefined, rememberMe);
-          localStorage.setItem("playerPreferences", JSON.stringify({ favoriteGameIds, experienceLevel: "Beginner" }));
+          localStorage.setItem("playerPreferences", JSON.stringify({ favoriteGameIds }));
           navigate("/me/profile");
         },
       },

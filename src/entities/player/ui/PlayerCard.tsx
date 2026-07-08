@@ -21,7 +21,9 @@ export const PlayerCard = ({ player }: PlayerCardProps) => {
         <h2>
           <Link to={`/players/${player.id}`}>{player.nickname}</Link>
         </h2>
-        <p>{player.firstName} {player.lastName}</p>
+        <p>
+          {player.firstName} {player.lastName}
+        </p>
         <span>{t("players.joined", { date: joinedAt })}</span>
       </div>
       <Link className={styles.action} to={`/players/${player.id}`}>

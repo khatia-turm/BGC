@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@entities/user/api";
+import { useMyClubRequest } from "@entities/club/api";
 import { clearAuthSession } from "@shared/auth/session";
 import { routes } from "@shared/config/routes";
 import styles from "./PlayerNavigation.module.scss";
@@ -10,16 +11,23 @@ import styles from "./PlayerNavigation.module.scss";
 export const PlayerNavigation = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const userQuery = useCurrentUser();
+  const clubRequest = useMyClubRequest();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     const closeMenu = (event: MouseEvent | KeyboardEvent) => {
-      if (event instanceof KeyboardEvent && event.key === "Escape") setOpen(false);
-      if (event instanceof MouseEvent && !menuRef.current?.contains(event.target as Node)) setOpen(false);
+      if (event instanceof KeyboardEvent && event.key === "Escape")
+        setOpen(false);
+      if (
+        event instanceof MouseEvent &&
+        !menuRef.current?.contains(event.target as Node)
+      )
+        setOpen(false);
     };
     document.addEventListener("mousedown", closeMenu);
     document.addEventListener("keydown", closeMenu);
@@ -39,16 +47,52 @@ export const PlayerNavigation = () => {
   const user = userQuery.data;
   const nickname = user?.nickname ?? t("navigation.player");
   const initial = nickname.charAt(0).toUpperCase();
-  const firstClub = user?.clubs[0];
+  const clubs = user?.clubs ?? [];
+  const firstClub = clubs[0];
+  const inClubDashboard = location.pathname.startsWith("/club-admin/");
+  const closeDropdown = () => setOpen(false);
+  const registerClubLink =
+    clubRequest.data?.status === "Pending" ? (
+      <NavLink
+        className={styles.clubLink}
+        to={routes.clubRegister}
+        role="menuitem"
+        onClick={closeDropdown}
+      >
+        {t("navigation.clubApprovalPending")}
+        <small>{clubRequest.data.clubName}</small>
+      </NavLink>
+    ) : (
+      <NavLink
+        className={styles.clubLink}
+        to={routes.clubRegister}
+        role="menuitem"
+        onClick={closeDropdown}
+      >
+        {t("navigation.registerNewClub")}
+        <small>{t("navigation.registerClubHint")}</small>
+      </NavLink>
+    );
 
   return (
     <div className={styles.profile} ref={menuRef}>
-      <button className={styles.trigger} type="button" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+      <button
+        className={styles.trigger}
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
         <span className={styles.avatar}>
           {user?.avatarUrl ? <img src={user.avatarUrl} alt="" /> : initial}
         </span>
-        <span className={styles.identity}><strong>{nickname}</strong></span>
-        <span className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`} aria-hidden="true" />
+        <span className={styles.identity}>
+          <strong>{nickname}</strong>
+        </span>
+        <span
+          className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}
+          aria-hidden="true"
+        />
       </button>
 
       {open && (
@@ -57,16 +101,95 @@ export const PlayerNavigation = () => {
             <strong>{nickname}</strong>
             <span>{user?.email ?? t("common.loading")}</span>
           </div>
-          <NavLink to={routes.myProfile} role="menuitem" onClick={() => setOpen(false)}>{t("navigation.myProfile")}</NavLink>
-          <NavLink to={routes.myStats} role="menuitem" onClick={() => setOpen(false)}>{t("navigation.myStats")}</NavLink>
-          <NavLink to={routes.myHistory} role="menuitem" onClick={() => setOpen(false)}>{t("navigation.myHistory")}</NavLink>
-          <NavLink to={routes.notifications} role="menuitem" onClick={() => setOpen(false)}>{t("navigation.notifications")}</NavLink>
-          {firstClub && (
-            <NavLink className={styles.clubLink} to={`/club-admin/${firstClub.id}`} role="menuitem" onClick={() => setOpen(false)}>
-              {t("navigation.clubDashboard")}<small>{firstClub.name}</small>
-            </NavLink>
+          {inClubDashboard ? (
+            <>
+              <NavLink
+                to={routes.myProfile}
+                role="menuitem"
+                onClick={closeDropdown}
+              >
+                {t("navigation.playerDashboard")}
+              </NavLink>
+              <div
+                className={styles.menuSection}
+                role="group"
+                aria-label={t("navigation.myClubs")}
+              >
+                <span className={styles.sectionLabel}>
+                  {t("navigation.myClubs")}
+                </span>
+                {clubs.map((club) => (
+                  <NavLink
+                    className={styles.clubItem}
+                    to={`/club-admin/${club.id}`}
+                    role="menuitem"
+                    onClick={closeDropdown}
+                    key={club.id}
+                  >
+                    <span>{club.name}</span>
+                    <small>{club.role}</small>
+                  </NavLink>
+                ))}
+              </div>
+              {registerClubLink}
+            </>
+          ) : (
+            <>
+              <NavLink
+                to={routes.myProfile}
+                role="menuitem"
+                onClick={closeDropdown}
+              >
+                {t("navigation.myProfile")}
+              </NavLink>
+              <NavLink
+                to={routes.myStats}
+                role="menuitem"
+                onClick={closeDropdown}
+              >
+                {t("navigation.myStats")}
+              </NavLink>
+              <NavLink
+                to={routes.myHistory}
+                role="menuitem"
+                onClick={closeDropdown}
+              >
+                {t("navigation.myHistory")}
+              </NavLink>
+              <NavLink
+                to={routes.notifications}
+                role="menuitem"
+                onClick={closeDropdown}
+              >
+                {t("navigation.notifications")}
+              </NavLink>
+              {firstClub ? (
+                <NavLink
+                  className={styles.clubLink}
+                  to={`/club-admin/${firstClub.id}`}
+                  role="menuitem"
+                  onClick={closeDropdown}
+                >
+                  {t("navigation.clubDashboard")}
+                  <small>
+                    {clubs.length > 1
+                      ? t("navigation.myClubsCount", { count: clubs.length })
+                      : firstClub.name}
+                  </small>
+                </NavLink>
+              ) : (
+                registerClubLink
+              )}
+            </>
           )}
-          <button className={styles.logout} type="button" role="menuitem" onClick={logout}>{t("navigation.logout")}</button>
+          <button
+            className={styles.logout}
+            type="button"
+            role="menuitem"
+            onClick={logout}
+          >
+            {t("navigation.logout")}
+          </button>
         </div>
       )}
     </div>

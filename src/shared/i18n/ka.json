@@ -17,6 +17,13 @@
     "myHistory": "ჩემი ისტორია",
     "notifications": "შეტყობინებები",
     "clubDashboard": "კლუბის მართვაზე გადასვლა",
+    "playerDashboard": "მოთამაშის პროფილზე გადასვლა",
+    "myClubs": "ჩემი კლუბები",
+    "myClubsCount": "{{count}} კლუბი",
+    "registerClub": "კლუბის რეგისტრაცია",
+    "registerNewClub": "ახალი კლუბის რეგისტრაცია",
+    "registerClubHint": "გაგზავნე კლუბი დასამტკიცებლად",
+    "clubApprovalPending": "დამტკიცების მოლოდინში",
     "logout": "გასვლა",
     "playerArea": "მოთამაშის სივრცე",
     "openMenu": "ნავიგაციის გახსნა",
@@ -42,8 +49,12 @@
     "clubsEyebrow": "იპოვე შენი თანამოაზრეები",
     "featuredClubs": "რჩეული კლუბები",
     "viewAllClubs": "ყველა კლუბი",
+    "gamesEyebrow": "აირჩიე შემდეგი თამაში",
+    "findGames": "იპოვე თამაშები",
+    "viewAllGames": "ყველა თამაში",
     "noEvents": "მომავალი ტურნირები ჯერ არ არის.",
-    "noClubs": "კლუბები ჯერ არ არის."
+    "noClubs": "კლუბები ჯერ არ არის.",
+    "noGames": "თამაშები ჯერ არ არის."
   },
   "cards": {
     "registrationOpen": "რეგისტრაცია ღიაა",
@@ -93,15 +104,15 @@
     "loginRequiredTitle": "ადგილის დასაკავებლად შედი ანგარიშში",
     "loginRequiredCopy": "ტურნირზე რეგისტრაციისთვის ან მოლოდინის სიაში ჩასაწერად ავტორიზაცია აუცილებელია.",
     "loginRequiredCta": "შესვლა",
-    "closeLoginPrompt": "შეტყობინების დახურვა"
-    ,"rulesAgreement": "ვეთანხმები ტურნირის წესებს"
-    ,"registrationConfirmed": "თქვენ დარეგისტრირებული ხართ"
-    ,"onWaitlist": "თქვენ მოლოდინის სიაში ხართ"
-    ,"confirmationSent": "დადასტურების შეტყობინება პროფილში მითითებულ საკონტაქტო მონაცემებზე გამოგეგზავნებათ."
-    ,"cancelRegistration": "რეგისტრაციის გაუქმება"
-    ,"cancelling": "უქმდება…"
-    ,"registering": "რეგისტრაცია…"
-    ,"cancellationClosed": "კლუბის მიერ განსაზღვრული გაუქმების ვადა ამოიწურა."
+    "closeLoginPrompt": "შეტყობინების დახურვა",
+    "rulesAgreement": "ვეთანხმები ტურნირის წესებს",
+    "registrationConfirmed": "თქვენ დარეგისტრირებული ხართ",
+    "onWaitlist": "თქვენ მოლოდინის სიაში ხართ",
+    "confirmationSent": "დადასტურების შეტყობინება პროფილში მითითებულ საკონტაქტო მონაცემებზე გამოგეგზავნებათ.",
+    "cancelRegistration": "რეგისტრაციის გაუქმება",
+    "cancelling": "უქმდება…",
+    "registering": "რეგისტრაცია…",
+    "cancellationClosed": "კლუბის მიერ განსაზღვრული გაუქმების ვადა ამოიწურა."
   },
   "clubs": {
     "eyebrow": "აღმოაჩინე ადგილობრივი საზოგადოებები",
@@ -118,7 +129,7 @@
     "active": "აქტიური",
     "notFound": "კლუბი ვერ მოიძებნა.",
     "backToClubs": "კლუბებზე დაბრუნება",
-    "verifiedClub": "MeepleHub-ის აქტიური კლუბი",
+    "verifiedClub": "MeepleHub-ის კლუბი",
     "clubNavigation": "კლუბის ნავიგაცია",
     "overview": "მიმოხილვა",
     "games": "თამაშები",
@@ -138,8 +149,8 @@
     "address": "მისამართი",
     "hours": "სამუშაო საათები",
     "email": "ელფოსტა",
-    "phone": "ტელეფონი"
-    ,"clubGames": "კლუბის თამაშების ბიბლიოთეკა",
+    "phone": "ტელეფონი",
+    "clubGames": "კლუბის თამაშების ბიბლიოთეკა",
     "clubGamesDescription": "კლუბში ფიზიკურად არსებული თამაშები ღონისძიებებისთვის, ტურნირებისა და რეგულარული თამაშისთვის.",
     "searchGames": "თამაშების ძიება",
     "searchGamesPlaceholder": "მოძებნე კლუბის ბიბლიოთეკაში…",
@@ -187,7 +198,19 @@
     "noClubs": "ეს თამაში ამჟამად არცერთ კლუბს არ აქვს.",
     "compete": "მომავალი შეჯიბრებები",
     "relatedTournaments": "ამ თამაშის ტურნირები",
-    "noTournaments": "ამ თამაშის მომავალი ტურნირი ჯერ არ არის."
+    "noTournaments": "ამ თამაშის მომავალი ტურნირი ჯერ არ არის.",
+    "categoryDescription": "Explore {{category}} board games and tune the results by search, player count, and ranking.",
+    "categoriesLabel": "Board game categories",
+    "playersLabel": "Players",
+    "playersPlaceholder": "Any",
+    "sortLabel": "Sort by",
+    "sortByRank": "BGG rank",
+    "sortByTitle": "Title",
+    "directionLabel": "Order",
+    "sortAsc": "Ascending",
+    "sortDesc": "Descending",
+    "previousCategories": "Previous",
+    "nextCategories": "Next"
   },
   "leaderboard": {
     "eyebrow": "საუკეთესოები სათამაშო მაგიდასთან",
