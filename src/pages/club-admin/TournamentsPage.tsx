@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
+  type AdminTournamentStatus,
   useAdminTournaments,
   useCancelTournament,
   usePublishTournament,
@@ -15,6 +16,14 @@ import styles from "./TournamentsPage.module.scss";
 const tabs = ["All", "Draft", "Published", "Open", "Closed"] as const;
 type Tab = (typeof tabs)[number];
 
+const tabStatuses: Record<Tab, AdminTournamentStatus | undefined> = {
+  All: undefined,
+  Draft: "Draft",
+  Published: "Published",
+  Open: "RegistrationOpen",
+  Closed: "RegistrationClosed",
+};
+
 const statusNotes: Record<TournamentStatus, string> = {
   0: "Only club admins can see this. Publish when registration should become public.",
   1: "Public event page is visible. Registration opens at the scheduled time.",
@@ -23,14 +32,6 @@ const statusNotes: Record<TournamentStatus, string> = {
   4: "Tournament has started. The current API does not manage rounds or results.",
   5: "Tournament is finished.",
   6: "Cancelled tournaments are hidden from public pages.",
-};
-
-const filterByTab = (item: Tournament, tab: Tab) => {
-  if (tab === "All") return true;
-  if (tab === "Draft") return item.status === 0;
-  if (tab === "Published") return item.status === 1;
-  if (tab === "Open") return item.status === 2;
-  return [3, 4, 5, 6].includes(item.status);
 };
 
 const formatDate = (value?: string | null) => {
@@ -77,8 +78,8 @@ export const TournamentsPage = () => {
   const { t } = useTranslation();
   const clubId = Number(useParams().clubId);
   const [tab, setTab] = useState<Tab>("All");
-  const tournaments = useAdminTournaments(clubId);
-  const rows = (tournaments.data ?? []).filter((item) => filterByTab(item, tab));
+  const tournaments = useAdminTournaments(clubId, tabStatuses[tab]);
+  const rows = tournaments.data ?? [];
 
   return (
     <main className={`${styles.page} ${styles.tournamentsPage}`}>

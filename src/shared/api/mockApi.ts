@@ -765,6 +765,17 @@ function resolveGet(
         .map(toBoardGameDto);
       return page(games, searchParams);
     }
+    if (segments[3] === "tournaments") {
+      const status = searchParams.get("status");
+      const tournaments = mockData.tournaments
+        .filter(
+          (tournament) =>
+            tournament.clubId === clubId &&
+            (!status || tournament.status === status),
+        )
+        .map(withTournamentCounts);
+      return page(tournaments, searchParams);
+    }
     if (segments[3] === "dashboard") {
       const tournamentIds = mockData.tournaments
         .filter((item) => item.clubId === clubId)

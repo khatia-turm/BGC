@@ -14,12 +14,21 @@ import type {
 export const tournamentKeys = {
   all: ["tournaments"] as const,
   list: ["tournaments", "list"] as const,
-  adminList: (clubId: number) => ["tournaments", "admin", clubId] as const,
+  adminList: (clubId: number, status?: AdminTournamentStatus) =>
+    ["tournaments", "admin", clubId, status ?? "all"] as const,
   detail: (id: number) => ["tournaments", "detail", id] as const,
   myRegistrations: ["tournaments", "my-registrations"] as const,
   registration: (id: number) => ["tournaments", "registration", id] as const,
   participants: (id: number) => ["tournaments", "participants", id] as const,
 };
+export type AdminTournamentStatus =
+  | "Draft"
+  | "Published"
+  | "RegistrationOpen"
+  | "RegistrationClosed"
+  | "InProgress"
+  | "Finished"
+  | "Cancelled";
 export type TournamentPage = {
   page: number;
   pageSize: number;
@@ -84,68 +93,19 @@ export const getTournaments = async () =>
 export const getTournament = (id: number) =>
   apiClient<Tournament>(`/api/tournaments/${id}`).then(normalizeTournament);
 
-const adminTournamentIdsKey = (clubId: number) =>
-  `meeplehub:club:${clubId}:admin-tournaments`;
-
-const getStoredAdminTournamentIds = (clubId: number) => {
-  if (typeof localStorage === "undefined") return [];
-  try {
-    const parsed = JSON.parse(
-      localStorage.getItem(adminTournamentIdsKey(clubId)) ?? "[]",
-    );
-    return Array.isArray(parsed)
-      ? parsed.filter((id): id is number => Number.isFinite(id))
-      : [];
-  } catch {
-    return [];
-  }
-};
-
-const storeAdminTournamentIds = (clubId: number, ids: number[]) => {
-  if (typeof localStorage === "undefined") return;
-  localStorage.setItem(
-    adminTournamentIdsKey(clubId),
-    JSON.stringify([...new Set(ids)]),
+export const getAdminTournaments = async (
+  clubId: number,
+  status?: AdminTournamentStatus,
+) => {
+  const params = new URLSearchParams();
+  if (status) params.set("status", status);
+  const query = params.size ? `?${params}` : "";
+  const response = await apiClient<TournamentPage | Tournament[]>(
+    `/api/clubs/${clubId}/tournaments${query}`,
   );
-};
+  const items = Array.isArray(response) ? response : response.items;
 
-const rememberAdminTournament = (tournament: Tournament) => {
-  storeAdminTournamentIds(tournament.clubId, [
-    tournament.id,
-    ...getStoredAdminTournamentIds(tournament.clubId),
-  ]);
-};
-
-export const getAdminTournaments = async (clubId: number) => {
-  const publicItems = (await getTournamentPage(1, 100, clubId)).items;
-  const hydratedPublicItems = await Promise.all(
-    publicItems.map((item) =>
-      item.registrationOpensAt && item.registrationClosesAt
-        ? item
-        : getTournament(item.id).catch(() => item),
-    ),
-  );
-  const publicIds = new Set(publicItems.map((item) => item.id));
-  const storedIds = getStoredAdminTournamentIds(clubId).filter(
-    (id) => !publicIds.has(id),
-  );
-  const privateItems = (
-    await Promise.all(
-      storedIds.map((id) =>
-        getTournament(id).catch(() => null as Tournament | null),
-      ),
-    )
-  ).filter(
-    (item): item is Tournament => item !== null && item.clubId === clubId,
-  );
-
-  const foundPrivateIds = new Set(privateItems.map((item) => item.id));
-  storeAdminTournamentIds(clubId, [
-    ...hydratedPublicItems.map((item) => item.id),
-    ...storedIds.filter((id) => foundPrivateIds.has(id)),
-  ]);
-
-  return [...privateItems, ...hydratedPublicItems].sort(
+  return items.map(normalizeTournament).sort(
     (first, second) =>
       new Date(first.startsAt).getTime() - new Date(second.startsAt).getTime(),
   );
@@ -157,10 +117,13 @@ export function useTournaments() {
     queryFn: getTournaments,
   });
 }
-export function useAdminTournaments(clubId: number) {
+export function useAdminTournaments(
+  clubId: number,
+  status?: AdminTournamentStatus,
+) {
   return useQuery({
-    queryKey: tournamentKeys.adminList(clubId),
-    queryFn: () => getAdminTournaments(clubId),
+    queryKey: tournamentKeys.adminList(clubId, status),
+    queryFn: () => getAdminTournaments(clubId, status),
     enabled: Number.isFinite(clubId),
   });
 }
@@ -299,10 +262,16 @@ export function useCreateTournament() {
   return useMutation({
     mutationFn: createTournament,
     onSuccess: (tournament) => {
-      rememberAdminTournament(tournament);
       queryClient.setQueryData(tournamentKeys.detail(tournament.id), tournament);
       queryClient.setQueryData<Tournament[]>(
         tournamentKeys.adminList(tournament.clubId),
+        (current = []) => [
+          tournament,
+          ...current.filter((item) => item.id !== tournament.id),
+        ],
+      );
+      queryClient.setQueryData<Tournament[]>(
+        tournamentKeys.adminList(tournament.clubId, "Draft"),
         (current = []) => [
           tournament,
           ...current.filter((item) => item.id !== tournament.id),
@@ -340,10 +309,6 @@ export function useCancelTournament(id: number) {
   return useMutation({
     mutationFn: () => cancelTournament(id),
     onSuccess: () => {
-      const tournament = queryClient.getQueryData<Tournament>(
-        tournamentKeys.detail(id),
-      );
-      if (tournament) rememberAdminTournament(tournament);
       void queryClient.invalidateQueries({ queryKey: tournamentKeys.detail(id) });
       void queryClient.invalidateQueries({ queryKey: tournamentKeys.all });
     },
