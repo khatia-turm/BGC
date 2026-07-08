@@ -95,6 +95,22 @@
 .account {
   justify-self: end;
 }
+.inactiveHeader {
+  display: grid;
+  gap: 0.2rem;
+  justify-self: center;
+  text-align: center;
+}
+.inactiveHeader strong {
+  color: colors.$neutral-100;
+}
+.inactiveHeader span {
+  color: colors.$primary-400;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
 .content {
   min-height: calc(100dvh - 4.5rem);
   padding: clamp(2.5rem, 6vw, 5rem) max(1rem, calc((100% - 1200px) / 2)) 6rem;
@@ -124,6 +140,45 @@
   place-items: center;
   color: colors.$neutral-100;
   background: colors.$neutral-950;
+}
+.inactiveState {
+  display: grid;
+  max-width: 42rem;
+  min-height: 22rem;
+  align-content: center;
+  gap: 0.9rem;
+}
+.inactiveState p {
+  margin: 0;
+  color: colors.$primary-400;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.inactiveState h1 {
+  margin: 0;
+  color: colors.$neutral-100;
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  letter-spacing: -0.04em;
+}
+.inactiveState span {
+  color: colors.$neutral-300;
+  line-height: 1.6;
+}
+.inactiveState a {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 2.8rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  color: colors.$neutral-950;
+  border-radius: 0.5rem;
+  background: colors.$primary-400;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-decoration: none;
 }
 
 @media (max-width: 1120px) {

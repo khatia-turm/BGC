@@ -1,7 +1,14 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { PlayerTournament } from "@entities/player/model/types";
 import styles from "./PlayerProfile.module.scss";
+
+type PlayerTournament = {
+  tournamentId: number;
+  name: string;
+  startsAt: string;
+  city: string;
+  status: string;
+};
 
 type PlayerTournamentsProps = {
   tournaments: PlayerTournament[];

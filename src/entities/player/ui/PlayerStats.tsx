@@ -1,9 +1,13 @@
 import { useTranslation } from "react-i18next";
-import type { PublicPlayerProfile } from "@entities/player/model/types";
 import styles from "./PlayerProfile.module.scss";
 
 type PlayerStatsProps = {
-  stats: PublicPlayerProfile["stats"];
+  stats: {
+    ratingPoints: number;
+    tournamentsPlayed: number;
+    wins: number;
+    bestFinish: number | null;
+  };
 };
 
 export const PlayerStats = ({ stats }: PlayerStatsProps) => {

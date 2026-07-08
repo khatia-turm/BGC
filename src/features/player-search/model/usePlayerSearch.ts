@@ -4,14 +4,19 @@ import { usePlayers } from "@entities/player/api";
 export const usePlayerSearch = () => {
   const [search, setSearch] = useState("");
   const deferredSearch = useDeferredValue(search);
-  const playersQuery = usePlayers(deferredSearch);
+  const normalizedSearch = deferredSearch.trim();
+  const canSearch = normalizedSearch.length >= 2;
+  const hasSearch = search.trim().length > 0;
+  const playersQuery = usePlayers(normalizedSearch, canSearch);
 
   return {
     search,
     setSearch,
-    players: playersQuery.data ?? [],
-    isPending: playersQuery.isPending,
+    hasSearch,
+    canSearch,
+    players: canSearch ? (playersQuery.data ?? []) : [],
+    isPending: canSearch && playersQuery.isPending,
     isFetching: playersQuery.isFetching,
-    isError: playersQuery.isError,
+    isError: canSearch && playersQuery.isError,
   };
 };

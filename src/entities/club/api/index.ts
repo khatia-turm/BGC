@@ -1,13 +1,19 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { apiClient } from "@shared/api/client";
 import type { Game } from "@entities/game/model/types";
-import type { Club, ClubDashboard, ClubStatus } from "../model/types";
+import type { Club, ClubStatus } from "../model/types";
 
 export type ClubFilters = {
   status?: ClubStatus;
   page?: number;
   pageSize?: number;
   admin?: boolean;
+  enabled?: boolean;
 };
 export type CreateClubPayload = {
   name: string;
@@ -51,6 +57,13 @@ type Page<T> = {
   items: T[];
 };
 export type ClubPage = Page<Club>;
+export const clubStatuses: ClubStatus[] = [
+  "Pending",
+  "Active",
+  "Rejected",
+  "Suspended",
+  "Deleted",
+];
 type ClubListDto = {
   clubId: number;
   name: string;
@@ -88,8 +101,8 @@ type BoardGameDto = {
   minPlayers: number;
   maxPlayers: number;
   bestPlayersCount: number;
-  minPlayerAge: number;
-  suggestedPlayerAge: number;
+  minPlayerAge: number | null;
+  suggestedPlayerAge: number | null;
   minPlayingTime: number;
   maxPlayingTime: number;
   complexity: number;
@@ -120,7 +133,6 @@ export const clubKeys = {
   list: (filters: ClubFilters) => [...clubKeys.all, "list", filters] as const,
   detail: (id: number) => [...clubKeys.all, "detail", id] as const,
   adminDetail: (id: number) => [...clubKeys.detail(id), "my"] as const,
-  dashboard: (id: number) => [...clubKeys.detail(id), "dashboard"] as const,
   games: (id: number) => [...clubKeys.detail(id), "boardgames"] as const,
   myRequest: ["clubs", "my"] as const,
   staff: (id: number) => ["clubs", id, "staff"] as const,
@@ -151,6 +163,8 @@ const toGame = (dto: BoardGameDto): Game => ({
   year: dto.year,
   minPlayers: dto.minPlayers,
   maxPlayers: dto.maxPlayers,
+  minPlayerAge: dto.minPlayerAge ?? 0,
+  suggestedPlayerAge: dto.suggestedPlayerAge ?? 0,
   minPlayingTime: dto.minPlayingTime,
   maxPlayingTime: dto.maxPlayingTime,
   complexity: dto.complexity,
@@ -186,6 +200,26 @@ export async function getClubsPage(
 }
 export const getClubs = async (filters: ClubFilters = {}) =>
   (await getClubsPage(filters)).items;
+export async function getAllClubStatusesPage(
+  page = 1,
+  pageSize = 10,
+): Promise<ClubPage> {
+  const statusPages = await Promise.all(
+    clubStatuses.map((status) =>
+      getClubsPage({ status, page: 1, pageSize: 100, admin: true }),
+    ),
+  );
+  const items = statusPages.flatMap((statusPage) => statusPage.items);
+  const start = (page - 1) * pageSize;
+
+  return {
+    page,
+    pageSize,
+    totalCount: items.length,
+    totalPages: items.length === 0 ? 0 : Math.ceil(items.length / pageSize),
+    items: items.slice(start, start + pageSize),
+  };
+}
 export const getClub = async (id: number) =>
   toClub(await apiClient<ClubDetailDto>(`/api/clubs/${id}`));
 export const getMyClub = async (id: number) =>
@@ -251,8 +285,6 @@ export const getMyClubRequest = async (): Promise<MyClubRequest | null> => {
 };
 
 // These calls are retained for screens outside the scope of the Clubs handoff.
-export const getClubDashboard = (id: number) =>
-  apiClient<ClubDashboard>(`/api/clubs/${id}/dashboard`);
 export const getClubStaff = (id: number) =>
   apiClient<ClubStaffMember[]>(`/api/clubs/${id}/staff`);
 
@@ -266,6 +298,14 @@ export function useClubPage(filters: ClubFilters = {}) {
   return useQuery({
     queryKey: [...clubKeys.list(filters), "page"],
     queryFn: () => getClubsPage(filters),
+    placeholderData: (previous) => previous,
+    enabled: filters.enabled ?? true,
+  });
+}
+export function useAllClubStatusesPage(page: number, pageSize = 10) {
+  return useQuery({
+    queryKey: [...clubKeys.all, "all-statuses", { page, pageSize }] as const,
+    queryFn: () => getAllClubStatusesPage(page, pageSize),
     placeholderData: (previous) => previous,
   });
 }
@@ -290,12 +330,26 @@ export function useClubGames(id: number) {
     enabled: Number.isFinite(id),
   });
 }
-export function useClubDashboard(id: number) {
-  return useQuery({
-    queryKey: clubKeys.dashboard(id),
-    queryFn: () => getClubDashboard(id),
-    enabled: Number.isFinite(id),
+export function useClubsWithGame(gameId: number, clubs: Club[] | undefined) {
+  const visibleClubs = clubs ?? [];
+  const inventoryQueries = useQueries({
+    queries: visibleClubs.map((club) => ({
+      queryKey: [...clubKeys.games(club.id), "has-game", gameId] as const,
+      queryFn: async () => {
+        const games = await getClubGames(club.id);
+        return games.some((game) => game.id === gameId);
+      },
+      enabled: Number.isFinite(gameId),
+    })),
   });
+
+  return {
+    data: visibleClubs.filter((_, index) => inventoryQueries[index]?.data),
+    isPending:
+      visibleClubs.length > 0 &&
+      inventoryQueries.some((query) => query.isPending),
+    isError: inventoryQueries.some((query) => query.isError),
+  };
 }
 export function useClubStaff(id: number) {
   return useQuery({

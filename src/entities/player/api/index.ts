@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@shared/api/client";
-import type { PublicPlayer, PublicPlayerProfile } from "../model/types";
+import type { PublicPlayer } from "../model/types";
 
 export const playerKeys = {
   all: ["users"] as const,
@@ -14,12 +14,13 @@ export const getPlayers = (search = "") => {
 };
 
 export const getPlayer = (id: number) =>
-  apiClient<PublicPlayerProfile>(`/api/users/${id}`);
+  apiClient<PublicPlayer>(`/api/users/${id}`);
 
-export const usePlayers = (search = "") =>
+export const usePlayers = (search = "", enabled = true) =>
   useQuery({
     queryKey: playerKeys.list(search),
     queryFn: () => getPlayers(search),
+    enabled,
   });
 
 export const usePlayer = (id: number) =>

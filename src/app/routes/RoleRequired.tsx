@@ -6,9 +6,14 @@ import { getAuthRoles } from "@shared/auth/session";
 
 export const RoleRequired = ({
   role,
+  deniedRoles = [],
   fallback = "/",
   children,
-}: PropsWithChildren<{ role: string; fallback?: string }>) => {
+}: PropsWithChildren<{
+  role?: string;
+  deniedRoles?: string[];
+  fallback?: string;
+}>) => {
   const authenticated = useAuthSession();
   const location = useLocation();
   const user = useCurrentUser(authenticated);
@@ -19,5 +24,11 @@ export const RoleRequired = ({
   if (user.isLoading) return null;
 
   const roles = new Set([...(user.data?.roles ?? []), ...getAuthRoles()]);
-  return roles.has(role) ? <>{children}</> : <Navigate to={fallback} replace />;
+  const isDenied = deniedRoles.some((deniedRole) => roles.has(deniedRole));
+  const hasRequiredRole = role ? roles.has(role) : true;
+  return hasRequiredRole && !isDenied ? (
+    <>{children}</>
+  ) : (
+    <Navigate to={fallback} replace />
+  );
 };

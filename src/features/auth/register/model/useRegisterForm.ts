@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../api";
 import { ApiError, getApiFieldError } from "@shared/api/client";
 import { setAuthSession } from "@shared/auth/session";
+import { updateUser } from "@entities/user/api";
+import { readImageFileAsDataUrl } from "@shared/lib/imageDataUrl";
 
 const initialValues = {
   firstName: "",
@@ -52,6 +54,7 @@ export const useRegisterForm = () => {
   const register = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarError, setAvatarError] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [values, setValues] = useState(initialValues);
@@ -72,18 +75,26 @@ export const useRegisterForm = () => {
   const getFieldError = (field: keyof typeof values) =>
     getApiFieldError(register.error, field);
   const formError =
-    register.error instanceof ApiError && register.error.errors
+    avatarError ??
+    (register.error instanceof ApiError && register.error.errors
       ? register.error.message
-      : register.error?.message;
+      : register.error?.message);
 
   const update =
     (field: keyof typeof values) =>
     (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setValues((current) => ({ ...current, [field]: event.target.value }));
 
-  const chooseAvatar = (event: ChangeEvent<HTMLInputElement>) => {
+  const chooseAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) setAvatarUrl(URL.createObjectURL(file));
+    if (!file) return;
+    setAvatarError(null);
+    try {
+      setAvatarUrl(await readImageFileAsDataUrl(file));
+    } catch (error) {
+      setAvatarUrl("");
+      setAvatarError(error instanceof Error ? error.message : "Could not read this image.");
+    }
   };
 
   const submit = (event: FormEvent) => {
@@ -107,8 +118,16 @@ export const useRegisterForm = () => {
         gender: Number(values.gender) as 0 | 1 | 2,
       },
       {
-        onSuccess: (response) => {
+        onSuccess: async (response) => {
           setAuthSession(response.token, undefined, rememberMe);
+          if (avatarUrl) {
+            try {
+              await updateUser(response.userId, { avatarUrl });
+            } catch {
+              setAvatarError("Account created, but the profile photo could not be saved.");
+              return;
+            }
+          }
           localStorage.setItem(
             "playerPreferences",
             JSON.stringify({ favoriteGameIds }),

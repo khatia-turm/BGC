@@ -1,4 +1,9 @@
-export type ClubStatus = "Pending" | "Active" | "Rejected" | "Suspended" | "Deleted";
+export type ClubStatus =
+  | "Pending"
+  | "Active"
+  | "Rejected"
+  | "Suspended"
+  | "Deleted";
 
 export type Club = {
   id: number;
@@ -15,11 +20,4 @@ export type Club = {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-};
-
-export type ClubDashboard = {
-  clubId: number;
-  pendingMembers: number;
-  upcomingTournaments: number;
-  totalPlayers: number;
 };

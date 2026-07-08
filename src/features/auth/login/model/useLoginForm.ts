@@ -4,6 +4,9 @@ import { useLoginMutation } from "../api";
 import { getApiFieldError } from "@shared/api/client";
 import { setAuthSession } from "@shared/auth/session";
 
+const ASP_NET_ROLE_CLAIM =
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+
 export const useLoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,9 +25,12 @@ export const useLoginForm = () => {
       {
         onSuccess: (response) => {
           setAuthSession(response.token, response.expiresAt, rememberMe);
-          const destination =
-            (location.state as { from?: string } | null)?.from ??
-            (hasJwtRole(response.token, "AppAdmin") ? "/admin" : "/me/events");
+          const isAppAdmin = hasJwtRole(response.token, "AppAdmin");
+          const requestedDestination = (location.state as { from?: string } | null)
+            ?.from;
+          const destination = isAppAdmin
+            ? "/admin"
+            : requestedDestination ?? "/me/events";
           navigate(destination, { replace: true });
         },
       },
@@ -53,10 +59,16 @@ function hasJwtRole(token: string, role: string) {
     if (!encodedPayload) return false;
     const payload = JSON.parse(
       atob(encodedPayload.replace(/-/g, "+").replace(/_/g, "/")),
-    ) as { role?: string | string[]; roles?: string[] };
+    ) as {
+      role?: string | string[];
+      roles?: string[];
+      [ASP_NET_ROLE_CLAIM]?: string | string[];
+    };
+    const aspNetRoles = payload[ASP_NET_ROLE_CLAIM];
     const roles = [
       ...(Array.isArray(payload.role) ? payload.role : [payload.role]),
       ...(payload.roles ?? []),
+      ...(Array.isArray(aspNetRoles) ? aspNetRoles : [aspNetRoles]),
     ].filter(Boolean);
     return roles.includes(role);
   } catch {

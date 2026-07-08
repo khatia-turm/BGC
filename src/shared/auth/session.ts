@@ -1,6 +1,8 @@
 const TOKEN_KEY = "authToken";
 const EXPIRY_KEY = "authTokenExpiresAt";
 const AUTH_CHANGE_EVENT = "auth-session-change";
+const ASP_NET_ROLE_CLAIM =
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
 
 export function setAuthSession(
   token: string,
@@ -69,7 +71,9 @@ function notifyAuthChange() {
 function readJwtExpiry(token: string) {
   try {
     const payload = readJwtPayload(token) as { exp?: number } | undefined;
-    return payload?.exp ? new Date(payload.exp * 1000).toISOString() : undefined;
+    return payload?.exp
+      ? new Date(payload.exp * 1000).toISOString()
+      : undefined;
   } catch {
     return undefined;
   }
@@ -78,12 +82,18 @@ function readJwtExpiry(token: string) {
 function readJwtRoles(token: string) {
   try {
     const payload = readJwtPayload(token) as
-      | { role?: string | string[]; roles?: string[] }
+      | {
+          role?: string | string[];
+          roles?: string[];
+          [ASP_NET_ROLE_CLAIM]?: string | string[];
+        }
       | undefined;
     if (!payload) return [];
+    const aspNetRoles = payload[ASP_NET_ROLE_CLAIM];
     return [
       ...(Array.isArray(payload.role) ? payload.role : [payload.role]),
       ...(payload.roles ?? []),
+      ...(Array.isArray(aspNetRoles) ? aspNetRoles : [aspNetRoles]),
     ].filter((role): role is string => Boolean(role));
   } catch {
     return [];

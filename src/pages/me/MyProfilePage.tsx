@@ -2,6 +2,7 @@ import { type FormEvent, useState } from "react";
 import type { UserProfile } from "@entities/user/model/types";
 import { useCurrentUser, useUpdateUser, useUser } from "@entities/user/api";
 import { useGames } from "@entities/game/api";
+import { readImageFileAsDataUrl } from "@shared/lib/imageDataUrl";
 import styles from "./MePage.module.scss";
 
 type Preferences = { favoriteGameIds: number[] };
@@ -42,6 +43,7 @@ const ProfileEditor = ({
 }) => {
   const updateUser = useUpdateUser();
   const [saved, setSaved] = useState(false);
+  const [imageError, setImageError] = useState<string | null>(null);
   const [preferences, setPreferences] = useState(readPreferences);
   const [form, setForm] = useState({
     firstName: profile.firstName,
@@ -64,6 +66,18 @@ const ProfileEditor = ({
         },
       },
     );
+  };
+  const chooseAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setSaved(false);
+    setImageError(null);
+    try {
+      const avatarUrl = await readImageFileAsDataUrl(file);
+      setForm((current) => ({ ...current, avatarUrl }));
+    } catch (error) {
+      setImageError(error instanceof Error ? error.message : "Could not read this image.");
+    }
   };
   const toggleGame = (id: number) =>
     setPreferences((value) => ({
@@ -134,15 +148,37 @@ const ProfileEditor = ({
           />
         </label>
         <label className={styles.wide}>
-          Profile picture URL
+          Profile picture
           <input
-            type="url"
+            type="text"
             value={form.avatarUrl}
             onChange={(event) =>
               setForm({ ...form, avatarUrl: event.target.value })
             }
+            placeholder="Paste an image URL or choose a file below"
           />
+          <span className={styles.imageTools}>
+            <label>
+              Choose image
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                onChange={chooseAvatar}
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => {
+                setSaved(false);
+                setImageError(null);
+                setForm({ ...form, avatarUrl: "" });
+              }}
+            >
+              Remove
+            </button>
+          </span>
         </label>
+        {imageError && <p className={styles.error}>{imageError}</p>}
         <fieldset className={`${styles.wide} ${styles.choices}`}>
           <legend>Favorite board games</legend>
           {games.map((game) => (

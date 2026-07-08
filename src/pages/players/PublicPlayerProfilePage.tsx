@@ -1,18 +1,13 @@
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { usePlayer } from "@entities/player/api";
-import { useGames } from "@entities/game/api";
 import { routes } from "@shared/config/routes";
-import { PlayerStats } from "@entities/player/ui/PlayerStats";
-import { PlayerRankings } from "@entities/player/ui/PlayerRankings";
-import { PlayerTournaments } from "@entities/player/ui/PlayerTournaments";
 import styles from "./PublicPlayerProfilePage.module.scss";
 
 export const PublicPlayerProfilePage = () => {
   const playerId = Number(useParams().playerId);
   const { t } = useTranslation();
   const playerQuery = usePlayer(playerId);
-  const { data: games = [] } = useGames();
 
   if (playerQuery.isPending)
     return <main className={styles.state}>{t("common.loading")}</main>;
@@ -36,12 +31,6 @@ export const PublicPlayerProfilePage = () => {
           </strong>
         </div>
       </header>
-
-      <PlayerStats stats={player.stats} />
-      <div className={styles.contentGrid}>
-        <PlayerRankings rankings={player.rankings} games={games} />
-        <PlayerTournaments tournaments={player.tournaments} />
-      </div>
     </main>
   );
 };

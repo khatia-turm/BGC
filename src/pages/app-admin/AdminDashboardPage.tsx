@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useClubPage } from "@entities/club/api";
 import { useGamePage } from "@entities/game/api";
-import { useTournamentPage } from "@entities/tournament/api";
 import { useUsers } from "@entities/user/api";
 import styles from "./AppAdminPages.module.scss";
 
@@ -26,7 +25,6 @@ export const AdminDashboardPage = () => {
   });
   const activeUsers = useUsers("Active", 1, 1);
   const suspendedUsers = useUsers("Suspended", 1, 1);
-  const tournaments = useTournamentPage(1, 1);
   const games = useGamePage({ page: 1, pageSize: 1 });
 
   return (
@@ -51,7 +49,6 @@ export const AdminDashboardPage = () => {
         <Stat label="Suspended clubs" value={suspendedClubs.data?.totalCount} />
         <Stat label="Active users" value={activeUsers.data?.totalCount} />
         <Stat label="Suspended users" value={suspendedUsers.data?.totalCount} />
-        <Stat label="Total tournaments" value={tournaments.data?.totalCount} />
         <Stat label="Board games" value={games.data?.totalCount} />
       </section>
 

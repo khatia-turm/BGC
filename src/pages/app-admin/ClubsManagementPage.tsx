@@ -1,29 +1,30 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useClubPage, useUpdateClubStatus } from "@entities/club/api";
+import {
+  clubStatuses,
+  useAllClubStatusesPage,
+  useClubPage,
+  useUpdateClubStatus,
+} from "@entities/club/api";
 import type { ClubStatus } from "@entities/club/model/types";
 import { Pagination } from "@shared/ui/Pagination";
 import styles from "./AppAdminPages.module.scss";
 
-const statuses: Array<"" | ClubStatus> = [
-  "",
-  "Pending",
-  "Active",
-  "Rejected",
-  "Suspended",
-  "Deleted",
-];
+const statuses: Array<"" | ClubStatus> = ["", ...clubStatuses];
 
 export const ClubsManagementPage = () => {
   const [status, setStatus] = useState<"" | ClubStatus>("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const clubs = useClubPage({
+  const filteredClubs = useClubPage({
     status: status || undefined,
     page,
     pageSize: 10,
     admin: true,
+    enabled: Boolean(status),
   });
+  const allClubs = useAllClubStatusesPage(page, 10);
+  const clubs = status ? filteredClubs : allClubs;
   const updateStatus = useUpdateClubStatus();
   const rows =
     clubs.data?.items.filter((club) =>

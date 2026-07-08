@@ -6,6 +6,8 @@ export type Game = {
   year: number;
   minPlayers: number;
   maxPlayers: number;
+  minPlayerAge: number;
+  suggestedPlayerAge: number;
   minPlayingTime: number;
   maxPlayingTime: number;
   complexity: number;

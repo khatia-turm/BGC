@@ -16,11 +16,6 @@ export const PublicNavigation = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const roles = new Set([...(user.data?.roles ?? []), ...getAuthRoles()]);
-  const isAppAdminOnly =
-    roles.has("AppAdmin") &&
-    !roles.has("Player") &&
-    !roles.has("ClubAdmin") &&
-    !roles.has("ClubModerator");
   const isAppAdmin = roles.has("AppAdmin");
   const linkClass = ({isActive}:{isActive:boolean}) => `${styles.link} ${isActive?styles.active:""}`;
   const close=()=>setOpen(false);
@@ -32,13 +27,13 @@ export const PublicNavigation = () => {
   };
   return <header className={styles.header}><nav className={styles.navigation} aria-label={t("navigation.mainLabel")}>
     <NavLink className={styles.logo} to={routes.home} aria-label={t("navigation.homeLabel")}><Logo className={styles.brand}/></NavLink>
-    {authenticated && <div className={styles.account}>{!isAppAdminOnly ? <PlayerNavigation /> : <div className={styles.adminAccount}><NavLink to={routes.appAdminDashboard}>Admin</NavLink><button type="button" onClick={logout}>{t("navigation.logout")}</button></div>}</div>}
+    {authenticated && <div className={styles.account}>{!isAppAdmin ? <PlayerNavigation /> : <div className={styles.adminAccount}><NavLink to={routes.appAdminDashboard}>Admin</NavLink><button type="button" onClick={logout}>{t("navigation.logout")}</button></div>}</div>}
     <button className={styles.menuButton} type="button" aria-expanded={open} aria-label={t("navigation.openMenu")} onClick={()=>setOpen((value)=>!value)}><i/><i/><i/></button>
     {open&&<button className={styles.backdrop} type="button" aria-label={t("navigation.closeMenu")} onClick={close}/>} 
     <div className={`${styles.drawer} ${open?styles.drawerOpen:""}`}>
       <div className={styles.drawerHeading}><Logo className={styles.drawerBrand}/><button type="button" onClick={close} aria-label={t("navigation.closeMenu")}>×</button></div>
       <div className={styles.primaryLinks}>
-        <NavLink className={linkClass} to={routes.tournaments} onClick={close}>{t("navigation.events")}</NavLink><NavLink className={linkClass} to={routes.clubs} onClick={close}>{t("navigation.clubs")}</NavLink><NavLink className={linkClass} to={routes.games} onClick={close}>{t("navigation.games")}</NavLink><NavLink className={linkClass} to={routes.leaderboards} onClick={close}>{t("navigation.leaderboards")}</NavLink><NavLink className={linkClass} to={routes.players} onClick={close}>{t("navigation.players")}</NavLink>{authenticated&&!isAppAdminOnly&&<NavLink className={linkClass} to={routes.myEvents} onClick={close}>{t("navigation.myEvents")}</NavLink>}{authenticated&&isAppAdmin&&<NavLink className={linkClass} to={routes.appAdminDashboard} onClick={close}>Admin</NavLink>}
+        <NavLink className={linkClass} to={routes.tournaments} onClick={close}>{t("navigation.events")}</NavLink><NavLink className={linkClass} to={routes.clubs} onClick={close}>{t("navigation.clubs")}</NavLink><NavLink className={linkClass} to={routes.games} onClick={close}>{t("navigation.games")}</NavLink><NavLink className={linkClass} to={routes.leaderboards} onClick={close}>{t("navigation.leaderboards")}</NavLink><NavLink className={linkClass} to={routes.players} onClick={close}>{t("navigation.players")}</NavLink>{authenticated&&!isAppAdmin&&<NavLink className={linkClass} to={routes.myEvents} onClick={close}>{t("navigation.myEvents")}</NavLink>}{authenticated&&isAppAdmin&&<NavLink className={linkClass} to={routes.appAdminDashboard} onClick={close}>Admin</NavLink>}
       </div>
       {!authenticated&&<div className={styles.authLinks}><NavLink className={styles.loginLink} to={routes.login} onClick={close}>{t("navigation.login")}</NavLink><span className={styles.separator}>/</span><NavLink className={styles.registerLink} to={routes.register} onClick={close}>{t("navigation.register")}</NavLink></div>}
     </div>

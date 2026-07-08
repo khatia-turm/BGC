@@ -11,7 +11,7 @@ docker
 admin pages
 
 1. club sees their games, sheudzlia daamatos, pop up detailed info bgc moaq,
-   ori button add or cancel, it was added successfuly + and allat shit
+   ori button add or cancel, it was added successfuly + and allat shit ✔️
 2. auth reset password
 3. new tournament
 
@@ -29,8 +29,13 @@ notifications
 
 bugs
 
-admin -> player pages merge
-status all doesn't show all statuses
-url picture
-game page grid layout
+admin -> player pages merge ✔️
+status all doesn't show all statuses ✔️
+url picture ✔️
+game page grid layout ✔️
 leaderboards mock figure out
+
+description sami wertili games ✔️
+min age max age ✔️
+
+games detail page field filters

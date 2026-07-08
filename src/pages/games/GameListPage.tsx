@@ -94,6 +94,8 @@ export const GameListPage = () => {
           >
             <option value="rank">{t("games.sortByRank")}</option>
             <option value="title">{t("games.sortByTitle")}</option>
+            <option value="minAge">{t("games.sortByMinAge")}</option>
+            <option value="suggestedAge">{t("games.sortBySuggestedAge")}</option>
           </select>
         </label>
         <label>

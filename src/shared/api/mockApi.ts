@@ -687,7 +687,11 @@ function resolveGet(
           };
         });
     }
-    return mockData.users.find((user) => user.id === userId);
+    const user = mockData.users.find((item) => item.id === userId);
+    if (!user) return undefined;
+    const isSelf = user.id === currentMockUser.id;
+    const isAppAdmin = currentMockUser.roles?.includes("AppAdmin");
+    return isSelf || isAppAdmin ? user : toPublicPlayer(user);
   }
 
   if (matches(segments, ["api", "clubs"])) {
@@ -978,7 +982,6 @@ function toPublicPlayer(user: (typeof mockData.users)[number]) {
     firstName: user.firstName,
     lastName: user.lastName,
     avatarUrl: user.avatarUrl,
-    joinedAt: user.createdAt,
   };
 }
 

@@ -1,4 +1,4 @@
-import type { RouteObject } from "react-router-dom";
+import { Navigate, type RouteObject } from "react-router-dom";
 import { PlayerLayout } from "@app/layouts/PlayerLayout";
 import { MyEventsPage } from "@pages/me/MyEventsPage";
 import { MyHistoryPage } from "@pages/me/MyHistoryPage";
@@ -10,11 +10,12 @@ import { RoleRequired } from "./RoleRequired";
 export const playerRoutes: RouteObject = {
   path: "/me",
   element: (
-    <RoleRequired role="Player" fallback="/admin">
+    <RoleRequired deniedRoles={["AppAdmin"]} fallback="/admin">
       <PlayerLayout />
     </RoleRequired>
   ),
   children: [
+    { index: true, element: <Navigate to="events" replace /> },
     { path: "events", element: <MyEventsPage /> },
     { path: "profile", element: <MyProfilePage /> },
     { path: "stats", element: <MyStatsPage /> },
