@@ -215,12 +215,12 @@ export const updateClub = (id: number, payload: CreateClubPayload) =>
     body: JSON.stringify(payload),
   });
 export const addClubBoardGame = (id: number, bggGameId: number) =>
-  apiClient<AddClubBoardGameResponse>(`/api/clubs/${id}/games`, {
+  apiClient<AddClubBoardGameResponse>(`/api/clubs/${id}/boardgames`, {
     method: "POST",
     body: JSON.stringify({ BggGameId: bggGameId }),
   });
 export const removeClubBoardGame = (id: number, boardGameId: number) =>
-  apiClient<void>(`/api/clubs/${id}/games/${boardGameId}`, {
+  apiClient<void>(`/api/clubs/${id}/boardgames/${boardGameId}`, {
     method: "DELETE",
   });
 export const updateClubStatus = (

@@ -4,7 +4,6 @@ export type PublicPlayer = {
   firstName: string;
   lastName: string;
   avatarUrl: string | null;
-  joinedAt: string;
 };
 
 export type PlayerRanking = {

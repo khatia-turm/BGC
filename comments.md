@@ -26,3 +26,11 @@ moderatori chaixsna
 leaderboard
 tournament management - enter results
 notifications
+
+bugs
+
+admin -> player pages merge
+status all doesn't show all statuses
+url picture
+game page grid layout
+leaderboards mock figure out
