@@ -222,6 +222,7 @@ form {
   border-radius: 0.65rem;
   background: rgba(#0b2422, 0.95);
   box-shadow: 0 1rem 3rem rgba(#000, 0.4);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 .saveBar div {
