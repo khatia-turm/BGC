@@ -90,7 +90,8 @@ export const LoginForm = () => {
             </button>
           </form>
           <p className={styles.switch}>
-            {t("auth.noAccount")} <Link to="/register">{t("auth.createAccount")}</Link>
+            {t("auth.noAccount")}{" "}
+            <Link to="/register">{t("auth.createAccount")}</Link>
           </p>
         </div>
       </section>

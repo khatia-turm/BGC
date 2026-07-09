@@ -4,17 +4,20 @@ import { useCurrentUser } from "@entities/user/api";
 import { useAuthSession } from "@shared/auth/useAuthSession";
 import { clearAuthSession, getAuthRoles } from "@shared/auth/session";
 import { Logo } from "@shared/ui/Logo";
+import { LanguageSwitcher } from "@shared/ui/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 import styles from "./AppAdminLayout.module.scss";
 
 const links = [
-  ["", "Dashboard"],
-  ["club-requests", "Club Requests"],
-  ["clubs", "Clubs"],
-  ["users", "Users"],
-  ["games", "Games"],
+  ["", "dashboard"],
+  ["club-requests", "clubRequests"],
+  ["clubs", "clubs"],
+  ["users", "users"],
+  ["games", "games"],
 ] as const;
 
 export const AppAdminLayout = () => {
+  const { t } = useTranslation();
   const authenticated = useAuthSession();
   const location = useLocation();
   const queryClient = useQueryClient();
@@ -24,7 +27,7 @@ export const AppAdminLayout = () => {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
 
   if (user.isLoading)
-    return <div className={styles.loading}>Opening admin workspace...</div>;
+    return <div className={styles.loading}>{t("appAdmin.layout.loading")}</div>;
 
   const roles = new Set([...(user.data?.roles ?? []), ...getAuthRoles()]);
   if (!roles.has("AppAdmin")) return <Navigate to="/" replace />;
@@ -40,38 +43,39 @@ export const AppAdminLayout = () => {
         <NavLink
           className={styles.brand}
           to="/admin"
-          aria-label="App admin dashboard"
+          aria-label={t("appAdmin.layout.dashboardLabel")}
         >
           <Logo className={styles.logo} />
         </NavLink>
         <nav className={styles.nav}>
-          {links.map(([path, label]) => (
+          {links.map(([path, key]) => (
             <NavLink
-              key={label}
+              key={key}
               end={!path}
               to={path}
               className={({ isActive }) =>
                 isActive ? styles.active : undefined
               }
             >
-              {label}
+              {t(`appAdmin.layout.${key}`)}
             </NavLink>
           ))}
         </nav>
         <div className={styles.account}>
           <div className={styles.adminAccount}>
             <span>
-              <strong>{user.data?.nickname ?? "System admin"}</strong>
+              <strong>{user.data?.nickname ?? t("appAdmin.layout.systemAdmin")}</strong>
               <small>{user.data?.email}</small>
             </span>
             <button type="button" onClick={logout}>
-              Logout
+              {t("navigation.logout")}
             </button>
           </div>
+          <LanguageSwitcher contained />
         </div>
       </header>
       <div className={styles.mobileContext}>
-        <strong>System admin</strong>
+        <strong>{t("appAdmin.layout.systemAdmin")}</strong>
         <span>{user.data?.email}</span>
       </div>
       <section className={styles.content}>

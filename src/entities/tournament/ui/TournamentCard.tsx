@@ -24,7 +24,10 @@ export const TournamentCard = ({
     month: "short",
     year: "numeric",
   }).format(new Date(tournament.startsAt));
-  const registrationWindow = getRegistrationWindowLabel(tournament, i18n.resolvedLanguage);
+  const registrationWindow = getRegistrationWindowLabel(
+    tournament,
+    i18n.resolvedLanguage,
+  );
 
   return (
     <article className={styles.card}>

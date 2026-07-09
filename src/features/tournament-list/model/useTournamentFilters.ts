@@ -45,7 +45,9 @@ export const useTournamentFilters = ({
           matchesSearch(term, [
             tournament.name,
             game?.title,
-            tournament.boardGames?.map((boardGame) => boardGame.title).join(" "),
+            tournament.boardGames
+              ?.map((boardGame) => boardGame.title)
+              .join(" "),
             club?.name,
             tournament.location ?? undefined,
           ]) &&
@@ -56,9 +58,20 @@ export const useTournamentFilters = ({
       })
       .sort(
         (first, second) =>
-          (new Date(first.startsAt).getTime() - new Date(second.startsAt).getTime()) * (sortOrder === "asc" ? 1 : -1),
+          (new Date(first.startsAt).getTime() -
+            new Date(second.startsAt).getTime()) *
+          (sortOrder === "asc" ? 1 : -1),
       );
-  }, [clubId, clubs, dateFilter, gameId, games, search, sortOrder, tournaments]);
+  }, [
+    clubId,
+    clubs,
+    dateFilter,
+    gameId,
+    games,
+    search,
+    sortOrder,
+    tournaments,
+  ]);
 
   return {
     filteredTournaments,
@@ -67,10 +80,8 @@ export const useTournamentFilters = ({
   };
 };
 
-const matchesSearch = (
-  term: string,
-  values: Array<string | undefined>,
-) => !term || values.some((value) => value?.toLowerCase().includes(term));
+const matchesSearch = (term: string, values: Array<string | undefined>) =>
+  !term || values.some((value) => value?.toLowerCase().includes(term));
 
 const matchesId = (selectedId: string, itemId: number) =>
   selectedId === "all" || itemId === Number(selectedId);

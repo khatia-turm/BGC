@@ -17,7 +17,10 @@ export const TournamentBuilderPage = () => {
           <p>Tournament setup</p>
           <h1>Create tournament</h1>
         </div>
-        <Link className={styles.button} to={`/club-admin/${clubId}/tournaments`}>
+        <Link
+          className={styles.button}
+          to={`/club-admin/${clubId}/tournaments`}
+        >
           Back to tournaments
         </Link>
       </header>
@@ -32,7 +35,9 @@ export const TournamentBuilderPage = () => {
           onSubmit={(payload) =>
             createTournament.mutate(payload, {
               onSuccess: (tournament) =>
-                navigate(`/club-admin/${clubId}/tournaments/${tournament.id}/edit`),
+                navigate(
+                  `/club-admin/${clubId}/tournaments/${tournament.id}/edit`,
+                ),
             })
           }
         />

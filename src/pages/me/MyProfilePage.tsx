@@ -1,4 +1,5 @@
 import { type FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { UserProfile } from "@entities/user/model/types";
 import { useCurrentUser, useUpdateUser, useUser } from "@entities/user/api";
 import { useGames } from "@entities/game/api";
@@ -17,11 +18,12 @@ const readPreferences = (): Preferences => {
 };
 
 export const MyProfilePage = () => {
+  const { t } = useTranslation();
   const current = useCurrentUser();
   const detail = useUser(current.data?.id ?? Number.NaN);
   const games = useGames();
   if (!current.data || !detail.data)
-    return <main className={styles.page}>Loading profile…</main>;
+    return <main className={styles.page}>{t("me.profile.loading")}</main>;
   return (
     <ProfileEditor
       key={"updatedAt" in detail.data ? detail.data.updatedAt : detail.data.id}
@@ -42,6 +44,7 @@ const ProfileEditor = ({
   games: Array<{ id: number; title: string }>;
 }) => {
   const updateUser = useUpdateUser();
+  const { t } = useTranslation();
   const [saved, setSaved] = useState(false);
   const [imageError, setImageError] = useState<string | null>(null);
   const [preferences, setPreferences] = useState(readPreferences);
@@ -76,7 +79,9 @@ const ProfileEditor = ({
       const avatarUrl = await readImageFileAsDataUrl(file);
       setForm((current) => ({ ...current, avatarUrl }));
     } catch (error) {
-      setImageError(error instanceof Error ? error.message : "Could not read this image.");
+      setImageError(
+        error instanceof Error ? error.message : t("common.imageReadError"),
+      );
     }
   };
   const toggleGame = (id: number) =>
@@ -89,11 +94,9 @@ const ProfileEditor = ({
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <p>Player profile</p>
-        <h1>My Profile</h1>
-        <span>
-          Keep your identity and favorite games up to date.
-        </span>
+        <p>{t("me.profile.eyebrow")}</p>
+        <h1>{t("me.profile.title")}</h1>
+        <span>{t("me.profile.description")}</span>
       </header>
       <form className={styles.form} onSubmit={submit}>
         <div className={styles.profileTop}>
@@ -108,7 +111,7 @@ const ProfileEditor = ({
           </div>
         </div>
         <label>
-          First name
+          {t("auth.firstName")}
           <input
             value={form.firstName}
             onChange={(event) =>
@@ -118,7 +121,7 @@ const ProfileEditor = ({
           />
         </label>
         <label>
-          Last name
+          {t("auth.lastName")}
           <input
             value={form.lastName}
             onChange={(event) =>
@@ -128,7 +131,7 @@ const ProfileEditor = ({
           />
         </label>
         <label>
-          Nickname
+          {t("auth.nickname")}
           <input
             value={form.nickname}
             onChange={(event) =>
@@ -138,7 +141,7 @@ const ProfileEditor = ({
           />
         </label>
         <label>
-          Phone
+          {t("auth.phone")}
           <input
             value={form.phone}
             onChange={(event) =>
@@ -148,18 +151,18 @@ const ProfileEditor = ({
           />
         </label>
         <label className={styles.wide}>
-          Profile picture
+          {t("me.profile.picture")}
           <input
             type="text"
             value={form.avatarUrl}
             onChange={(event) =>
               setForm({ ...form, avatarUrl: event.target.value })
             }
-            placeholder="Paste an image URL or choose a file below"
+            placeholder={t("common.imageUrlPlaceholder")}
           />
           <span className={styles.imageTools}>
             <label>
-              Choose image
+              {t("common.chooseImage")}
               <input
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
@@ -174,13 +177,13 @@ const ProfileEditor = ({
                 setForm({ ...form, avatarUrl: "" });
               }}
             >
-              Remove
+              {t("common.remove")}
             </button>
           </span>
         </label>
         {imageError && <p className={styles.error}>{imageError}</p>}
         <fieldset className={`${styles.wide} ${styles.choices}`}>
-          <legend>Favorite board games</legend>
+          <legend>{t("me.profile.favoriteGames")}</legend>
           {games.map((game) => (
             <label key={game.id}>
               <input
@@ -192,13 +195,13 @@ const ProfileEditor = ({
             </label>
           ))}
         </fieldset>
-        {saved && <p className={styles.success}>Profile saved successfully.</p>}
+        {saved && <p className={styles.success}>{t("me.profile.saved")}</p>}
         <button
           className={styles.button}
           disabled={updateUser.isPending}
           type="submit"
         >
-          {updateUser.isPending ? "Saving…" : "Save profile"}
+          {updateUser.isPending ? t("common.saving") : t("me.profile.save")}
         </button>
       </form>
     </main>

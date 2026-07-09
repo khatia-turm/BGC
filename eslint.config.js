@@ -5,6 +5,8 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
+const tsconfigRootDir = import.meta.dirname
+
 export default defineConfig([
   globalIgnores(['dist']),
   {
@@ -17,6 +19,9 @@ export default defineConfig([
     ],
     languageOptions: {
       globals: globals.browser,
+      parserOptions: {
+        tsconfigRootDir,
+      },
     },
   },
 ])

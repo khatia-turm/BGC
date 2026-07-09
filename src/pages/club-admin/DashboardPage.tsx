@@ -50,7 +50,9 @@ export const DashboardPage = () => {
         </article>
         <article className={styles.stat}>
           <span>{t("clubAdmin.dashboard.gameInventory")}</span>
-          <strong className={styles.altNumber}>{games.data?.length ?? 0}</strong>
+          <strong className={styles.altNumber}>
+            {games.data?.length ?? 0}
+          </strong>
           <small>{t("clubAdmin.dashboard.gameInventoryHint")}</small>
         </article>
         <article className={styles.stat}>
@@ -101,9 +103,7 @@ export const DashboardPage = () => {
         {!upcoming.length && (
           <div className={styles.dashboardEmpty}>
             <strong>{t("clubAdmin.dashboard.noUpcoming")}</strong>
-            <span>
-              {t("clubAdmin.dashboard.noUpcomingHint")}
-            </span>
+            <span>{t("clubAdmin.dashboard.noUpcomingHint")}</span>
             <Link className={styles.button} to="tournaments/new">
               {t("clubAdmin.common.createTournament")}
             </Link>

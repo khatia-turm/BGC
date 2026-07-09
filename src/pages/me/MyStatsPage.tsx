@@ -1,18 +1,16 @@
+import { useTranslation } from "react-i18next";
 import styles from "./MePage.module.scss";
 
 export const MyStatsPage = () => {
+  const { t } = useTranslation();
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <p>Player progress</p>
-        <h1>My Stats</h1>
-        <span>
-          Your ratings and ranking points for every competitive board game.
-        </span>
+        <p>{t("me.stats.eyebrow")}</p>
+        <h1>{t("me.stats.title")}</h1>
+        <span>{t("me.stats.description")}</span>
       </header>
-      <div className={styles.empty}>
-        Your first ranking will appear after a scored tournament.
-      </div>
+      <div className={styles.empty}>{t("me.stats.empty")}</div>
     </main>
   );
 };

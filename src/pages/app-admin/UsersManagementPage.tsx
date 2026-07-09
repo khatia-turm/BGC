@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   useUpdateUserStatus,
   useUser,
@@ -9,19 +10,15 @@ import type { UserStatus } from "@entities/user/model/types";
 import { Pagination } from "@shared/ui/Pagination";
 import styles from "./AppAdminPages.module.scss";
 
-const statuses: Array<"" | UserStatus> = [
-  "",
-  "Active",
-  "Suspended",
-  "Deleted",
-];
+const statuses: UserStatus[] = ["Active", "Suspended", "Deleted"];
 
 export const UsersManagementPage = () => {
-  const [status, setStatus] = useState<"" | UserStatus>("");
+  const { t } = useTranslation();
+  const [status, setStatus] = useState<UserStatus>("Active");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-  const users = useUsers(status || undefined, page, 10);
+  const users = useUsers(status, page, 10);
   const selectedUser = useUser(selectedUserId ?? 0);
   const selectedUserClubs = useUserClubs(selectedUserId);
   const updateStatus = useUpdateUserStatus();
@@ -34,8 +31,9 @@ export const UsersManagementPage = () => {
 
   const changeStatus = (id: number, nextStatus: UserStatus) => {
     const reason =
-      window.prompt(`Reason for ${nextStatus.toLowerCase()} status?`) ||
-      `Changed to ${nextStatus} by app admin`;
+      window.prompt(
+        t("appAdmin.common.statusReason", { status: nextStatus.toLowerCase() }),
+      ) || t("appAdmin.common.statusChangedReason", { status: nextStatus });
     updateStatus.mutate({ id, status: nextStatus, reason });
   };
 
@@ -43,37 +41,34 @@ export const UsersManagementPage = () => {
     <main className={styles.page}>
       <header className={styles.heading}>
         <div>
-          <p>User moderation</p>
-          <h1>Users</h1>
-          <span>
-            Review player accounts and update user status when moderation or
-            platform safety requires it.
-          </span>
+          <p>{t("appAdmin.users.eyebrow")}</p>
+          <h1>{t("appAdmin.layout.users")}</h1>
+          <span>{t("appAdmin.users.description")}</span>
         </div>
       </header>
 
       <section className={styles.panel}>
         <div className={styles.filters}>
           <label>
-            <span>Search</span>
+            <span>{t("clubs.searchLabel")}</span>
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search nickname or email"
+              placeholder={t("appAdmin.users.searchPlaceholder")}
             />
           </label>
           <label>
-            <span>Status</span>
+            <span>{t("appAdmin.common.status")}</span>
             <select
               value={status}
               onChange={(event) => {
-                setStatus(event.target.value as "" | UserStatus);
+                setStatus(event.target.value as UserStatus);
                 setPage(1);
               }}
             >
               {statuses.map((item) => (
-                <option key={item || "All"} value={item}>
-                  {item || "All statuses"}
+                <option key={item} value={item}>
+                  {item}
                 </option>
               ))}
             </select>
@@ -81,19 +76,19 @@ export const UsersManagementPage = () => {
         </div>
 
         {users.isPending ? (
-          <div className={styles.message}>Loading users...</div>
+          <div className={styles.message}>{t("appAdmin.users.loading")}</div>
         ) : users.isError ? (
-          <div className={styles.message}>Could not load users.</div>
+          <div className={styles.message}>{t("appAdmin.users.loadError")}</div>
         ) : rows.length ? (
           <div className={styles.tableWrap}>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>User</th>
-                  <th>Email</th>
-                  <th>Created</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>{t("appAdmin.users.user")}</th>
+                  <th>{t("auth.email")}</th>
+                  <th>{t("appAdmin.common.created")}</th>
+                  <th>{t("appAdmin.common.status")}</th>
+                  <th>{t("appAdmin.common.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,7 +109,7 @@ export const UsersManagementPage = () => {
                           type="button"
                           onClick={() => setSelectedUserId(user.id)}
                         >
-                          View
+                          {t("appAdmin.common.view")}
                         </button>
                         {user.status !== "Active" && (
                           <button
@@ -122,7 +117,7 @@ export const UsersManagementPage = () => {
                             disabled={updateStatus.isPending}
                             onClick={() => changeStatus(user.id, "Active")}
                           >
-                            Activate
+                            {t("appAdmin.common.activate")}
                           </button>
                         )}
                         {user.status !== "Suspended" && (
@@ -131,7 +126,7 @@ export const UsersManagementPage = () => {
                             disabled={updateStatus.isPending}
                             onClick={() => changeStatus(user.id, "Suspended")}
                           >
-                            Suspend
+                            {t("appAdmin.common.suspend")}
                           </button>
                         )}
                         {user.status !== "Deleted" && (
@@ -140,7 +135,7 @@ export const UsersManagementPage = () => {
                             disabled={updateStatus.isPending}
                             onClick={() => changeStatus(user.id, "Deleted")}
                           >
-                            Delete
+                            {t("appAdmin.common.delete")}
                           </button>
                         )}
                       </div>
@@ -151,71 +146,78 @@ export const UsersManagementPage = () => {
             </table>
           </div>
         ) : (
-          <div className={styles.message}>No users match those filters.</div>
+          <div className={styles.message}>{t("appAdmin.users.noResults")}</div>
         )}
       </section>
       {selectedUserId && (
         <section className={styles.panel}>
           <div className={styles.panelHeader}>
-            <h2>User detail</h2>
+            <h2>{t("appAdmin.users.detail")}</h2>
             <button
               className={styles.ghostButton}
               type="button"
               onClick={() => setSelectedUserId(null)}
             >
-              Close
+              {t("clubAdmin.common.close")}
             </button>
           </div>
           {selectedUser.isPending ? (
-            <div className={styles.message}>Loading user detail...</div>
+            <div className={styles.message}>
+              {t("appAdmin.users.loadingDetail")}
+            </div>
           ) : selectedUser.isError ? (
-            <div className={styles.message}>Could not load user detail.</div>
+            <div className={styles.message}>
+              {t("appAdmin.users.detailLoadError")}
+            </div>
           ) : selectedUser.data ? (
             <div className={styles.detailGrid}>
               <article>
-                <span>Nickname</span>
+                <span>{t("auth.nickname")}</span>
                 <strong>{selectedUser.data.nickname}</strong>
               </article>
               <article>
-                <span>Name</span>
+                <span>{t("appAdmin.users.name")}</span>
                 <strong>
                   {selectedUser.data.firstName} {selectedUser.data.lastName}
                 </strong>
               </article>
               <article>
-                <span>Email</span>
+                <span>{t("auth.email")}</span>
                 <strong>{selectedUser.data.email}</strong>
               </article>
               {"phone" in selectedUser.data && (
                 <article>
-                  <span>Phone</span>
-                  <strong>{selectedUser.data.phone || "Not provided"}</strong>
+                  <span>{t("auth.phone")}</span>
+                  <strong>
+                    {selectedUser.data.phone ||
+                      t("appAdmin.common.notProvided")}
+                  </strong>
                 </article>
               )}
               {"status" in selectedUser.data && (
                 <article>
-                  <span>Status</span>
+                  <span>{t("appAdmin.common.status")}</span>
                   <strong>{selectedUser.data.status}</strong>
                 </article>
               )}
               {"updatedAt" in selectedUser.data && (
                 <article>
-                  <span>Updated</span>
+                  <span>{t("appAdmin.common.updated")}</span>
                   <strong>
                     {new Date(selectedUser.data.updatedAt).toLocaleDateString()}
                   </strong>
                 </article>
               )}
               <article className={styles.fullWidth}>
-                <span>Managed clubs</span>
+                <span>{t("appAdmin.users.managedClubs")}</span>
                 <strong>
                   {selectedUserClubs.isPending
-                    ? "Loading..."
+                    ? t("common.loading")
                     : selectedUserClubs.data?.length
                       ? selectedUserClubs.data
                           .map((club) => `${club.name} (${club.role})`)
                           .join(", ")
-                      : "No managed clubs"}
+                      : t("appAdmin.users.noManagedClubs")}
                 </strong>
               </article>
             </div>

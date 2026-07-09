@@ -44,6 +44,7 @@ export const TournamentDetailsPage = () => {
     ? games.find((item) => item.id === primaryBoardGame.boardGameId)
     : undefined;
   const boardGameTitle = game?.title ?? primaryBoardGame?.title;
+  const boardGameId = game?.id ?? primaryBoardGame?.boardGameId;
   const isFull = tournament.currentParticipants >= tournament.maxParticipants;
   const tournamentType = t(`tournamentTypes.${tournament.tournamentType}`);
   const dateFormatter = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
@@ -109,7 +110,13 @@ export const TournamentDetailsPage = () => {
             </div>
             <div>
               <span>{t("tournaments.game")}</span>
-              <strong>{boardGameTitle ?? "-"}</strong>
+              <strong>
+                {boardGameId && boardGameTitle ? (
+                  <Link to={`/games/${boardGameId}`}>{boardGameTitle}</Link>
+                ) : (
+                  (boardGameTitle ?? "-")
+                )}
+              </strong>
             </div>
             <div>
               <span>{t("tournaments.hostedBy")}</span>

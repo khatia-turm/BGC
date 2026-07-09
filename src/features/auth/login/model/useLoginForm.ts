@@ -26,11 +26,12 @@ export const useLoginForm = () => {
         onSuccess: (response) => {
           setAuthSession(response.token, response.expiresAt, rememberMe);
           const isAppAdmin = hasJwtRole(response.token, "AppAdmin");
-          const requestedDestination = (location.state as { from?: string } | null)
-            ?.from;
+          const requestedDestination = (
+            location.state as { from?: string } | null
+          )?.from;
           const destination = isAppAdmin
             ? "/admin"
-            : requestedDestination ?? "/me/events";
+            : (requestedDestination ?? "/me/events");
           navigate(destination, { replace: true });
         },
       },

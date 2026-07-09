@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   useCreateClub,
   useMyClubRequest,
@@ -21,6 +22,7 @@ const initialForm: CreateClubPayload = {
 };
 
 export const ClubRegisterPage = () => {
+  const { t } = useTranslation();
   const createClub = useCreateClub();
   const request = useMyClubRequest();
   const [form, setForm] = useState(initialForm);
@@ -44,7 +46,7 @@ export const ClubRegisterPage = () => {
       }));
     } catch (error) {
       setImageError(
-        error instanceof Error ? error.message : "Could not read this image.",
+        error instanceof Error ? error.message : t("common.imageReadError"),
       );
     }
   };
@@ -64,25 +66,25 @@ export const ClubRegisterPage = () => {
           <span className={styles.successIcon} aria-hidden="true">
             OK
           </span>
-          <p className={styles.eyebrow}>Application received</p>
-          <h1>Your club request is waiting for approval</h1>
+          <p className={styles.eyebrow}>
+            {t("clubRegistration.receivedEyebrow")}
+          </p>
+          <h1>{t("clubRegistration.receivedTitle")}</h1>
           <p>
             {result?.message ??
-              `${pendingRequest?.clubName} was submitted and is awaiting administrator review.`}
+              t("clubRegistration.pendingMessage", {
+                name: pendingRequest?.clubName,
+              })}
           </p>
           <div className={styles.status}>
-            <span>Player account</span>
-            <strong>Active</strong>
-            <span>Club request</span>
-            <strong>Pending</strong>
+            <span>{t("clubRegistration.playerAccount")}</span>
+            <strong>{t("clubRegistration.active")}</strong>
+            <span>{t("clubRegistration.clubRequest")}</span>
+            <strong>{t("clubRegistration.pending")}</strong>
           </div>
-          <p className={styles.note}>
-            You can keep using MeepleHub as a player while the platform team
-            reviews your request. If it is rejected, your player account will
-            stay active.
-          </p>
+          <p className={styles.note}>{t("clubRegistration.reviewNote")}</p>
           <Link className={styles.primaryAction} to="/me/profile">
-            Back to my profile
+            {t("clubRegistration.backToProfile")}
           </Link>
         </section>
       </main>
@@ -91,31 +93,31 @@ export const ClubRegisterPage = () => {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <p className={styles.eyebrow}>For community organizers</p>
-        <h1>Register your club</h1>
-        <p>
-          Tell us about your venue. Your application will be reviewed before the
-          club becomes public.
-        </p>
+        <p className={styles.eyebrow}>{t("clubRegistration.eyebrow")}</p>
+        <h1>{t("clubRegistration.title")}</h1>
+        <p>{t("clubRegistration.description")}</p>
       </header>
 
-      <div className={styles.flow} aria-label="Club registration progress">
+      <div
+        className={styles.flow}
+        aria-label={t("clubRegistration.progressLabel")}
+      >
         <span className={styles.done}>
-          1 <b>Player account</b>
+          1 <b>{t("clubRegistration.playerAccount")}</b>
         </span>
         <i />
         <span className={styles.current}>
-          2 <b>Club details</b>
+          2 <b>{t("clubRegistration.clubDetails")}</b>
         </span>
         <i />
         <span>
-          3 <b>Approval</b>
+          3 <b>{t("clubRegistration.approval")}</b>
         </span>
       </div>
 
       <form className={styles.form} onSubmit={submit}>
         <label>
-          Club name
+          {t("clubRegistration.clubName")}
           <input
             value={form.name}
             onChange={update("name")}
@@ -124,7 +126,7 @@ export const ClubRegisterPage = () => {
           />
         </label>
         <label>
-          City
+          {t("clubs.cityLabel")}
           <input
             value={form.city}
             onChange={update("city")}
@@ -133,7 +135,7 @@ export const ClubRegisterPage = () => {
           />
         </label>
         <label className={styles.wide}>
-          Address
+          {t("clubs.address")}
           <input
             value={form.address}
             onChange={update("address")}
@@ -142,7 +144,7 @@ export const ClubRegisterPage = () => {
           />
         </label>
         <label>
-          Email
+          {t("clubs.email")}
           <input
             type="email"
             value={form.email}
@@ -151,7 +153,7 @@ export const ClubRegisterPage = () => {
           />
         </label>
         <label>
-          Phone
+          {t("clubs.phone")}
           <input
             type="tel"
             value={form.phone}
@@ -160,7 +162,7 @@ export const ClubRegisterPage = () => {
           />
         </label>
         <label className={styles.wide}>
-          Working hours
+          {t("clubs.hours")}
           <input
             value={form.workingHours}
             onChange={update("workingHours")}
@@ -169,16 +171,16 @@ export const ClubRegisterPage = () => {
           />
         </label>
         <label className={styles.wide}>
-          Club logo <small>Optional</small>
+          {t("clubRegistration.clubLogo")} <small>{t("common.optional")}</small>
           <input
             type="text"
             value={form.logoUrl}
             onChange={update("logoUrl")}
-            placeholder="Paste an image URL or choose a file below"
+            placeholder={t("common.imageUrlPlaceholder")}
           />
           <span className={styles.imageTools}>
             <label>
-              Choose image
+              {t("common.chooseImage")}
               <input
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
@@ -192,13 +194,13 @@ export const ClubRegisterPage = () => {
                 setForm({ ...form, logoUrl: "" });
               }}
             >
-              Remove
+              {t("common.remove")}
             </button>
           </span>
         </label>
         {form.logoUrl && (
           <div className={styles.logoPreview}>
-            <img src={form.logoUrl} alt="Club logo preview" />
+            <img src={form.logoUrl} alt={t("clubRegistration.logoPreview")} />
           </div>
         )}
         {imageError && (
@@ -207,7 +209,7 @@ export const ClubRegisterPage = () => {
           </p>
         )}
         <label className={styles.wide}>
-          About the club
+          {t("clubRegistration.about")}
           <textarea
             value={form.description}
             onChange={update("description")}
@@ -217,12 +219,8 @@ export const ClubRegisterPage = () => {
           />
         </label>
         <aside className={styles.notice}>
-          <strong>What happens next?</strong>
-          <p>
-            The platform administrator reviews this request. You become the club
-            administrator only after approval; until then, your player access is
-            unchanged.
-          </p>
+          <strong>{t("clubRegistration.nextTitle")}</strong>
+          <p>{t("clubRegistration.nextDescription")}</p>
         </aside>
         {createClub.error && (
           <p className={styles.error} role="alert">
@@ -230,7 +228,9 @@ export const ClubRegisterPage = () => {
           </p>
         )}
         <button className={styles.submit} disabled={createClub.isPending}>
-          {createClub.isPending ? "Submitting..." : "Submit club for approval"}
+          {createClub.isPending
+            ? t("clubRegistration.submitting")
+            : t("clubRegistration.submit")}
         </button>
       </form>
     </main>
