@@ -15,11 +15,9 @@ export const MyEventsPage = () => {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <p>My tournaments</p>
-        <h1>My Events</h1>
-        <span>
-          Track registrations, waitlists and upcoming tables in one place.
-        </span>
+        <p>{t("me.events.eyebrow")}</p>
+        <h1>{t("me.events.title")}</h1>
+        <span>{t("me.events.description")}</span>
       </header>
 
       {registrations.isPending ? (
@@ -27,15 +25,16 @@ export const MyEventsPage = () => {
       ) : registrations.isError ? (
         <div className={styles.empty}>{t("common.loadError")}</div>
       ) : events.length ? (
-        <section className={styles.eventGrid} aria-label="Registered events">
+        <section
+          className={styles.eventGrid}
+          aria-label={t("me.events.registeredEvents")}
+        >
           {events.map((event) => (
             <MyEventCard event={event} key={event.registrationId} />
           ))}
         </section>
       ) : (
-        <div className={styles.empty}>
-          You have no tournament registrations yet.
-        </div>
+        <div className={styles.empty}>{t("me.events.empty")}</div>
       )}
     </main>
   );
@@ -43,7 +42,9 @@ export const MyEventsPage = () => {
 
 const MyEventCard = ({ event }: { event: MyTournamentRegistration }) => {
   const { t, i18n } = useTranslation();
-  const cancelRegistration = useCancelTournamentRegistration(event.tournamentId);
+  const cancelRegistration = useCancelTournamentRegistration(
+    event.tournamentId,
+  );
   const dateFormatter = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
     dateStyle: "medium",
     timeStyle: "short",
@@ -67,29 +68,31 @@ const MyEventCard = ({ event }: { event: MyTournamentRegistration }) => {
 
       <dl className={styles.eventDetails}>
         <div>
-          <dt>Date</dt>
+          <dt>{t("cards.date")}</dt>
           <dd>{dateFormatter.format(new Date(event.tournamentStartsAt))}</dd>
         </div>
         <div>
-          <dt>Location</dt>
+          <dt>{t("cards.location")}</dt>
           <dd>{event.location ?? "-"}</dd>
         </div>
         <div>
-          <dt>Entry fee</dt>
+          <dt>{t("tournaments.entryFee")}</dt>
           <dd>
             {event.entryFee != null && event.entryFee > 0
               ? `${event.entryFee.toFixed(2)} GEL`
-              : "Free"}
+              : t("tournaments.freeEntry")}
           </dd>
         </div>
         <div>
-          <dt>Registered</dt>
+          <dt>{t("me.events.registered")}</dt>
           <dd>{dateFormatter.format(new Date(event.registeredAt))}</dd>
         </div>
       </dl>
 
       <div className={styles.eventActions}>
-        <Link to={`/tournaments/${event.tournamentId}`}>View tournament</Link>
+        <Link to={`/tournaments/${event.tournamentId}`}>
+          {t("me.events.viewTournament")}
+        </Link>
         <button
           disabled={cancelRegistration.isPending}
           onClick={() => cancelRegistration.mutate()}

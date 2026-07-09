@@ -868,8 +868,32 @@ function resolveGet(
     return club ? toClubDetailDto(club) : undefined;
   }
 
-  if (matches(segments, ["api", "tournaments"]))
-    return page(mockData.tournaments.map(withTournamentCounts), searchParams);
+  if (matches(segments, ["api", "tournaments"])) {
+    const search = searchParams.get("search")?.trim().toLowerCase();
+    const clubId = toNumber(searchParams.get("clubId"));
+    const boardGameId = toNumber(searchParams.get("boardGameId"));
+    const startsAfter = searchParams.get("startsAfter");
+    const startsBefore = searchParams.get("startsBefore");
+    const descending = searchParams.get("sortDirection") === "desc";
+    const tournaments = mockData.tournaments
+      .filter((tournament) => {
+        const startsAt = new Date(tournament.startsAt).getTime();
+        return (
+          (!search || tournament.name.toLowerCase().includes(search)) &&
+          (!clubId || tournament.clubId === clubId) &&
+          (!boardGameId || tournament.gameId === boardGameId) &&
+          (!startsAfter || startsAt >= new Date(startsAfter).getTime()) &&
+          (!startsBefore || startsAt <= new Date(startsBefore).getTime())
+        );
+      })
+      .sort(
+        (first, second) =>
+          (new Date(first.startsAt).getTime() -
+            new Date(second.startsAt).getTime()) *
+          (descending ? -1 : 1),
+      );
+    return page(tournaments.map(withTournamentCounts), searchParams);
+  }
   if (segments[0] === "api" && segments[1] === "tournaments" && segments[2]) {
     const tournament = mockData.tournaments.find(
       (tournament) => tournament.id === Number(segments[2]),

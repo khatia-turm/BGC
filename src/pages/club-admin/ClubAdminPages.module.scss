@@ -651,3 +651,19 @@
     width: 100%;
   }
 }
+
+.detailsLink {
+  color: colors.$primary-400;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-decoration: none;
+
+  &:visited {
+    color: colors.$primary-400;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: colors.$neutral-100;
+  }
+}

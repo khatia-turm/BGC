@@ -16,7 +16,10 @@ export const RegistrationRequestsPage = () => {
           <p>Tournament registrations</p>
           <h1>Registrations</h1>
         </div>
-        <Link className={styles.button} to={`/club-admin/${clubId}/tournaments`}>
+        <Link
+          className={styles.button}
+          to={`/club-admin/${clubId}/tournaments`}
+        >
           Back to tournaments
         </Link>
       </header>
@@ -46,7 +49,9 @@ export const RegistrationRequestsPage = () => {
                     </span>
                   </td>
                   <td>{registration.waitlistPosition ?? "-"}</td>
-                  <td>{new Date(registration.registeredAt).toLocaleString()}</td>
+                  <td>
+                    {new Date(registration.registeredAt).toLocaleString()}
+                  </td>
                 </tr>
               ))}
             </tbody>

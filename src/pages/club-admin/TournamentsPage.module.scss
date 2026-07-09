@@ -89,6 +89,47 @@
   opacity: 1;
 }
 
+.search {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 30rem;
+  margin-top: 1.25rem;
+  color: #9cc3c0;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.search input {
+  min-height: 2.9rem;
+  padding: 0 0.9rem;
+  color: #d9fffb;
+  border: 1px solid rgba(#bce6e2, 0.2);
+  border-radius: 0.45rem;
+  outline: 0;
+  background: #061817;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 650;
+  transition:
+    border-color 150ms,
+    box-shadow 150ms,
+    background 150ms;
+}
+
+.search input::placeholder {
+  color: rgba(#9cc3c0, 0.62);
+}
+
+.search input:hover {
+  border-color: rgba(colors.$primary-400, 0.46);
+}
+
+.search input:focus {
+  border-color: #00c8bf;
+  background: #071d1c;
+  box-shadow: 0 0 0 3px rgba(colors.$primary-400, 0.1);
+}
+
 .lifecycleNote,
 .adminTournamentCard,
 .empty {

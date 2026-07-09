@@ -43,6 +43,14 @@ export type MyTournamentRegistrationsPage = {
   totalPages: number;
   items: MyTournamentRegistration[];
 };
+export type TournamentPageFilters = {
+  search?: string;
+  clubId?: number;
+  boardGameId?: number;
+  startsAfter?: string;
+  startsBefore?: string;
+  sortDirection?: "asc" | "desc";
+};
 export type TournamentPayload = {
   clubId?: number;
   name: string;
@@ -63,13 +71,22 @@ export type TournamentPayload = {
 export const getTournamentPage = async (
   page = 1,
   pageSize = 20,
-  clubId?: number,
+  filters: TournamentPageFilters = {},
 ): Promise<TournamentPage> => {
   const params = new URLSearchParams({
     page: String(page),
     pageSize: String(pageSize),
   });
-  if (clubId) params.set("clubId", String(clubId));
+  if (filters.clubId) params.set("clubId", String(filters.clubId));
+  if (filters.boardGameId)
+    params.set("boardGameId", String(filters.boardGameId));
+  if (filters.search) params.set("search", filters.search);
+  if (filters.startsAfter) params.set("startsAfter", filters.startsAfter);
+  if (filters.startsBefore) params.set("startsBefore", filters.startsBefore);
+  if (filters.sortDirection) {
+    params.set("sortBy", "startsAt");
+    params.set("sortDirection", filters.sortDirection);
+  }
   const response = await apiClient<TournamentPage | Tournament[]>(
     `/api/tournaments?${params}`,
   );
@@ -104,8 +121,16 @@ export const getAdminTournaments = async (
     `/api/clubs/${clubId}/tournaments${query}`,
   );
   const items = Array.isArray(response) ? response : response.items;
+  const normalizedItems = items.map(normalizeTournament);
+  const hydratedItems = await Promise.all(
+    normalizedItems.map((item) =>
+      item.registrationOpensAt && item.registrationClosesAt
+        ? item
+        : getTournament(item.id).catch(() => item),
+    ),
+  );
 
-  return items.map(normalizeTournament).sort(
+  return hydratedItems.sort(
     (first, second) =>
       new Date(first.startsAt).getTime() - new Date(second.startsAt).getTime(),
   );
@@ -127,10 +152,14 @@ export function useAdminTournaments(
     enabled: Number.isFinite(clubId),
   });
 }
-export function useTournamentPage(page: number, pageSize = 20) {
+export function useTournamentPage(
+  page: number,
+  pageSize = 20,
+  filters: TournamentPageFilters = {},
+) {
   return useQuery({
-    queryKey: [...tournamentKeys.list, { page, pageSize }],
-    queryFn: () => getTournamentPage(page, pageSize),
+    queryKey: [...tournamentKeys.list, { page, pageSize, filters }],
+    queryFn: () => getTournamentPage(page, pageSize, filters),
     placeholderData: (previous) => previous,
   });
 }
@@ -201,10 +230,15 @@ export function useMyTournamentRegistration(id: number, enabled: boolean) {
   });
 }
 
-export function useMyTournamentRegistrations(page = 1, pageSize = 20) {
+export function useMyTournamentRegistrations(
+  page = 1,
+  pageSize = 20,
+  enabled = true,
+) {
   return useQuery({
     queryKey: [...tournamentKeys.myRegistrations, { page, pageSize }],
     queryFn: () => getMyTournamentRegistrations(page, pageSize),
+    enabled,
   });
 }
 
@@ -262,7 +296,10 @@ export function useCreateTournament() {
   return useMutation({
     mutationFn: createTournament,
     onSuccess: (tournament) => {
-      queryClient.setQueryData(tournamentKeys.detail(tournament.id), tournament);
+      queryClient.setQueryData(
+        tournamentKeys.detail(tournament.id),
+        tournament,
+      );
       queryClient.setQueryData<Tournament[]>(
         tournamentKeys.adminList(tournament.clubId),
         (current = []) => [
@@ -287,7 +324,9 @@ export function useUpdateTournament(id: number) {
     mutationFn: (payload: Omit<TournamentPayload, "clubId">) =>
       updateTournament(id, payload),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: tournamentKeys.detail(id) });
+      void queryClient.invalidateQueries({
+        queryKey: tournamentKeys.detail(id),
+      });
       void queryClient.invalidateQueries({ queryKey: tournamentKeys.all });
     },
   });
@@ -298,7 +337,9 @@ export function usePublishTournament(id: number) {
   return useMutation({
     mutationFn: () => publishTournament(id),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: tournamentKeys.detail(id) });
+      void queryClient.invalidateQueries({
+        queryKey: tournamentKeys.detail(id),
+      });
       void queryClient.invalidateQueries({ queryKey: tournamentKeys.all });
     },
   });
@@ -309,7 +350,9 @@ export function useCancelTournament(id: number) {
   return useMutation({
     mutationFn: () => cancelTournament(id),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: tournamentKeys.detail(id) });
+      void queryClient.invalidateQueries({
+        queryKey: tournamentKeys.detail(id),
+      });
       void queryClient.invalidateQueries({ queryKey: tournamentKeys.all });
     },
   });
@@ -337,8 +380,7 @@ const normalizeTournament = (tournament: LegacyTournament): Tournament => ({
   location: tournament.location ?? tournament.venue ?? tournament.city ?? null,
   currentParticipants:
     tournament.currentParticipants ?? tournament.registeredPlayers ?? 0,
-  maxParticipants:
-    tournament.maxParticipants ?? tournament.maxPlayers ?? 0,
+  maxParticipants: tournament.maxParticipants ?? tournament.maxPlayers ?? 0,
   boardGames:
     tournament.boardGames ??
     (tournament.gameId
@@ -350,7 +392,7 @@ const normalizeTournament = (tournament: LegacyTournament): Tournament => ({
             year: null,
           },
         ]
-      : undefined),
+      : []),
   myRegistration: tournament.myRegistration
     ? {
         ...tournament.myRegistration,

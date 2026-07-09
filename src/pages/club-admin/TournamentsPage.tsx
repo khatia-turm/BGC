@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -74,12 +74,30 @@ const getRegistrationWindow = (item: Tournament) => {
   return `Opened ${opensLabel}`;
 };
 
+const matchesSearch = (item: Tournament, search: string) => {
+  const term = search.trim().toLowerCase();
+  if (!term) return true;
+
+  return [
+    item.name,
+    item.description,
+    item.location,
+    item.clubName,
+    ...(item.boardGames?.map((game) => game.title) ?? []),
+  ].some((value) => value?.toLowerCase().includes(term));
+};
+
 export const TournamentsPage = () => {
   const { t } = useTranslation();
   const clubId = Number(useParams().clubId);
   const [tab, setTab] = useState<Tab>("All");
+  const [search, setSearch] = useState("");
   const tournaments = useAdminTournaments(clubId, tabStatuses[tab]);
-  const rows = tournaments.data ?? [];
+  const rows = useMemo(
+    () =>
+      (tournaments.data ?? []).filter((item) => matchesSearch(item, search)),
+    [search, tournaments.data],
+  );
 
   return (
     <main className={`${styles.page} ${styles.tournamentsPage}`}>
@@ -104,18 +122,27 @@ export const TournamentsPage = () => {
           </button>
         ))}
       </div>
+      <label className={styles.search}>
+        <span>{t("tournaments.searchLabel")}</span>
+        <input
+          type="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder={t("tournaments.searchPlaceholder")}
+        />
+      </label>
       <section className={styles.lifecycleNote}>
         <strong>{t("clubAdmin.tournaments.lifecycleTitle")}</strong>
         <span>{t("clubAdmin.tournaments.lifecycleDescription")}</span>
       </section>
       <section className={styles.adminTournamentList}>
-        {tournaments.isPending
-          ? (
-              <div className={styles.empty}>
-                <span>{t("common.loading")}</span>
-              </div>
-            )
-          : rows.map((item) => <TournamentRow item={item} key={item.id} />)}
+        {tournaments.isPending ? (
+          <div className={styles.empty}>
+            <span>{t("common.loading")}</span>
+          </div>
+        ) : (
+          rows.map((item) => <TournamentRow item={item} key={item.id} />)
+        )}
       </section>
       {!tournaments.isPending && !rows.length && (
         <div className={styles.empty}>

@@ -46,6 +46,34 @@ export function getAuthToken() {
 
 export const isAuthenticated = () => Boolean(getAuthToken());
 
+export function getAuthUserId() {
+  const token = getAuthToken();
+  if (!token) return null;
+
+  try {
+    const payload = readJwtPayload(token) as
+      | {
+          UserId?: string;
+          nameid?: string;
+          sub?: string;
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"?: string;
+        }
+      | undefined;
+    const id =
+      payload?.UserId ??
+      payload?.nameid ??
+      payload?.sub ??
+      payload?.[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+      ];
+    const parsedId = Number(id);
+
+    return Number.isFinite(parsedId) ? parsedId : null;
+  } catch {
+    return null;
+  }
+}
+
 export function getAuthRoles() {
   const token = getAuthToken();
   return token ? readJwtRoles(token) : [];

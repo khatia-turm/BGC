@@ -60,15 +60,15 @@ export const TournamentFilters = ({
         </select>
       </label>
       <label>
-        <span>Sort by date</span>
+        <span>{t("tournaments.sortByDate")}</span>
         <select
           value={values.sortOrder}
           onChange={(event) =>
             actions.setSortOrder(event.target.value as "asc" | "desc")
           }
         >
-          <option value="asc">Soonest first</option>
-          <option value="desc">Latest first</option>
+          <option value="asc">{t("tournaments.soonestFirst")}</option>
+          <option value="desc">{t("tournaments.latestFirst")}</option>
         </select>
       </label>
       <label>

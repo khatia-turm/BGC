@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useNotifications } from "@entities/notification/api";
 import styles from "./MePage.module.scss";
 
 export const NotificationsPage = () => {
+  const { t } = useTranslation();
   const notifications = useNotifications();
 
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <p>Inbox</p>
-        <h1>Notifications</h1>
-        <span>Notifications are not available yet.</span>
+        <p>{t("me.notifications.eyebrow")}</p>
+        <h1>{t("me.notifications.title")}</h1>
+        <span>{t("me.notifications.description")}</span>
       </header>
       {notifications.data?.length ? (
         <section className={styles.list}>
@@ -26,7 +28,7 @@ export const NotificationsPage = () => {
                 <p>{item.message}</p>
                 {item.tournamentId && (
                   <Link to={`/tournaments/${item.tournamentId}`}>
-                    View tournament -&gt;
+                    {t("me.events.viewTournament")} -&gt;
                   </Link>
                 )}
               </div>
@@ -36,8 +38,8 @@ export const NotificationsPage = () => {
       ) : (
         <div className={styles.empty}>
           {notifications.isPending
-            ? "Loading notifications..."
-            : "You have no notifications."}
+            ? t("me.notifications.loading")
+            : t("me.notifications.empty")}
         </div>
       )}
     </main>

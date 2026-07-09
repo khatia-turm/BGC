@@ -23,31 +23,47 @@ export const userKeys = {
 export const getCurrentUser = () => apiClient<CurrentUser>("/api/auth/me");
 
 export function getUsers(status?: UserStatus, page = 1, pageSize = 50) {
-  const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
   if (status) params.set("status", status);
-  return apiClient<PaginatedUsers | UserListItem[]>(`/api/users?${params}`).then(
-    (response) =>
-      Array.isArray(response)
-        ? {
-            items: response,
-            totalCount: response.length,
-            page,
-            pageSize,
-            totalPages: 1,
-          }
-        : response,
+  return apiClient<PaginatedUsers | UserListItem[]>(
+    `/api/users?${params}`,
+  ).then((response) =>
+    Array.isArray(response)
+      ? {
+          items: response,
+          totalCount: response.length,
+          page,
+          pageSize,
+          totalPages: 1,
+        }
+      : response,
   );
 }
 
 export const searchUsers = (query: string) =>
-  apiClient<UserPublicProfile[]>(`/api/users/search?q=${encodeURIComponent(query.trim())}`);
+  apiClient<UserPublicProfile[]>(
+    `/api/users/search?q=${encodeURIComponent(query.trim())}`,
+  );
 
-export const getUser = (id: number) => apiClient<UserProfile>(`/api/users/${id}`);
+export const getUser = (id: number) =>
+  apiClient<UserProfile>(`/api/users/${id}`);
 export const getUserClubs = (id: number) =>
-  apiClient<Pick<ManagedClub, "id" | "name" | "role">[]>(`/api/users/${id}/clubs`);
+  apiClient<Pick<ManagedClub, "id" | "name" | "role">[]>(
+    `/api/users/${id}/clubs`,
+  );
 export const updateUser = (id: number, payload: UpdateUserPayload) =>
-  apiClient<UserDetail>(`/api/users/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
-export const updateUserStatus = (id: number, status: UserStatus, reason?: string) =>
+  apiClient<UserDetail>(`/api/users/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+export const updateUserStatus = (
+  id: number,
+  status: UserStatus,
+  reason?: string,
+) =>
   apiClient<UserDetail>(`/api/users/${id}/status`, {
     method: "PATCH",
     body: JSON.stringify({ status, reason }),
@@ -58,9 +74,16 @@ export const deactivateCurrentUser = () =>
 export const useCurrentUser = (enabled = true) =>
   useQuery({ queryKey: userKeys.me, queryFn: getCurrentUser, enabled });
 export const useUsers = (status?: UserStatus, page = 1, pageSize = 50) =>
-  useQuery({ queryKey: userKeys.list(status, page, pageSize), queryFn: () => getUsers(status, page, pageSize) });
+  useQuery({
+    queryKey: userKeys.list(status, page, pageSize),
+    queryFn: () => getUsers(status, page, pageSize),
+  });
 export const useUser = (id: number) =>
-  useQuery({ queryKey: userKeys.detail(id), queryFn: () => getUser(id), enabled: Number.isInteger(id) && id > 0 });
+  useQuery({
+    queryKey: userKeys.detail(id),
+    queryFn: () => getUser(id),
+    enabled: Number.isInteger(id) && id > 0,
+  });
 export const useUserClubs = (id: number | null) =>
   useQuery({
     queryKey: [...userKeys.detail(id ?? 0), "clubs"],
@@ -69,7 +92,12 @@ export const useUserClubs = (id: number | null) =>
   });
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
-  return useMutation({ mutationFn: ({ id, payload }: { id: number; payload: UpdateUserPayload }) => updateUser(id, payload), onSuccess: () => void queryClient.invalidateQueries({ queryKey: userKeys.all }) });
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: number; payload: UpdateUserPayload }) =>
+      updateUser(id, payload),
+    onSuccess: () =>
+      void queryClient.invalidateQueries({ queryKey: userKeys.all }),
+  });
 };
 export const useUpdateUserStatus = () => {
   const queryClient = useQueryClient();
@@ -83,7 +111,9 @@ export const useUpdateUserStatus = () => {
       status: UserStatus;
       reason?: string;
     }) => updateUserStatus(id, status, reason),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: userKeys.all }),
+    onSuccess: () =>
+      void queryClient.invalidateQueries({ queryKey: userKeys.all }),
   });
 };
-export const useDeactivateCurrentUser = () => useMutation({ mutationFn: deactivateCurrentUser });
+export const useDeactivateCurrentUser = () =>
+  useMutation({ mutationFn: deactivateCurrentUser });

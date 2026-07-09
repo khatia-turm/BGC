@@ -2,7 +2,7 @@
   "navigation": {
     "mainLabel": "Main navigation",
     "homeLabel": "BGC home",
-    "events": "Events",
+    "tournaments": "Tournaments",
     "clubs": "Clubs",
     "games": "Games",
     "leaderboards": "Leaderboards",
@@ -27,7 +27,8 @@
     "logout": "Logout",
     "playerArea": "Player dashboard",
     "openMenu": "Open navigation menu",
-    "closeMenu": "Close navigation menu"
+    "closeMenu": "Close navigation menu",
+    "admin": "Admin"
   },
   "home": {
     "eyebrow": "Georgia's board game community",
@@ -103,6 +104,9 @@
     "upcoming": "Upcoming",
     "thisWeek": "This week",
     "thisMonth": "This month",
+    "sortByDate": "Sort by date",
+    "soonestFirst": "Soonest first",
+    "latestFirst": "Latest first",
     "results": "{{count}} tournaments found",
     "resultsLabel": "Tournament results",
     "noResults": "No tournaments match those filters.",
@@ -295,11 +299,49 @@
     "noTournaments": "No public tournament activity yet."
   },
   "clubAdmin": {
+    "layout": {
+      "loading": "Opening club workspace...",
+      "dashboardLabel": "Club admin dashboard",
+      "dashboard": "Dashboard",
+      "tournaments": "Tournaments",
+      "requests": "Requests",
+      "games": "Games",
+      "members": "Members",
+      "settings": "Settings",
+      "workspace": "Club workspace",
+      "unavailable": "Unavailable",
+      "workspaceUnavailable": "Club workspace unavailable",
+      "notActive": "{{name}} is not active.",
+      "thisClub": "This club",
+      "unknown": "Unknown",
+      "currentStatus": "Current status: {{status}}. Game inventory and other club-admin tools are available after the club is active.",
+      "backToProfile": "Back to profile",
+      "publicProfile": "Public profile ↗"
+    },
     "common": {
       "createTournament": "Create Tournament",
       "manage": "Manage",
       "edit": "Edit",
       "close": "Close"
+    },
+    "inventory": {
+      "eyebrow": "Club catalog",
+      "title": "Game inventory",
+      "addFromBgg": "Add from BGG",
+      "addNewGame": "Add new game",
+      "added": "{{title}} was added successfully.",
+      "updated": "The club inventory has been updated.",
+      "searchBgg": "Search BoardGameGeek",
+      "searchCurrent": "Search current club games...",
+      "yearUnknown": "Year unknown",
+      "loadingDetails": "Loading game details...",
+      "time": "Time",
+      "unknown": "Unknown",
+      "noDescription": "No description available.",
+      "adding": "Adding...",
+      "addGame": "Add game",
+      "loading": "Loading game inventory...",
+      "empty": "Your club inventory is empty. Add games before creating game-specific tournaments."
     },
     "dashboard": {
       "title": "Dashboard",
@@ -402,10 +444,182 @@
     "privacy": "Privacy policy",
     "registerAction": "Create my account",
     "haveAccount": "Already have an account?",
-    "rememberMe": "Remember me on this device"
+    "rememberMe": "Remember me on this device",
+    "birthday": "Birthday",
+    "gender": "Gender",
+    "selectGender": "Select gender",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderOther": "Other",
+    "showPassword": "Show",
+    "hidePassword": "Hide",
+    "favoriteGames": "Favorite board games"
+  },
+  "me": {
+    "events": {
+      "eyebrow": "My tournaments",
+      "title": "My Events",
+      "description": "Track registrations, waitlists and upcoming tables in one place.",
+      "registeredEvents": "Registered events",
+      "empty": "You have no tournament registrations yet.",
+      "registered": "Registered",
+      "viewTournament": "View tournament"
+    },
+    "history": {
+      "eyebrow": "Competitive record",
+      "title": "My History",
+      "description": "Review previous participation, results and tournament status.",
+      "empty": "Completed tournaments will appear here."
+    },
+    "stats": {
+      "eyebrow": "Player progress",
+      "title": "My Stats",
+      "description": "Your ratings and ranking points for every competitive board game.",
+      "empty": "Your first ranking will appear after a scored tournament."
+    },
+    "notifications": {
+      "eyebrow": "Inbox",
+      "title": "Notifications",
+      "description": "Notifications are not available yet.",
+      "loading": "Loading notifications...",
+      "empty": "You have no notifications."
+    },
+    "profile": {
+      "loading": "Loading profile...",
+      "eyebrow": "Player profile",
+      "title": "My Profile",
+      "description": "Keep your identity and favorite games up to date.",
+      "picture": "Profile picture",
+      "favoriteGames": "Favorite board games",
+      "saved": "Profile saved successfully.",
+      "save": "Save profile"
+    }
+  },
+  "appAdmin": {
+    "layout": {
+      "loading": "Opening admin workspace...",
+      "dashboardLabel": "App admin dashboard",
+      "dashboard": "Dashboard",
+      "clubRequests": "Club Requests",
+      "clubs": "Clubs",
+      "users": "Users",
+      "games": "Games",
+      "systemAdmin": "System admin"
+    },
+    "common": {
+      "status": "Status",
+      "actions": "Actions",
+      "view": "View",
+      "activate": "Activate",
+      "suspend": "Suspend",
+      "delete": "Delete",
+      "approve": "Approve",
+      "reject": "Reject",
+      "reviewAll": "Review all",
+      "loadingRequests": "Loading requests...",
+      "noPendingRequests": "No pending requests.",
+      "allStatuses": "All statuses",
+      "statusReason": "Reason for {{status}} status?",
+      "statusChangedReason": "Changed to {{status}} by app admin",
+      "created": "Created",
+      "updated": "Updated",
+      "notProvided": "Not provided"
+    },
+    "dashboard": {
+      "eyebrow": "System control",
+      "title": "Admin dashboard",
+      "description": "Review pending club applications, platform users, clubs, tournaments, and synced board game data.",
+      "overview": "Platform overview",
+      "pendingClubRequests": "Pending club requests",
+      "activeClubs": "Active clubs",
+      "suspendedClubs": "Suspended clubs",
+      "activeUsers": "Active users",
+      "suspendedUsers": "Suspended users",
+      "boardGames": "Board games"
+    },
+    "clubs": {
+      "eyebrow": "Platform clubs",
+      "description": "View registered clubs, filter by moderation status, and suspend, reactivate, reject, or delete clubs when needed.",
+      "searchPlaceholder": "Search by club or city",
+      "loading": "Loading clubs...",
+      "loadError": "Could not load clubs.",
+      "noResults": "No clubs match those filters."
+    },
+    "users": {
+      "eyebrow": "User moderation",
+      "description": "Review player accounts and update user status when moderation or platform safety requires it.",
+      "searchPlaceholder": "Search nickname or email",
+      "loading": "Loading users...",
+      "loadError": "Could not load users.",
+      "noResults": "No users match those filters.",
+      "user": "User",
+      "detail": "User detail",
+      "loadingDetail": "Loading user detail...",
+      "detailLoadError": "Could not load user detail.",
+      "name": "Name",
+      "managedClubs": "Managed clubs",
+      "noManagedClubs": "No managed clubs"
+    },
+    "games": {
+      "eyebrow": "Board game records",
+      "description": "Monitor stored board games and trigger documented AppAdmin imports for BGG hot games or CSV seeding.",
+      "importHotBgg": "Import hot BGG",
+      "seedCsv": "Seed CSV",
+      "latestImportResult": "Latest import result",
+      "requested": "Requested",
+      "processed": "Processed",
+      "inserted": "Inserted",
+      "searchPlaceholder": "Search board games",
+      "loading": "Loading games...",
+      "loadError": "Could not load games.",
+      "unknownYear": "Unknown year",
+      "noResults": "No games match that search."
+    },
+    "clubRequests": {
+      "eyebrow": "Club moderation",
+      "description": "Review new club applications. Approval activates the club; rejection leaves the applicant as a regular player account.",
+      "loading": "Loading club requests...",
+      "loadError": "Could not load club requests.",
+      "rejectionReason": "Reason for rejection?",
+      "rejectedReason": "Rejected by app admin",
+      "approvedReason": "Approved by app admin"
+    }
+  },
+  "clubRegistration": {
+    "receivedEyebrow": "Application received",
+    "receivedTitle": "Your club request is waiting for approval",
+    "pendingMessage": "{{name}} was submitted and is awaiting administrator review.",
+    "playerAccount": "Player account",
+    "active": "Active",
+    "clubRequest": "Club request",
+    "pending": "Pending",
+    "reviewNote": "You can keep using MeepleHub as a player while the platform team reviews your request. If it is rejected, your player account will stay active.",
+    "backToProfile": "Back to my profile",
+    "eyebrow": "For community organizers",
+    "title": "Register your club",
+    "description": "Tell us about your venue. Your application will be reviewed before the club becomes public.",
+    "progressLabel": "Club registration progress",
+    "clubDetails": "Club details",
+    "approval": "Approval",
+    "clubName": "Club name",
+    "clubLogo": "Club logo",
+    "logoPreview": "Club logo preview",
+    "about": "About the club",
+    "nextTitle": "What happens next?",
+    "nextDescription": "The platform administrator reviews this request. You become the club administrator only after approval; until then, your player access is unchanged.",
+    "submitting": "Submitting...",
+    "submit": "Submit club for approval"
   },
   "common": {
     "loading": "Loading…",
-    "loadError": "We couldn't load this right now."
+    "loadError": "We couldn't load this right now.",
+    "imageReadError": "Could not read this image.",
+    "imageUrlPlaceholder": "Paste an image URL or choose a file below",
+    "chooseImage": "Choose image",
+    "remove": "Remove",
+    "saving": "Saving...",
+    "optional": "(optional)",
+    "done": "Done",
+    "cancel": "Cancel"
   }
 }

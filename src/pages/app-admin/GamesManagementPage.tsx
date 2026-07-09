@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   useGamePage,
   useImportHotBoardGames,
@@ -8,6 +9,7 @@ import { Pagination } from "@shared/ui/Pagination";
 import styles from "./AppAdminPages.module.scss";
 
 export const GamesManagementPage = () => {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const games = useGamePage({
@@ -25,12 +27,9 @@ export const GamesManagementPage = () => {
     <main className={styles.page}>
       <header className={styles.heading}>
         <div>
-          <p>Board game records</p>
-          <h1>Games</h1>
-          <span>
-            Monitor stored board games and trigger documented AppAdmin imports
-            for BGG hot games or CSV seeding.
-          </span>
+          <p>{t("appAdmin.games.eyebrow")}</p>
+          <h1>{t("navigation.games")}</h1>
+          <span>{t("appAdmin.games.description")}</span>
         </div>
         <div className={styles.actions}>
           <button
@@ -38,56 +37,71 @@ export const GamesManagementPage = () => {
             disabled={importHot.isPending}
             onClick={() => importHot.mutate()}
           >
-            Import hot BGG
+            {t("appAdmin.games.importHotBgg")}
           </button>
           <button
             className={styles.button}
             disabled={seedCsv.isPending}
             onClick={() => seedCsv.mutate({ offset: 0, count: 100 })}
           >
-            Seed CSV
+            {t("appAdmin.games.seedCsv")}
           </button>
         </div>
       </header>
 
       {importResult && (
-        <section className={styles.stats} aria-label="Latest import result">
-          <Stat label="Requested" value={importResult.requestedCount} />
-          <Stat label="Processed" value={importResult.processedCount} />
-          <Stat label="Inserted" value={importResult.insertedCount} />
-          <Stat label="Updated" value={importResult.updatedCount} />
+        <section
+          className={styles.stats}
+          aria-label={t("appAdmin.games.latestImportResult")}
+        >
+          <Stat
+            label={t("appAdmin.games.requested")}
+            value={importResult.requestedCount}
+          />
+          <Stat
+            label={t("appAdmin.games.processed")}
+            value={importResult.processedCount}
+          />
+          <Stat
+            label={t("appAdmin.games.inserted")}
+            value={importResult.insertedCount}
+          />
+          <Stat
+            label={t("appAdmin.common.updated")}
+            value={importResult.updatedCount}
+          />
         </section>
       )}
 
       <section className={styles.panel}>
         <div className={styles.filters}>
           <label>
-            <span>Search</span>
+            <span>{t("games.searchLabel")}</span>
             <input
               value={search}
               onChange={(event) => {
                 setSearch(event.target.value);
                 setPage(1);
               }}
-              placeholder="Search board games"
+              placeholder={t("appAdmin.games.searchPlaceholder")}
             />
           </label>
         </div>
 
         {games.isPending ? (
-          <div className={styles.message}>Loading games...</div>
+          <div className={styles.message}>{t("appAdmin.games.loading")}</div>
         ) : games.isError ? (
-          <div className={styles.message}>Could not load games.</div>
+          <div className={styles.message}>{t("appAdmin.games.loadError")}</div>
         ) : games.data?.items.length ? (
           <div className={styles.tableWrap}>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Game</th>
-                  <th>Players</th>
-                  <th>Rank</th>
-                  <th>Rating</th>
-                  <th>Voters</th>
+                  <th>{t("games.game", { defaultValue: "Game" })}</th>
+                  <th>{t("cards.players")}</th>
+                  <th>{t("clubs.rank")}</th>
+                  <th>{t("games.rating")}</th>
+                  <th>{t("games.voters")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -95,7 +109,9 @@ export const GamesManagementPage = () => {
                   <tr key={game.id}>
                     <td>
                       <strong>{game.title}</strong>
-                      <small>{game.year || "Unknown year"}</small>
+                      <small>
+                        {game.year || t("appAdmin.games.unknownYear")}
+                      </small>
                     </td>
                     <td>
                       {game.minPlayers}-{game.maxPlayers}
@@ -109,7 +125,7 @@ export const GamesManagementPage = () => {
             </table>
           </div>
         ) : (
-          <div className={styles.message}>No games match that search.</div>
+          <div className={styles.message}>{t("appAdmin.games.noResults")}</div>
         )}
       </section>
       <Pagination

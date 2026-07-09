@@ -24,7 +24,10 @@ export const EditTournamentPage = () => {
           <p>Tournament setup</p>
           <h1>Edit tournament</h1>
         </div>
-        <Link className={styles.button} to={`/club-admin/${clubId}/tournaments`}>
+        <Link
+          className={styles.button}
+          to={`/club-admin/${clubId}/tournaments`}
+        >
           Back to tournaments
         </Link>
       </header>
@@ -34,11 +37,13 @@ export const EditTournamentPage = () => {
         tournament={tournament.data}
         isPending={updateTournament.isPending}
         submitLabel="Save changes"
-        onSubmit={({ clubId: _clubId, ...payload }) =>
+        onSubmit={(formPayload) => {
+          const payload = { ...formPayload };
+          delete payload.clubId;
           updateTournament.mutate(payload, {
             onSuccess: () => navigate(`/club-admin/${clubId}/tournaments`),
-          })
-        }
+          });
+        }}
       />
       {updateTournament.error && (
         <p className={styles.error}>{updateTournament.error.message}</p>

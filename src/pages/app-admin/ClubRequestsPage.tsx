@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useClubPage, useUpdateClubStatus } from "@entities/club/api";
 import { Pagination } from "@shared/ui/Pagination";
 import styles from "./AppAdminPages.module.scss";
 
 export const ClubRequestsPage = () => {
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const requests = useClubPage({
     status: "Pending",
@@ -17,8 +19,9 @@ export const ClubRequestsPage = () => {
   const review = (id: number, status: "Active" | "Rejected") => {
     const reason =
       status === "Rejected"
-        ? window.prompt("Reason for rejection?") || "Rejected by app admin"
-        : "Approved by app admin";
+        ? window.prompt(t("appAdmin.clubRequests.rejectionReason")) ||
+          t("appAdmin.clubRequests.rejectedReason")
+        : t("appAdmin.clubRequests.approvedReason");
     updateStatus.mutate({ id, status, reason });
   };
 
@@ -26,29 +29,30 @@ export const ClubRequestsPage = () => {
     <main className={styles.page}>
       <header className={styles.heading}>
         <div>
-          <p>Club moderation</p>
-          <h1>Club requests</h1>
-          <span>
-            Review new club applications. Approval activates the club; rejection
-            leaves the applicant as a regular player account.
-          </span>
+          <p>{t("appAdmin.clubRequests.eyebrow")}</p>
+          <h1>{t("appAdmin.layout.clubRequests")}</h1>
+          <span>{t("appAdmin.clubRequests.description")}</span>
         </div>
       </header>
 
       <section className={styles.panel}>
         {requests.isPending ? (
-          <div className={styles.message}>Loading club requests...</div>
+          <div className={styles.message}>
+            {t("appAdmin.clubRequests.loading")}
+          </div>
         ) : requests.isError ? (
-          <div className={styles.message}>Could not load club requests.</div>
+          <div className={styles.message}>
+            {t("appAdmin.clubRequests.loadError")}
+          </div>
         ) : requests.data?.items.length ? (
           <div className={styles.tableWrap}>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Club</th>
-                  <th>City</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>{t("clubs.title")}</th>
+                  <th>{t("clubs.cityLabel")}</th>
+                  <th>{t("appAdmin.common.status")}</th>
+                  <th>{t("appAdmin.common.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -68,21 +72,21 @@ export const ClubRequestsPage = () => {
                           className={styles.ghostButton}
                           to={`/clubs/${club.id}`}
                         >
-                          View
+                          {t("appAdmin.common.view")}
                         </Link>
                         <button
                           className={styles.button}
                           disabled={updateStatus.isPending}
                           onClick={() => review(club.id, "Active")}
                         >
-                          Approve
+                          {t("appAdmin.common.approve")}
                         </button>
                         <button
                           className={styles.dangerButton}
                           disabled={updateStatus.isPending}
                           onClick={() => review(club.id, "Rejected")}
                         >
-                          Reject
+                          {t("appAdmin.common.reject")}
                         </button>
                       </div>
                     </td>
@@ -92,7 +96,9 @@ export const ClubRequestsPage = () => {
             </table>
           </div>
         ) : (
-          <div className={styles.message}>No pending club requests.</div>
+          <div className={styles.message}>
+            {t("appAdmin.common.noPendingRequests")}
+          </div>
         )}
       </section>
       <Pagination

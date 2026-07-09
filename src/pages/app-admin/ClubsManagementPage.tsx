@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   clubStatuses,
   useAllClubStatusesPage,
@@ -13,6 +14,7 @@ import styles from "./AppAdminPages.module.scss";
 const statuses: Array<"" | ClubStatus> = ["", ...clubStatuses];
 
 export const ClubsManagementPage = () => {
+  const { t } = useTranslation();
   const [status, setStatus] = useState<"" | ClubStatus>("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -35,8 +37,9 @@ export const ClubsManagementPage = () => {
 
   const changeStatus = (id: number, nextStatus: ClubStatus) => {
     const reason =
-      window.prompt(`Reason for ${nextStatus.toLowerCase()} status?`) ||
-      `Changed to ${nextStatus} by app admin`;
+      window.prompt(
+        t("appAdmin.common.statusReason", { status: nextStatus.toLowerCase() }),
+      ) || t("appAdmin.common.statusChangedReason", { status: nextStatus });
     updateStatus.mutate({ id, status: nextStatus, reason });
   };
 
@@ -44,27 +47,24 @@ export const ClubsManagementPage = () => {
     <main className={styles.page}>
       <header className={styles.heading}>
         <div>
-          <p>Platform clubs</p>
-          <h1>Clubs</h1>
-          <span>
-            View registered clubs, filter by moderation status, and suspend,
-            reactivate, reject, or delete clubs when needed.
-          </span>
+          <p>{t("appAdmin.clubs.eyebrow")}</p>
+          <h1>{t("navigation.clubs")}</h1>
+          <span>{t("appAdmin.clubs.description")}</span>
         </div>
       </header>
 
       <section className={styles.panel}>
         <div className={styles.filters}>
           <label>
-            <span>Search</span>
+            <span>{t("clubs.searchLabel")}</span>
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search by club or city"
+              placeholder={t("appAdmin.clubs.searchPlaceholder")}
             />
           </label>
           <label>
-            <span>Status</span>
+            <span>{t("appAdmin.common.status")}</span>
             <select
               value={status}
               onChange={(event) => {
@@ -74,7 +74,7 @@ export const ClubsManagementPage = () => {
             >
               {statuses.map((item) => (
                 <option key={item || "All"} value={item}>
-                  {item || "All statuses"}
+                  {item || t("appAdmin.common.allStatuses")}
                 </option>
               ))}
             </select>
@@ -82,18 +82,18 @@ export const ClubsManagementPage = () => {
         </div>
 
         {clubs.isPending ? (
-          <div className={styles.message}>Loading clubs...</div>
+          <div className={styles.message}>{t("appAdmin.clubs.loading")}</div>
         ) : clubs.isError ? (
-          <div className={styles.message}>Could not load clubs.</div>
+          <div className={styles.message}>{t("appAdmin.clubs.loadError")}</div>
         ) : rows.length ? (
           <div className={styles.tableWrap}>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Club</th>
-                  <th>City</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>{t("clubs.title")}</th>
+                  <th>{t("clubs.cityLabel")}</th>
+                  <th>{t("appAdmin.common.status")}</th>
+                  <th>{t("appAdmin.common.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -113,7 +113,7 @@ export const ClubsManagementPage = () => {
                           className={styles.ghostButton}
                           to={`/clubs/${club.id}`}
                         >
-                          View
+                          {t("appAdmin.common.view")}
                         </Link>
                         {club.status !== "Active" && (
                           <button
@@ -121,7 +121,7 @@ export const ClubsManagementPage = () => {
                             disabled={updateStatus.isPending}
                             onClick={() => changeStatus(club.id, "Active")}
                           >
-                            Activate
+                            {t("appAdmin.common.activate")}
                           </button>
                         )}
                         {club.status !== "Suspended" && (
@@ -130,7 +130,7 @@ export const ClubsManagementPage = () => {
                             disabled={updateStatus.isPending}
                             onClick={() => changeStatus(club.id, "Suspended")}
                           >
-                            Suspend
+                            {t("appAdmin.common.suspend")}
                           </button>
                         )}
                         {club.status !== "Deleted" && (
@@ -139,7 +139,7 @@ export const ClubsManagementPage = () => {
                             disabled={updateStatus.isPending}
                             onClick={() => changeStatus(club.id, "Deleted")}
                           >
-                            Delete
+                            {t("appAdmin.common.delete")}
                           </button>
                         )}
                       </div>
@@ -150,7 +150,7 @@ export const ClubsManagementPage = () => {
             </table>
           </div>
         ) : (
-          <div className={styles.message}>No clubs match those filters.</div>
+          <div className={styles.message}>{t("appAdmin.clubs.noResults")}</div>
         )}
       </section>
       <Pagination

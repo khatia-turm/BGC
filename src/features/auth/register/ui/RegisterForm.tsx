@@ -132,7 +132,7 @@ export const RegisterForm = () => {
 
             <div className={styles.twoColumns}>
               <label>
-                <span>Birthday</span>
+                <span>{t("auth.birthday")}</span>
                 <input
                   type="date"
                   value={values.birthday}
@@ -143,18 +143,18 @@ export const RegisterForm = () => {
                 <FieldError error={form.getFieldError("birthday")} />
               </label>
               <label>
-                <span>Gender</span>
+                <span>{t("auth.gender")}</span>
                 <select
                   value={values.gender}
                   onChange={form.update("gender")}
                   required
                 >
                   <option value="" disabled>
-                    Select gender
+                    {t("auth.selectGender")}
                   </option>
-                  <option value="0">Male</option>
-                  <option value="1">Female</option>
-                  <option value="2">Other</option>
+                  <option value="0">{t("auth.genderMale")}</option>
+                  <option value="1">{t("auth.genderFemale")}</option>
+                  <option value="2">{t("auth.genderOther")}</option>
                 </select>
                 <FieldError error={form.getFieldError("gender")} />
               </label>
@@ -179,7 +179,7 @@ export const RegisterForm = () => {
                     onClick={form.togglePassword}
                     aria-label={t("auth.togglePassword")}
                   >
-                    {form.showPassword ? "Hide" : "Show"}
+                    {form.showPassword ? t("auth.hidePassword") : t("auth.showPassword")}
                   </button>
                 </div>
                 <div
@@ -212,7 +212,7 @@ export const RegisterForm = () => {
 
             <fieldset className={styles.gameChoices}>
               <legend>
-                Favorite board games <small>(optional)</small>
+                {t("auth.favoriteGames")} <small>{t("common.optional")}</small>
               </legend>
               {games.map((game) => (
                 <label key={game.id}>

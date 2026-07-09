@@ -225,12 +225,32 @@ export const getClub = async (id: number) =>
 export const getMyClub = async (id: number) =>
   toClub(await apiClient<ClubDetailDto>(`/api/clubs/${id}/my`));
 export const getClubGames = async (id: number, search = "") => {
-  const params = new URLSearchParams({ page: "1", pageSize: "100" });
-  if (search) params.set("search", search);
-  const response = await apiClient<Page<BoardGameDto>>(
-    `/api/clubs/${id}/boardgames?${params}`,
-  );
-  return response.items.map(toGame);
+  const pageSize = 100;
+  const getPage = (page: number) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      pageSize: String(pageSize),
+    });
+    if (search) params.set("search", search);
+
+    return apiClient<Page<BoardGameDto>>(
+      `/api/clubs/${id}/boardgames?${params}`,
+    );
+  };
+
+  const firstPage = await getPage(1);
+  const remainingPages =
+    firstPage.totalPages > 1
+      ? await Promise.all(
+          Array.from({ length: firstPage.totalPages - 1 }, (_, index) =>
+            getPage(index + 2),
+          ),
+        )
+      : [];
+
+  return [firstPage, ...remainingPages]
+    .flatMap((page) => page.items)
+    .map(toGame);
 };
 export const createClub = async (payload: CreateClubPayload) => {
   const response = await apiClient<CreateClubDto>("/api/clubs", {
