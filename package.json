@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:mock": "vite --mode mock",
     "mock:server": "node --watch mock-be/server.js",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest",
+    "test:mock": "vitest run mock-be src/shared/api/mockApi.test.ts",
     "preview": "vite preview"
   },
   "dependencies": {

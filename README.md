@@ -263,54 +263,15 @@ TanStack Query manages server state, including:
 
 Local UI state such as search input and selected filters stays in React hooks.
 
-The real API client automatically attaches an `Authorization: Bearer ...` header when `authToken` exists in local storage. Authentication itself is not implemented yet.
+Both API transports attach the current session's `Authorization: Bearer ...` header, including sessions stored with Remember me.
 
 ## Mock API
 
-The mock adapter is implemented in `src/shared/api/mockApi.ts`. It accepts the same paths used by the future backend and reads from `mock-be/mock-data.json`. A small artificial delay is included so loading states can be tested.
+Run `npm run dev:mock` for a persistent browser mock. For HTTP testing, run `npm run mock:server`, set `VITE_API_URL=http://localhost:5051` in `.env`, and run `npm run dev` in another terminal.
 
-Currently supported read endpoints include:
+Both transports share `mock-be/api.js` and follow the supplied backend's routes, DTOs, authorization, validation, pagination, and mutations. This includes user/password updates, club approval and inventory, and tournament creation, publishing, cancellation, registration and waitlist promotion. Browser state survives refreshes; HTTP state survives restarts without modifying the seed file. Fresh demo dates are relative to today.
 
-```text
-GET /api/auth/me
-GET /api/users
-GET /api/users/:id
-GET /api/users/:id/clubs
-
-GET /api/players?search=...
-GET /api/players/:id
-
-GET /api/games
-GET /api/games/:id
-GET /api/games/categories
-
-GET /api/clubs
-GET /api/clubs/:id
-GET /api/clubs/:id/dashboard
-GET /api/clubs/:id/games
-GET /api/clubs/:id/leaderboards
-
-GET /api/tournaments
-GET /api/tournaments/:id
-
-GET /api/leaderboards
-```
-
-The mock API currently supports only `GET`. Other methods intentionally return a `501` mock error until mutations are implemented.
-
-### Mock data contents
-
-The dataset currently includes:
-
-- 6 users;
-- 4 public clubs;
-- 4 board games and 5 categories;
-- 5 tournaments;
-- tournament registrations, stages, rounds, and one match example;
-- club-scoped leaderboard entries;
-- platform-wide leaderboard entries.
-
-IDs are connected across records so cards, filters, and detail routes can resolve related games and clubs.
+See [mock-be/README.md](mock-be/README.md) for demo accounts, reset instructions, tests, and the remaining fixture-only substitutes for BGG and features without backend controllers.
 
 ## Public player privacy
 

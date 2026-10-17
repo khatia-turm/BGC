@@ -798,6 +798,12 @@
       "userId": 240,
       "clubId": 460,
       "role": "Admin"
+    },
+    {
+      "id": 5,
+      "userId": 241,
+      "clubId": 461,
+      "role": "Admin"
     }
   ],
   "categories": [
@@ -1002,6 +1008,30 @@
       "clubId": 459,
       "gameId": 15,
       "deletedAt": null
+    },
+    {
+      "id": 7,
+      "clubId": 459,
+      "gameId": 16,
+      "deletedAt": null
+    },
+    {
+      "id": 8,
+      "clubId": 460,
+      "gameId": 13,
+      "deletedAt": null
+    },
+    {
+      "id": 9,
+      "clubId": 460,
+      "gameId": 14,
+      "deletedAt": null
+    },
+    {
+      "id": 10,
+      "clubId": 460,
+      "gameId": 15,
+      "deletedAt": null
     }
   ],
   "tournaments": [
@@ -1041,8 +1071,8 @@
       "registrationClosesAt": "2026-07-22T18:00:00Z",
       "startsAt": "2026-07-25T12:00:00Z",
       "endsAt": "2026-07-25T19:00:00Z",
-      "maxPlayers": 24,
-      "registeredPlayers": 24,
+      "maxPlayers": 2,
+      "registeredPlayers": 2,
       "entryFee": 15,
       "scoringPolicy": "LinearPlacementPoints",
       "tieBreakRules": ["MostWins", "HighestRawScore"],
@@ -1224,6 +1254,20 @@
       "userId": 240,
       "status": "Accepted",
       "registeredAt": "2026-07-05T16:00:55.949Z"
+    },
+    {
+      "id": 907,
+      "tournamentId": 701,
+      "userId": 236,
+      "status": "Accepted",
+      "registeredAt": "2026-06-21T10:00:00Z"
+    },
+    {
+      "id": 908,
+      "tournamentId": 701,
+      "userId": 237,
+      "status": "Accepted",
+      "registeredAt": "2026-06-21T11:00:00Z"
     }
   ],
   "tournamentStages": [

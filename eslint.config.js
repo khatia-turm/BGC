@@ -10,6 +10,14 @@ const tsconfigRootDir = import.meta.dirname
 export default defineConfig([
   globalIgnores(['dist']),
   {
+    files: ['mock-be/**/*.js'],
+    extends: [js.configs.recommended],
+    languageOptions: { globals: globals.node },
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_', ignoreRestSiblings: true }],
+    },
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,

@@ -24,6 +24,8 @@ dist-ssr
 *.sw?
 
 .env
+mock-be/mock-state.json
+mock-be/mock-state.json.tmp
 
 
 // temp 

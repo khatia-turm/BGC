@@ -11,17 +11,14 @@ export async function apiClient<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  if (USE_MOCK_API) return mockRequest<T>(path, options);
-
   const token = getAuthToken();
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...options.headers,
-    },
-  });
+  const headers = new Headers(options.headers);
+  if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  if (token && !headers.has("Authorization")) headers.set("Authorization", `Bearer ${token}`);
+  const request = { ...options, headers };
+  if (USE_MOCK_API) return mockRequest<T>(path, request);
+
+  const response = await fetch(`${API_URL}${path}`, request);
 
   if (!response.ok) throw await readError(response);
 
