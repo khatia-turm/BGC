@@ -349,7 +349,9 @@ app.get("/api/clubs/:id/tournaments", requireUser, (req, res) => {
   const clubId = Number(req.params.id);
   const membership = db.userClubs.find(
     (item) =>
-      item.clubId === clubId && item.userId === req.user.id && item.role === "Admin",
+      item.clubId === clubId &&
+      item.userId === req.user.id &&
+      item.role === "Admin",
   );
   if (!membership)
     return problem(res, 403, "Club administrator access is required.");
